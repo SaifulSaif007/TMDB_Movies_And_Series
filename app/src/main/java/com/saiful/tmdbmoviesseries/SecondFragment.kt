@@ -1,9 +1,6 @@
 package com.saiful.tmdbmoviesseries
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.saiful.base.view.BaseFragment
@@ -15,7 +12,10 @@ class SecondFragment : BaseFragment<FragmentSecondBinding>() {
 
     override fun getViewModel(): BaseViewModel? = null
 
-    override fun layoutInflater(inflater: LayoutInflater, container: ViewGroup?): FragmentSecondBinding {
+    override fun layoutInflater(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentSecondBinding {
         return FragmentSecondBinding.inflate(inflater, container, false)
     }
 

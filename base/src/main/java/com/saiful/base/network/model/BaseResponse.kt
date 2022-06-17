@@ -15,4 +15,3 @@ sealed class BaseResponse<out T : Any, out U : Any> {
 
 typealias GenericResponse<S> = BaseResponse<S, GenericError>
 
-typealias GenericTMDBRestResponse<S> = BaseResponse<S, GenericError>
