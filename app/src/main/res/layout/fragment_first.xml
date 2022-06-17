@@ -17,10 +17,21 @@
             android:layout_height="wrap_content"
             android:text="@string/next"
             app:layout_constraintBottom_toTopOf="@id/textview_first"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button_second"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-        />
+
+        <Button
+            android:id="@+id/button_second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/toast"
+            app:layout_constraintBottom_toBottomOf="@+id/button_first"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/button_first"
+            app:layout_constraintTop_toTopOf="@+id/button_first" />
 
         <TextView
             android:id="@+id/textview_first"
