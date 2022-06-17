@@ -1,4 +1,4 @@
-package com.deshipay.base.network
+package com.saiful.base.network
 
 import com.squareup.moshi.ToJson
 import com.squareup.moshi.FromJson

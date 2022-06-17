@@ -1,6 +1,5 @@
 package com.saiful.base.network
 
-import com.deshipay.base.network.ThrowableAdapter
 import com.saiful.base.BuildConfig
 import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
