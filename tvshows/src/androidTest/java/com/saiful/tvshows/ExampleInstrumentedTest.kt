@@ -1,4 +1,4 @@
-package com.saiful.series
+package com.saiful.tvshows
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

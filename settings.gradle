@@ -16,4 +16,5 @@ rootProject.name = "TMDB Movies & Series"
 include ':app'
 include ':base'
 include ':movie'
-include ':series'
+include ':tvshows'
+include ':person'

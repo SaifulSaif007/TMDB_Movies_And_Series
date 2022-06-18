@@ -13,7 +13,8 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/base" />
             <option value="$PROJECT_DIR$/movie" />
-            <option value="$PROJECT_DIR$/series" />
+            <option value="$PROJECT_DIR$/person" />
+            <option value="$PROJECT_DIR$/tvshows" />
           </set>
         </option>
       </GradleProjectSettings>

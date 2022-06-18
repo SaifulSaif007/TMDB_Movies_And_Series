@@ -1,4 +1,4 @@
-package com.saiful.series
+package com.saiful.tvshows
 
 import org.junit.Test
 
