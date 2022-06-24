@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/movie_nav_graph"
+    app:startDestination="@id/movieDashboardFragment">
+
+    <fragment
+        android:id="@+id/movieDashboardFragment"
+        android:name="com.saiful.movie.MovieDashboardFragment"
+        android:label="Movies"
+        tools:layout="@layout/fragment_movie_dashboard"/>
+</navigation>

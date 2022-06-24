@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/movie_nav_graph"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="movie" />
+    <item
+        android:id="@+id/tvshows_nav_graph"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="tvshow" />
+    <item
+        android:id="@+id/person_nav_graph"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="celebrity" />
+
+</menu>

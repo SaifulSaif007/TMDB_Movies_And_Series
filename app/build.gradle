@@ -37,6 +37,9 @@ android {
 dependencies {
 
     implementation project(path: ':base')
+    implementation project(path: ':movie')
+    implementation project(path: ':tvshows')
+    implementation project(path: ':person')
 
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'

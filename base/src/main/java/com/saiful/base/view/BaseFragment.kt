@@ -44,13 +44,13 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         return viewDataBinding.root
     }
 
+    protected abstract fun layoutInflater(inflater: LayoutInflater, container: ViewGroup?): VB
+
     @LayoutRes
     protected abstract fun layoutId(): Int
 
     protected abstract fun getViewModel(): BaseViewModel?
 
     protected abstract fun initOnCreateView()
-
-    protected abstract fun layoutInflater(inflater: LayoutInflater, container: ViewGroup?): VB
 
 }
