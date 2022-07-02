@@ -3,15 +3,15 @@
 
     <item
         android:id="@+id/movie_nav_graph"
-        android:icon="@drawable/ic_launcher_background"
+        android:icon="@drawable/ic_movie_icon"
         android:title="movie" />
     <item
         android:id="@+id/tvshows_nav_graph"
-        android:icon="@drawable/ic_launcher_background"
+        android:icon="@drawable/ic_tvshows_icon"
         android:title="tvshow" />
     <item
         android:id="@+id/person_nav_graph"
-        android:icon="@drawable/ic_launcher_background"
+        android:icon="@drawable/ic_celeb_icon"
         android:title="celebrity" />
 
 </menu>
