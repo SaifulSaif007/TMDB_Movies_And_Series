@@ -1,4 +1,4 @@
-package com.saiful.movie.data
+package com.saiful.movie.data.api
 
 import com.saiful.base.network.model.GenericResponse
 import com.saiful.movie.model.PopularMovies

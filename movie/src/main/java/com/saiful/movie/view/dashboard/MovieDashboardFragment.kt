@@ -1,10 +1,11 @@
-package com.saiful.movie.view
+package com.saiful.movie.view.dashboard
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.get
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
@@ -12,15 +13,20 @@ import androidx.viewpager2.widget.ViewPager2
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
+import com.saiful.movie.data.api.MovieDataManager
+import com.saiful.movie.data.repository.DashboardRepo
 import com.saiful.movie.databinding.FragmentMovieDashboardBinding
 import com.saiful.movie.model.ImageSliderItem
 import com.saiful.movie.view.adapter.SliderAdapter
-import java.lang.Math.abs
+import kotlinx.coroutines.flow.collect
 
 class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
 
     private lateinit var viewPager: ViewPager2
     private lateinit var mPageChangeHandler: Handler
+    private val viewModel by lazy {
+        TempVMF(DashboardRepo(MovieDataManager.apiService())).create(DashboardVM::class.java)
+    }
 
     override fun layoutInflater(
         inflater: LayoutInflater,
@@ -31,7 +37,7 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
 
     override fun layoutId(): Int = R.layout.fragment_movie_dashboard
 
-    override fun getViewModel(): BaseViewModel? = null
+    override fun getViewModel(): BaseViewModel = viewModel
 
     override fun initOnCreateView() {
         viewPager = bindingView.imageSlider
@@ -61,6 +67,13 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
                 mPageChangeHandler.postDelayed(runnable, 3000)
             }
         })
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.popularMoviesList.collect {
+                Log.d("popular", it?.page.toString())
+
+            }
+        }
     }
 
     private val runnable  = Runnable {
