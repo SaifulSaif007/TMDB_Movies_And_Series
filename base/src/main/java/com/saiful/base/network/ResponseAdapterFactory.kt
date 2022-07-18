@@ -1,6 +1,5 @@
 package com.saiful.base.network
 
-import com.deshipay.base.network.ResponseAdapter
 import com.saiful.base.network.model.BaseResponse
 import retrofit2.Call
 import retrofit2.CallAdapter
