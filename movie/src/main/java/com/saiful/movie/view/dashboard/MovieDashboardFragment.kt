@@ -5,6 +5,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -18,15 +19,15 @@ import com.saiful.movie.data.repository.DashboardRepo
 import com.saiful.movie.databinding.FragmentMovieDashboardBinding
 import com.saiful.movie.model.ImageSliderItem
 import com.saiful.movie.view.adapter.SliderAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
+@AndroidEntryPoint
 class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
 
     private lateinit var viewPager: ViewPager2
     private lateinit var mPageChangeHandler: Handler
-    private val viewModel by lazy {
-        TempVMF(DashboardRepo(MovieDataManager.apiService())).create(DashboardVM::class.java)
-    }
+    private val viewModel: DashboardVM by viewModels()
 
     override fun layoutInflater(
         inflater: LayoutInflater,
@@ -60,7 +61,7 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
         }
         viewPager.setPageTransformer(transformer)
 
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 mPageChangeHandler.removeCallbacks(runnable)
@@ -76,7 +77,7 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
         }
     }
 
-    private val runnable  = Runnable {
+    private val runnable = Runnable {
         viewPager.currentItem = viewPager.currentItem + 1
     }
 
