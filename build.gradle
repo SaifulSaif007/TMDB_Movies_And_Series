@@ -13,3 +13,18 @@ plugins {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+ext {
+    // APP dependencies
+    allModuleDep = [
+            'com.google.dagger:hilt-android:2.42',
+            //Navigation
+            'androidx.navigation:navigation-fragment-ktx:2.4.2',
+            'androidx.navigation:navigation-runtime-ktx:2.4.2',
+            'androidx.navigation:navigation-ui-ktx:2.4.2',
+    ]
+    allModuleAnno = [
+            "com.google.dagger:hilt-compiler:2.42"
+    ]
+
+}
