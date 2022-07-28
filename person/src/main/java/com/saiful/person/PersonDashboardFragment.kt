@@ -5,7 +5,9 @@ import android.view.ViewGroup
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.person.databinding.FragmentPersonDashboardBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PersonDashboardFragment : BaseFragment<FragmentPersonDashboardBinding>() {
     override fun layoutInflater(
         inflater: LayoutInflater,

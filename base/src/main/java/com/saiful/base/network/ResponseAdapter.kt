@@ -1,6 +1,5 @@
-package com.deshipay.base.network
+package com.saiful.base.network
 
-import com.saiful.base.network.ResponseCall
 import com.saiful.base.network.model.BaseResponse
 import okhttp3.ResponseBody
 import retrofit2.Call

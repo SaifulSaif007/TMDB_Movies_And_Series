@@ -5,7 +5,9 @@ import android.view.ViewGroup
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.tvshows.databinding.FragmentTvshowsDashboardBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TvShowsFragment : BaseFragment<FragmentTvshowsDashboardBinding>() {
     override fun layoutInflater(
         inflater: LayoutInflater,
