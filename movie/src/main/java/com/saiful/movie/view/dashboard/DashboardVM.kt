@@ -5,9 +5,13 @@ import com.saiful.base.network.model.GenericResponse
 import com.saiful.base.viewmodel.BaseOpsViewModel
 import com.saiful.movie.data.repository.DashboardRepo
 import com.saiful.movie.model.PopularMovies
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import javax.inject.Inject
 
-class DashboardVM(private val dashboardRepo: DashboardRepo) : BaseOpsViewModel() {
+@HiltViewModel
+class DashboardVM
+    @Inject constructor(private val dashboardRepo: DashboardRepo) : BaseOpsViewModel() {
 
     var popularMoviesList = MutableStateFlow<PopularMovies?>(null)
 

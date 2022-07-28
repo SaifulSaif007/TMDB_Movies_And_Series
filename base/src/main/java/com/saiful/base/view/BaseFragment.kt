@@ -6,13 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.LayoutRes
-import androidx.appcompat.resources.Compatibility.Api21Impl.inflate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
-import androidx.viewbinding.ViewBindings
 import com.saiful.base.viewmodel.BaseViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
