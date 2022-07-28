@@ -18,6 +18,7 @@ import com.saiful.movie.data.api.MovieDataManager
 import com.saiful.movie.data.repository.DashboardRepo
 import com.saiful.movie.databinding.FragmentMovieDashboardBinding
 import com.saiful.movie.model.ImageSliderItem
+import com.saiful.movie.view.adapter.MovieDashboardAdapter
 import com.saiful.movie.view.adapter.SliderAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -28,6 +29,7 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
     private lateinit var viewPager: ViewPager2
     private lateinit var mPageChangeHandler: Handler
     private val viewModel: DashboardVM by viewModels()
+    private val movieAdapter = MovieDashboardAdapter()
 
     override fun layoutInflater(
         inflater: LayoutInflater,
@@ -69,10 +71,15 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
             }
         })
 
+        bindingView.popularMovieRecycler.adapter = movieAdapter
+
         lifecycleScope.launchWhenStarted {
-            viewModel.popularMoviesList.collect {
+            viewModel.popularMoviesList.collect { it ->
                 Log.d("popular", it?.page.toString())
 
+                it?.results?.let { movies ->
+                    movieAdapter.submitList(movies)
+                }
             }
         }
     }
