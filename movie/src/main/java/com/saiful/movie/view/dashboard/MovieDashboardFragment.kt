@@ -20,6 +20,7 @@ import com.saiful.movie.view.adapter.MovieDashboardAdapter
 import com.saiful.movie.view.adapter.SliderAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
@@ -30,6 +31,7 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
     private val popularMovieAdapter = MovieDashboardAdapter()
     private val nowPlayingMovieAdapter = MovieDashboardAdapter()
     private val topRatedMovieAdapter = MovieDashboardAdapter()
+    @Inject lateinit var itemDecorator: ItemDecorator
 
     override fun layoutInflater(
         inflater: LayoutInflater,
@@ -72,17 +74,17 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
         })
 
         bindingView.popularMovieRecycler.apply {
-            addItemDecoration(ItemDecorator())
+            addItemDecoration(itemDecorator)
             adapter = popularMovieAdapter
         }
 
         bindingView.nowPlayingMovieRecycler.apply {
-            addItemDecoration(ItemDecorator())
+            addItemDecoration(itemDecorator)
             adapter = nowPlayingMovieAdapter
         }
 
         bindingView.topRatedMovieRecycler.apply {
-            addItemDecoration(ItemDecorator())
+            addItemDecoration(itemDecorator)
             adapter = topRatedMovieAdapter
         }
 

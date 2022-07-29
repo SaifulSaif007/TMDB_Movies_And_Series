@@ -3,13 +3,13 @@ package com.saiful.base.util
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ItemDecorator(
-    private val left: Int = 15,
-    private val top: Int = 8,
-    private val right: Int = 15,
-    private val bottom: Int = 8
-) : RecyclerView.ItemDecoration() {
+//TODO -> Make runtime injection by using interface (@AssistedFactory)
+@Singleton
+class ItemDecorator
+@Inject constructor() : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -18,6 +18,6 @@ class ItemDecorator(
         state: RecyclerView.State
     ) {
         super.getItemOffsets(outRect, view, parent, state)
-        outRect.set(left, top, right, bottom)
+        outRect.set(15, 8, 15, 8)
     }
 }
