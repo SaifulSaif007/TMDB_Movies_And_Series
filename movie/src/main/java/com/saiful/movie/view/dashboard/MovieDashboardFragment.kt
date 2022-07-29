@@ -2,7 +2,6 @@ package com.saiful.movie.view.dashboard
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
@@ -14,8 +13,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
-import com.saiful.movie.data.api.MovieDataManager
-import com.saiful.movie.data.repository.DashboardRepo
 import com.saiful.movie.databinding.FragmentMovieDashboardBinding
 import com.saiful.movie.model.ImageSliderItem
 import com.saiful.movie.view.adapter.MovieDashboardAdapter
@@ -29,7 +26,9 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
     private lateinit var viewPager: ViewPager2
     private lateinit var mPageChangeHandler: Handler
     private val viewModel: DashboardVM by viewModels()
-    private val movieAdapter = MovieDashboardAdapter()
+    private val popularMovieAdapter = MovieDashboardAdapter()
+    private val nowPlayingMovieAdapter = MovieDashboardAdapter()
+    private val topRatedMovieAdapter = MovieDashboardAdapter()
 
     override fun layoutInflater(
         inflater: LayoutInflater,
@@ -71,17 +70,34 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
             }
         })
 
-        bindingView.popularMovieRecycler.adapter = movieAdapter
+        bindingView.popularMovieLayout.popularMovieRecycler.adapter = popularMovieAdapter
+        bindingView.nowPlayingMovieLayout.popularMovieRecycler.adapter = nowPlayingMovieAdapter
+        bindingView.topRatedMovieLayout.popularMovieRecycler.adapter = topRatedMovieAdapter
 
         lifecycleScope.launchWhenStarted {
-            viewModel.popularMoviesList.collect { it ->
-                Log.d("popular", it?.page.toString())
-
-                it?.results?.let { movies ->
-                    movieAdapter.submitList(movies)
+            viewModel.popularMoviesList.collect { popular ->
+                popular?.results?.let { movies ->
+                    popularMovieAdapter.submitList(movies)
                 }
             }
         }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.nowPlayingMoviesList.collect{ nowPlaying->
+                nowPlaying?.results?.let { movies->
+                    nowPlayingMovieAdapter.submitList(movies)
+                }
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.topRatedMoviesList.collect{ topRated ->
+                topRated?.results?.let { movies->
+                    topRatedMovieAdapter.submitList(movies)
+                }
+            }
+        }
+
     }
 
     private val runnable = Runnable {
