@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DashboardVM
-    @Inject constructor(private val dashboardRepo: DashboardRepo) : BaseOpsViewModel() {
+@Inject constructor(private val dashboardRepo: DashboardRepo) : BaseOpsViewModel() {
 
     var popularMoviesList = MutableStateFlow<PopularMovies?>(null)
     var nowPlayingMoviesList = MutableStateFlow<NowPlayingMovies?>(null)
@@ -25,20 +25,20 @@ class DashboardVM
         fetchTopRatedMovies()
     }
 
-    private fun fetchPopularMovies(){
+    private fun fetchPopularMovies() {
         executeRestCodeBlock(popularMovie) {
             dashboardRepo.getPopularMovies(1)
         }
     }
 
-    private fun fetchNowPlayingMovies(){
-        executeRestCodeBlock(nowPlayingMovie){
+    private fun fetchNowPlayingMovies() {
+        executeRestCodeBlock(nowPlayingMovie) {
             dashboardRepo.getNowPlayingMovies(1)
         }
     }
 
-    private fun fetchTopRatedMovies(){
-        executeRestCodeBlock(topRatedMovie){
+    private fun fetchTopRatedMovies() {
+        executeRestCodeBlock(topRatedMovie) {
             dashboardRepo.getTopRatedMovies(1)
         }
     }
@@ -54,15 +54,15 @@ class DashboardVM
                 }
             }
             nowPlayingMovie -> {
-                when(val response = data as GenericResponse<*>){
+                when (val response = data as GenericResponse<*>) {
                     is BaseResponse.Success -> {
                         nowPlayingMoviesList.value = response.body as NowPlayingMovies
                     }
                     else -> {}
                 }
             }
-            topRatedMovie ->{
-                when(val response = data as GenericResponse<*>){
+            topRatedMovie -> {
+                when (val response = data as GenericResponse<*>) {
                     is BaseResponse.Success -> {
                         topRatedMoviesList.value = response.body as TopRatedMoves
                     }

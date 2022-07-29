@@ -70,9 +70,9 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
             }
         })
 
-        bindingView.popularMovieLayout.popularMovieRecycler.adapter = popularMovieAdapter
-        bindingView.nowPlayingMovieLayout.popularMovieRecycler.adapter = nowPlayingMovieAdapter
-        bindingView.topRatedMovieLayout.popularMovieRecycler.adapter = topRatedMovieAdapter
+        bindingView.popularMovieRecycler.adapter = popularMovieAdapter
+        bindingView.nowPlayingMovieRecycler.adapter = nowPlayingMovieAdapter
+        bindingView.topRatedMovieRecycler.adapter = topRatedMovieAdapter
 
         lifecycleScope.launchWhenStarted {
             viewModel.popularMoviesList.collect { popular ->
