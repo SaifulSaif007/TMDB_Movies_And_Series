@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.saiful.base.util.ItemDecorator
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
@@ -70,9 +71,20 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
             }
         })
 
-        bindingView.popularMovieRecycler.adapter = popularMovieAdapter
-        bindingView.nowPlayingMovieRecycler.adapter = nowPlayingMovieAdapter
-        bindingView.topRatedMovieRecycler.adapter = topRatedMovieAdapter
+        bindingView.popularMovieRecycler.apply {
+            addItemDecoration(ItemDecorator())
+            adapter = popularMovieAdapter
+        }
+
+        bindingView.nowPlayingMovieRecycler.apply {
+            addItemDecoration(ItemDecorator())
+            adapter = nowPlayingMovieAdapter
+        }
+
+        bindingView.topRatedMovieRecycler.apply {
+            addItemDecoration(ItemDecorator())
+            adapter = topRatedMovieAdapter
+        }
 
         lifecycleScope.launchWhenStarted {
             viewModel.popularMoviesList.collect { popular ->

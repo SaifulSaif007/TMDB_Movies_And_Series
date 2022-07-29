@@ -2,4 +2,6 @@
 <resources>
     <string name="popular_movies">Popular Movies</string>
     <string name="see_all">See all</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="top_rated">Top Rated</string>
 </resources>
