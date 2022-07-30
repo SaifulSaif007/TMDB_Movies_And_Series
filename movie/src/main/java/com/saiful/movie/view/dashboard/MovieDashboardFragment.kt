@@ -31,6 +31,7 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
     private val popularMovieAdapter = MovieDashboardAdapter()
     private val nowPlayingMovieAdapter = MovieDashboardAdapter()
     private val topRatedMovieAdapter = MovieDashboardAdapter()
+    private val upcomingMovieAdapter = MovieDashboardAdapter()
     @Inject lateinit var itemDecorator: ItemDecorator
 
     override fun layoutInflater(
@@ -88,6 +89,11 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
             adapter = topRatedMovieAdapter
         }
 
+        bindingView.upcomingMovieRecycler.apply {
+            addItemDecoration(itemDecorator)
+            adapter = upcomingMovieAdapter
+        }
+
         lifecycleScope.launchWhenStarted {
             viewModel.popularMoviesList.collect { popular ->
                 popular?.results?.let { movies ->
@@ -108,6 +114,14 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
             viewModel.topRatedMoviesList.collect{ topRated ->
                 topRated?.results?.let { movies->
                     topRatedMovieAdapter.submitList(movies)
+                }
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.upcomingMoviesList.collect{ upcoming->
+                upcoming?.results?.let { movies->
+                    upcomingMovieAdapter.submitList(movies)
                 }
             }
         }

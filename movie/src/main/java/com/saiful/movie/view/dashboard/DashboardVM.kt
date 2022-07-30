@@ -7,6 +7,7 @@ import com.saiful.movie.data.repository.DashboardRepo
 import com.saiful.movie.model.NowPlayingMovies
 import com.saiful.movie.model.PopularMovies
 import com.saiful.movie.model.TopRatedMoves
+import com.saiful.movie.model.UpcomingMovies
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
@@ -18,11 +19,13 @@ class DashboardVM
     var popularMoviesList = MutableStateFlow<PopularMovies?>(null)
     var nowPlayingMoviesList = MutableStateFlow<NowPlayingMovies?>(null)
     var topRatedMoviesList = MutableStateFlow<TopRatedMoves?>(null)
+    var upcomingMoviesList = MutableStateFlow<UpcomingMovies?>(null)
 
     init {
         fetchPopularMovies()
         fetchNowPlayingMovies()
         fetchTopRatedMovies()
+        fetchUpcomingMovies()
     }
 
     private fun fetchPopularMovies() {
@@ -40,6 +43,12 @@ class DashboardVM
     private fun fetchTopRatedMovies() {
         executeRestCodeBlock(topRatedMovie) {
             dashboardRepo.getTopRatedMovies(1)
+        }
+    }
+
+    private fun fetchUpcomingMovies(){
+        executeRestCodeBlock(upcomingMovie){
+            dashboardRepo.getUpcomingMovies(1)
         }
     }
 
@@ -69,6 +78,14 @@ class DashboardVM
                     else -> {}
                 }
             }
+            upcomingMovie -> {
+                when(val response = data as GenericResponse<*>){
+                    is BaseResponse.Success -> {
+                        upcomingMoviesList.value = response.body as UpcomingMovies
+                    }
+                    else -> {}
+                }
+            }
         }
     }
 
@@ -76,5 +93,6 @@ class DashboardVM
         const val popularMovie = "POPULAR_MOVIE"
         const val nowPlayingMovie = "NOW_PLAYING_MOVIE"
         const val topRatedMovie = "TOP_RATED_MOVIE"
+        const val upcomingMovie = "UPCOMING_MOVIE"
     }
 }

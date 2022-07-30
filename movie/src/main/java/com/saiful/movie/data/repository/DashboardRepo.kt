@@ -13,4 +13,6 @@ class DashboardRepo
     suspend fun getNowPlayingMovies(pageNo: Int) = apiService.nowPlayingMovies(pageNo)
 
     suspend fun getTopRatedMovies(pageNo: Int) = apiService.topRatedMovies(pageNo)
+
+    suspend fun getUpcomingMovies(pageNo: Int) = apiService.upcomingMovies(pageNo)
 }
