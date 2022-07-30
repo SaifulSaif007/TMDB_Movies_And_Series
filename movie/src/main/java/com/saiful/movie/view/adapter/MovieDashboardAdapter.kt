@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.saiful.base.util.AppConstants.imageBaseUrl
+import com.saiful.base.util.AppConstants.posterSize
 import com.saiful.movie.R
 import com.saiful.movie.databinding.FragmentMovieDashboardBinding
 import com.saiful.movie.databinding.LayoutImageSliderBinding
@@ -45,7 +47,7 @@ class MovieDashboardAdapter :
 
     override fun getItemCount(): Int = differ.currentList.size
 
-    fun submitList(list: List<Movies>){
+    fun submitList(list: List<Movies>) {
         differ.submitList(list)
         notifyDataSetChanged()
     }
@@ -55,7 +57,7 @@ class MovieDashboardAdapter :
 
         fun bind(item: Movies) {
             Glide.with(binding.root.context)
-                .load("http://image.tmdb.org/t/p/w342" + item.posterPath)
+                .load(imageBaseUrl + posterSize + item.posterPath)
                 .transition(DrawableTransitionOptions.withCrossFade(500))
                 .error(R.drawable.image1)
                 .into(binding.posterImage)
