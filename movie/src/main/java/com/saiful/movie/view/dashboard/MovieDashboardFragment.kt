@@ -151,7 +151,7 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
 
     override fun onResume() {
         super.onResume()
-        mPageChangeHandler.postDelayed(runnable, 3000)
+        mPageChangeHandler.postDelayed(runnable, 5000)
     }
 
 }

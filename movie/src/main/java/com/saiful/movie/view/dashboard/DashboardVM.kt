@@ -58,6 +58,9 @@ class DashboardVM
                 when (val response = data as GenericResponse<*>) {
                     is BaseResponse.Success -> {
                         popularMoviesList.value = response.body as PopularMovies
+                        popularMoviesList.value?.results?.shuffled()?.subList(0, 2)?.let {
+                            sliderList.addAll(it)
+                        }
                     }
                     else -> {}
                 }
@@ -66,6 +69,9 @@ class DashboardVM
                 when (val response = data as GenericResponse<*>) {
                     is BaseResponse.Success -> {
                         nowPlayingMoviesList.value = response.body as NowPlayingMovies
+                        nowPlayingMoviesList.value?.results?.shuffled()?.subList(0, 2)?.let {
+                            sliderList.addAll(it)
+                        }
                     }
                     else -> {}
                 }
@@ -74,7 +80,9 @@ class DashboardVM
                 when (val response = data as GenericResponse<*>) {
                     is BaseResponse.Success -> {
                         topRatedMoviesList.value = response.body as TopRatedMoves
-                        sliderList.addAll(topRatedMoviesList.value!!.results.shuffled().subList(0,3))
+                        topRatedMoviesList.value?.results?.shuffled()?.subList(0, 2)?.let {
+                            sliderList.addAll(it)
+                        }
                     }
                     else -> {}
                 }
@@ -83,12 +91,10 @@ class DashboardVM
                 when (val response = data as GenericResponse<*>) {
                     is BaseResponse.Success -> {
                         upcomingMoviesList.value = response.body as UpcomingMovies
-
-                        upcomingMoviesList.value?.results?.subList(0, 3)
-                            ?.let {
-                                sliderList.addAll(it)
-                                sliderLoaded.value = true
-                            }
+                        upcomingMoviesList.value?.results?.shuffled()?.subList(0, 2)?.let {
+                            sliderList.addAll(it)
+                            sliderLoaded.value = true
+                        }
                     }
                     else -> {}
                 }
