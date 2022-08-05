@@ -13,10 +13,10 @@ import javax.inject.Inject
 class DashboardVM
 @Inject constructor(private val dashboardRepo: DashboardRepo) : BaseOpsViewModel() {
 
-    var popularMoviesList = MutableStateFlow<PopularMovies?>(null)
-    var nowPlayingMoviesList = MutableStateFlow<NowPlayingMovies?>(null)
-    var topRatedMoviesList = MutableStateFlow<TopRatedMoves?>(null)
-    var upcomingMoviesList = MutableStateFlow<UpcomingMovies?>(null)
+    var popularMoviesList = MutableStateFlow<MoviesResponse?>(null)
+    var nowPlayingMoviesList = MutableStateFlow<MoviesResponse?>(null)
+    var topRatedMoviesList = MutableStateFlow<MoviesResponse?>(null)
+    var upcomingMoviesList = MutableStateFlow<MoviesResponse?>(null)
     var sliderList = arrayListOf<Movies>()
     val sliderLoaded = MutableStateFlow<Boolean>(false)
 
@@ -57,7 +57,7 @@ class DashboardVM
             popularMovie -> {
                 when (val response = data as GenericResponse<*>) {
                     is BaseResponse.Success -> {
-                        popularMoviesList.value = response.body as PopularMovies
+                        popularMoviesList.value = response.body as MoviesResponse
                         popularMoviesList.value?.results?.shuffled()?.subList(0, 2)?.let {
                             sliderList.addAll(it)
                         }
@@ -68,7 +68,7 @@ class DashboardVM
             nowPlayingMovie -> {
                 when (val response = data as GenericResponse<*>) {
                     is BaseResponse.Success -> {
-                        nowPlayingMoviesList.value = response.body as NowPlayingMovies
+                        nowPlayingMoviesList.value = response.body as MoviesResponse
                         nowPlayingMoviesList.value?.results?.shuffled()?.subList(0, 2)?.let {
                             sliderList.addAll(it)
                         }
@@ -79,7 +79,7 @@ class DashboardVM
             topRatedMovie -> {
                 when (val response = data as GenericResponse<*>) {
                     is BaseResponse.Success -> {
-                        topRatedMoviesList.value = response.body as TopRatedMoves
+                        topRatedMoviesList.value = response.body as MoviesResponse
                         topRatedMoviesList.value?.results?.shuffled()?.subList(0, 2)?.let {
                             sliderList.addAll(it)
                         }
@@ -90,7 +90,7 @@ class DashboardVM
             upcomingMovie -> {
                 when (val response = data as GenericResponse<*>) {
                     is BaseResponse.Success -> {
-                        upcomingMoviesList.value = response.body as UpcomingMovies
+                        upcomingMoviesList.value = response.body as MoviesResponse
                         upcomingMoviesList.value?.results?.shuffled()?.subList(0, 2)?.let {
                             sliderList.addAll(it)
                             sliderLoaded.value = true

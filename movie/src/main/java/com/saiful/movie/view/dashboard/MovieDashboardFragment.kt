@@ -17,6 +17,7 @@ import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
 import com.saiful.movie.databinding.FragmentMovieDashboardBinding
+import com.saiful.movie.model.MovieCategory
 import com.saiful.movie.view.adapter.MovieDashboardAdapter
 import com.saiful.movie.view.adapter.SliderAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,6 +34,7 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
     private val nowPlayingMovieAdapter = MovieDashboardAdapter()
     private val topRatedMovieAdapter = MovieDashboardAdapter()
     private val upcomingMovieAdapter = MovieDashboardAdapter()
+
     @Inject
     lateinit var itemDecorator: ItemDecorator
 
@@ -107,12 +109,6 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
 
     }
 
-    private fun setOnClick() {
-        bindingView.topRatedMovieLayout.setOnClickListener {
-            findNavController().navigateSafe(R.id.action_dashboard_to_list)
-        }
-    }
-
     private fun setUpImageSlider() {
         viewPager = bindingView.imageSlider
         mPageChangeHandler = Handler(Looper.getMainLooper())
@@ -149,6 +145,25 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
         }
     }
 
+    private fun setOnClick() {
+        bindingView.popularSeeAllLabel.setOnClickListener {
+            val action = MovieDashboardFragmentDirections.actionDashboardToList(MovieCategory.POPULAR)
+            findNavController().navigateSafe(action)
+        }
+        bindingView.topRatedSeeAllLabel.setOnClickListener {
+            val action = MovieDashboardFragmentDirections.actionDashboardToList(MovieCategory.TOP_RATED)
+            findNavController().navigateSafe(action)
+        }
+        bindingView.nowPlayingSeeAllLabel.setOnClickListener {
+            val action = MovieDashboardFragmentDirections.actionDashboardToList(MovieCategory.NOW_PLAYING)
+            findNavController().navigateSafe(action)
+        }
+        bindingView.upcomingSeeAllLabel.setOnClickListener {
+            val action = MovieDashboardFragmentDirections.actionDashboardToList(MovieCategory.UPCOMING)
+            findNavController().navigateSafe(action)
+        }
+    }
+
     private val runnable = Runnable {
         viewPager.currentItem = viewPager.currentItem + 1
     }
@@ -162,5 +177,6 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
         super.onResume()
         mPageChangeHandler.postDelayed(runnable, 5000)
     }
+
 
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import com.saiful.base.util.ItemDecorator
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
@@ -21,6 +22,7 @@ class MovieListFragment : BaseFragment<FragmentMovieListBinding>() {
     @Inject
     lateinit var itemDecorator: ItemDecorator
     private val viewModel: ListVM by viewModels()
+    private val args : MovieListFragmentArgs by navArgs()
 
     override fun layoutInflater(
         inflater: LayoutInflater,
@@ -34,6 +36,7 @@ class MovieListFragment : BaseFragment<FragmentMovieListBinding>() {
     override fun getViewModel(): BaseViewModel = viewModel
 
     override fun initOnCreateView() {
+        viewModel.selectedCategory(args.movieCategory)
         val movieAdapter = MovieListLoadAdapter()
         bindingView.apply {
             movieListRecycler.apply {

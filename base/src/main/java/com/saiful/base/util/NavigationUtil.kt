@@ -4,8 +4,21 @@ import android.os.Bundle
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
+import androidx.navigation.NavDirections
 import androidx.navigation.NavGraph
 import androidx.navigation.fragment.findNavController
+
+fun NavController.navigateSafe(directions: NavDirections) {
+    val action = (currentDestination ?: graph).getAction(directions.actionId) ?: return
+    var destId = action.destinationId
+    val dest = graph.findNode(destId)
+    if (dest is NavGraph) {
+        destId = dest.startDestinationId
+    }
+    if (currentDestination?.id != destId) {
+        navigate(directions)
+    }
+}
 
 fun NavController.navigateSafe(@IdRes resId: Int, args: Bundle? = null) {
     val destinationId = currentDestination?.getAction(resId)?.destinationId.orEmpty()
