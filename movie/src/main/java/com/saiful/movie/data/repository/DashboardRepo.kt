@@ -18,12 +18,4 @@ class DashboardRepo
 
     suspend fun getUpcomingMovies(pageNo: Int) = apiService.upcomingMovies(pageNo)
 
-    fun getMoviePager() = Pager(
-        config = PagingConfig(
-            pageSize = 20,
-            maxSize = 100,
-            enablePlaceholders = false
-        ),
-        pagingSourceFactory = { MoviePagingSource(apiService) }
-    ).flow
 }
