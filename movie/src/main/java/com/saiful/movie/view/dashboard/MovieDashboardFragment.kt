@@ -6,16 +6,17 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.saiful.base.util.ItemDecorator
+import com.saiful.base.util.navigateSafe
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
 import com.saiful.movie.databinding.FragmentMovieDashboardBinding
-import com.saiful.movie.model.ImageSliderItem
 import com.saiful.movie.view.adapter.MovieDashboardAdapter
 import com.saiful.movie.view.adapter.SliderAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,6 +50,8 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
     override fun initOnCreateView() {
 
         setUpImageSlider()
+
+        setOnClick()
 
         bindingView.popularMovieRecycler.apply {
             addItemDecoration(itemDecorator)
@@ -102,6 +105,12 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
             }
         }
 
+    }
+
+    private fun setOnClick() {
+        bindingView.topRatedMovieLayout.setOnClickListener {
+            findNavController().navigateSafe(R.id.action_dashboard_to_list)
+        }
     }
 
     private fun setUpImageSlider() {

@@ -9,5 +9,16 @@
         android:id="@+id/movieDashboardFragment"
         android:name="com.saiful.movie.view.dashboard.MovieDashboardFragment"
         android:label="Movies"
-        tools:layout="@layout/fragment_movie_dashboard"/>
+        tools:layout="@layout/fragment_movie_dashboard">
+        <action
+            android:id="@+id/action_dashboard_to_list"
+            app:destination="@id/movieListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/movieListFragment"
+        android:name="com.saiful.movie.view.list.MovieListFragment"
+        android:label="List"
+        tools:layout="@layout/fragment_movie_list" />
+
 </navigation>

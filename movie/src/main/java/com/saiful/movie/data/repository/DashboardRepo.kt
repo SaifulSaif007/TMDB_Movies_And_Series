@@ -1,5 +1,7 @@
 package com.saiful.movie.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import com.saiful.movie.data.api.MovieApiService
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -15,4 +17,14 @@ class DashboardRepo
     suspend fun getTopRatedMovies(pageNo: Int) = apiService.topRatedMovies(pageNo)
 
     suspend fun getUpcomingMovies(pageNo: Int) = apiService.upcomingMovies(pageNo)
+
+    fun getMoviePager() = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+            initialLoadSize = 20 * 2,
+            maxSize = 100,
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = { MoviePagingSource(apiService) }
+    ).flow
 }

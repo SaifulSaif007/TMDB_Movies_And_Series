@@ -29,4 +29,5 @@ interface MovieApiService {
     suspend fun upcomingMovies(
         @Query("page") page: Int
     ) : GenericResponse<UpcomingMovies>
+
 }

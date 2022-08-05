@@ -1,5 +1,6 @@
 package com.saiful.movie.view.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -10,22 +11,20 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.saiful.base.util.AppConstants.imageBaseUrl
 import com.saiful.base.util.AppConstants.posterSize
 import com.saiful.movie.R
-import com.saiful.movie.databinding.FragmentMovieDashboardBinding
-import com.saiful.movie.databinding.LayoutImageSliderBinding
 import com.saiful.movie.databinding.LayoutMovieItemBinding
 import com.saiful.movie.model.Movies
-import com.saiful.movie.model.PopularMovies
 
 class MovieDashboardAdapter :
     RecyclerView.Adapter<MovieDashboardAdapter.MovieDashboardViewHolder>() {
 
+    @SuppressLint("DiffUtilEquals")
     private val diffCallback = object : DiffUtil.ItemCallback<Movies>() {
         override fun areItemsTheSame(oldItem: Movies, newItem: Movies): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: Movies, newItem: Movies): Boolean {
-            return oldItem.equals(newItem)
+            return oldItem == newItem
         }
     }
     private val differ = AsyncListDiffer(this, diffCallback)
