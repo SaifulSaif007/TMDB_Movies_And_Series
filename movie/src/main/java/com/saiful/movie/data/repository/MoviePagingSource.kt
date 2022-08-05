@@ -33,7 +33,7 @@ class MoviePagingSource(private val apiService: MovieApiService) : PagingSource<
         LoadResult.Page(
             data = movies,
             prevKey = if (pageCount == START_PAGE_INDEX) null else pageCount - 1,
-            nextKey = if (movies.isNotEmpty()) null else pageCount + 1
+            nextKey = if (movies.isEmpty()) null else pageCount + 1
         )
 
     companion object {

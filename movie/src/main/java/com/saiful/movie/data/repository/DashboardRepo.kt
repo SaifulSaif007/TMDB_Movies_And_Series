@@ -21,7 +21,6 @@ class DashboardRepo
     fun getMoviePager() = Pager(
         config = PagingConfig(
             pageSize = 20,
-            initialLoadSize = 20 * 2,
             maxSize = 100,
             enablePlaceholders = false
         ),

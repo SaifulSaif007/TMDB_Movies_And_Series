@@ -39,12 +39,12 @@ class MovieListFragment : BaseFragment<FragmentMovieListBinding>() {
             movieListRecycler.apply {
                 setHasFixedSize(true)
                 adapter = movieAdapter
+                addItemDecoration(itemDecorator)
             }
         }
 
         lifecycleScope.launchWhenStarted {
             viewModel.movieList.collect {
-                Log.d("size", it.toString())
                 movieAdapter.submitData(it)
             }
         }

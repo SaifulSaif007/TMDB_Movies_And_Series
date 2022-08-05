@@ -38,11 +38,13 @@ class MovieListLoadAdapter :
         fun bind(movies: Movies) {
             binding.apply {
                 Glide.with(itemView)
-                    .load(AppConstants.imageBaseUrl + AppConstants.backdropSize + movies.backdropPath)
+                    .load(AppConstants.imageBaseUrl + AppConstants.backdropSize + movies.posterPath)
                     .into(binding.posterImage)
 
                 movieTitle.text = movies.title
                 movieSubtitle.text = movies.overview
+                ratingBar.rating = movies.voteAverage?.toFloat() ?: 0f
+                movieRating.text = "(" + movies.voteAverage.toString() + ")"
             }
 
         }
