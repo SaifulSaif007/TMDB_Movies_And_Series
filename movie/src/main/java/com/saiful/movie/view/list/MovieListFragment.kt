@@ -1,8 +1,8 @@
 package com.saiful.movie.view.list
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
@@ -15,6 +15,7 @@ import com.saiful.movie.view.adapter.MovieListLoadAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class MovieListFragment : BaseFragment<FragmentMovieListBinding>() {
@@ -36,6 +37,7 @@ class MovieListFragment : BaseFragment<FragmentMovieListBinding>() {
     override fun getViewModel(): BaseViewModel = viewModel
 
     override fun initOnCreateView() {
+        (activity as AppCompatActivity).supportActionBar?.title = args.movieCategory.value
         viewModel.selectedCategory(args.movieCategory)
         val movieAdapter = MovieListLoadAdapter()
         bindingView.apply {
