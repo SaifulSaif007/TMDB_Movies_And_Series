@@ -35,6 +35,10 @@
         android:id="@+id/movieDetailsFragment"
         android:name="com.saiful.movie.view.details.MovieDetailsFragment"
         android:label="Details"
-        tools:layout="@layout/fragment_movie_details"/>
+        tools:layout="@layout/fragment_movie_details">
+        <argument
+            android:name="movie_id"
+            app:argType="integer" />
+    </fragment>
 
 </navigation>

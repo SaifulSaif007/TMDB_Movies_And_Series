@@ -169,7 +169,11 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
     }
 
     private fun movieItemClick(movieId: Int) {
-        findNavController().navigateSafe(R.id.action_dashboard_to_details)
+        findNavController().navigateSafe(
+            MovieDashboardFragmentDirections.actionDashboardToDetails(
+                movieId
+            )
+        )
     }
 
     private val runnable = Runnable {

@@ -25,7 +25,7 @@ class MovieListFragment : BaseFragment<FragmentMovieListBinding>() {
     @Inject
     lateinit var itemDecorator: ItemDecorator
     private val viewModel: ListVM by viewModels()
-    private val args : MovieListFragmentArgs by navArgs()
+    private val args: MovieListFragmentArgs by navArgs()
 
     override fun layoutInflater(
         inflater: LayoutInflater,
@@ -59,6 +59,6 @@ class MovieListFragment : BaseFragment<FragmentMovieListBinding>() {
     }
 
     private fun movieItemClick(movieId: Int) {
-        findNavController().navigateSafe(R.id.action_list_to_details)
+        findNavController().navigateSafe(MovieListFragmentDirections.actionListToDetails(movieId))
     }
 }

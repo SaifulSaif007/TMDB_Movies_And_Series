@@ -2,14 +2,34 @@ package com.saiful.movie.view.details
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.saiful.base.util.AppConstants
+import com.saiful.base.util.AppConstants.backdropSize
+import com.saiful.base.util.AppConstants.imageBaseUrl
+import com.saiful.base.util.AppConstants.posterSize
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
 import com.saiful.movie.databinding.FragmentMovieDetailsBinding
+import com.saiful.movie.view.list.MovieListFragmentArgs
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
+
+    private val args : MovieDetailsFragmentArgs by navArgs()
+    private val viewModel : MovieDetailsVM by viewModels()
+
     override fun layoutInflater(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -19,9 +39,29 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
 
     override fun layoutId() = R.layout.fragment_movie_details
 
-    override fun getViewModel(): BaseViewModel? = null
+    override fun getViewModel(): BaseViewModel = viewModel
 
     override fun initOnCreateView() {
+        viewModel.fetchMovieDetails(args.movieId)
 
+        lifecycleScope.launchWhenStarted {
+            viewModel.movieDetails.collect {
+                Glide.with(requireContext())
+                    .load(imageBaseUrl + backdropSize + it?.backdropPath)
+                    .transition(DrawableTransitionOptions.withCrossFade(500))
+                    .error(R.drawable.image1)
+                    .into(bindingView.backdropImage)
+
+                Glide.with(requireContext())
+                    .load(imageBaseUrl + posterSize + it?.posterPath)
+                    .transition(DrawableTransitionOptions.withCrossFade(500))
+                    .error(R.drawable.image1)
+                    .into(bindingView.posterImage)
+
+                (activity as AppCompatActivity).supportActionBar?.title = it?.title
+
+            }
+        }
     }
 }
+

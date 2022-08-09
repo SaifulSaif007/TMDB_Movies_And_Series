@@ -1,6 +1,7 @@
 package com.saiful.tmdbmoviesseries
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var binding: ActivityMainBinding
+    private var currentDestination: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -36,10 +38,14 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.findNavController()
 
         val appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController , appBarConfiguration)
+        setupActionBarWithNavController(navController, appBarConfiguration)
 
         val navBar = findViewById<BottomNavigationView>(R.id.nav_bar_container)
         navBar.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener{_, destination, _->
+            currentDestination = destination.id
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
