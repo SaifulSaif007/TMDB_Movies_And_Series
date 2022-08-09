@@ -30,10 +30,10 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
     private lateinit var viewPager: ViewPager2
     private lateinit var mPageChangeHandler: Handler
     private val viewModel: DashboardVM by viewModels()
-    private val popularMovieAdapter = MovieDashboardAdapter()
-    private val nowPlayingMovieAdapter = MovieDashboardAdapter()
-    private val topRatedMovieAdapter = MovieDashboardAdapter()
-    private val upcomingMovieAdapter = MovieDashboardAdapter()
+    private val popularMovieAdapter = MovieDashboardAdapter(::movieItemClick)
+    private val nowPlayingMovieAdapter = MovieDashboardAdapter(::movieItemClick)
+    private val topRatedMovieAdapter = MovieDashboardAdapter(::movieItemClick)
+    private val upcomingMovieAdapter = MovieDashboardAdapter(::movieItemClick)
 
     @Inject
     lateinit var itemDecorator: ItemDecorator
@@ -53,7 +53,7 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
 
         setUpImageSlider()
 
-        setOnClick()
+        seeAllClick()
 
         bindingView.popularMovieRecycler.apply {
             addItemDecoration(itemDecorator)
@@ -145,23 +145,31 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
         }
     }
 
-    private fun setOnClick() {
+    private fun seeAllClick() {
         bindingView.popularSeeAllLabel.setOnClickListener {
-            val action = MovieDashboardFragmentDirections.actionDashboardToList(MovieCategory.POPULAR)
+            val action =
+                MovieDashboardFragmentDirections.actionDashboardToList(MovieCategory.POPULAR)
             findNavController().navigateSafe(action)
         }
         bindingView.topRatedSeeAllLabel.setOnClickListener {
-            val action = MovieDashboardFragmentDirections.actionDashboardToList(MovieCategory.TOP_RATED)
+            val action =
+                MovieDashboardFragmentDirections.actionDashboardToList(MovieCategory.TOP_RATED)
             findNavController().navigateSafe(action)
         }
         bindingView.nowPlayingSeeAllLabel.setOnClickListener {
-            val action = MovieDashboardFragmentDirections.actionDashboardToList(MovieCategory.NOW_PLAYING)
+            val action =
+                MovieDashboardFragmentDirections.actionDashboardToList(MovieCategory.NOW_PLAYING)
             findNavController().navigateSafe(action)
         }
         bindingView.upcomingSeeAllLabel.setOnClickListener {
-            val action = MovieDashboardFragmentDirections.actionDashboardToList(MovieCategory.UPCOMING)
+            val action =
+                MovieDashboardFragmentDirections.actionDashboardToList(MovieCategory.UPCOMING)
             findNavController().navigateSafe(action)
         }
+    }
+
+    private fun movieItemClick(movieId: Int) {
+        findNavController().navigateSafe(R.id.action_dashboard_to_details)
     }
 
     private val runnable = Runnable {

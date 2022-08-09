@@ -5,8 +5,10 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.saiful.base.util.ItemDecorator
+import com.saiful.base.util.navigateSafe
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
@@ -39,7 +41,7 @@ class MovieListFragment : BaseFragment<FragmentMovieListBinding>() {
     override fun initOnCreateView() {
         (activity as AppCompatActivity).supportActionBar?.title = args.movieCategory.value
         viewModel.selectedCategory(args.movieCategory)
-        val movieAdapter = MovieListLoadAdapter()
+        val movieAdapter = MovieListLoadAdapter(::movieItemClick)
         bindingView.apply {
             movieListRecycler.apply {
                 setHasFixedSize(true)
@@ -54,5 +56,9 @@ class MovieListFragment : BaseFragment<FragmentMovieListBinding>() {
             }
         }
 
+    }
+
+    private fun movieItemClick(movieId: Int) {
+        findNavController().navigateSafe(R.id.action_list_to_details)
     }
 }

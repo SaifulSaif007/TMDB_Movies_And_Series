@@ -11,7 +11,7 @@ import com.saiful.base.util.AppConstants
 import com.saiful.movie.databinding.LayoutMovieListItemBinding
 import com.saiful.movie.model.Movies
 
-class MovieListLoadAdapter :
+class MovieListLoadAdapter(private val listener: (Int) -> Unit) :
     PagingDataAdapter<Movies, MovieListLoadAdapter.MovieViewHolder>(DIFF_UTIL) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -32,7 +32,13 @@ class MovieListLoadAdapter :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
-
+            binding.root.setOnClickListener {
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val item = getItem(position)
+                    if (item != null) listener.invoke(item.id)
+                }
+            }
         }
 
         fun bind(movies: Movies) {

@@ -14,7 +14,7 @@ import com.saiful.movie.R
 import com.saiful.movie.databinding.LayoutMovieItemBinding
 import com.saiful.movie.model.Movies
 
-class MovieDashboardAdapter :
+class MovieDashboardAdapter (private val listener: (Int) -> Unit):
     RecyclerView.Adapter<MovieDashboardAdapter.MovieDashboardViewHolder>() {
 
     @SuppressLint("DiffUtilEquals")
@@ -54,6 +54,15 @@ class MovieDashboardAdapter :
     inner class MovieDashboardViewHolder(private val binding: LayoutMovieItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        init {
+            binding.root.setOnClickListener {
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val item = differ.currentList[position]
+                    listener.invoke(item.id)
+                }
+            }
+        }
         fun bind(item: Movies) {
             Glide.with(binding.root.context)
                 .load(imageBaseUrl + posterSize + item.posterPath)
