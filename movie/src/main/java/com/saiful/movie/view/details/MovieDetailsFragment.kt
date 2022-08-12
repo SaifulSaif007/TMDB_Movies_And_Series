@@ -16,6 +16,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.saiful.base.util.AppConstants.backdropSize
 import com.saiful.base.util.AppConstants.imageBaseUrl
 import com.saiful.base.util.AppConstants.posterSize
+import com.saiful.base.util.floatNumberFormatter
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
@@ -26,8 +27,8 @@ import kotlinx.coroutines.flow.collect
 @AndroidEntryPoint
 class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
 
-    private val args : MovieDetailsFragmentArgs by navArgs()
-    private val viewModel : MovieDetailsVM by viewModels()
+    private val args: MovieDetailsFragmentArgs by navArgs()
+    private val viewModel: MovieDetailsVM by viewModels()
 
     override fun layoutInflater(
         inflater: LayoutInflater,
@@ -43,23 +44,27 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
     override fun initOnCreateView() {
         viewModel.fetchMovieDetails(args.movieId)
 
-        bindingView.collapsingAppbar.setExpandedTitleColor(Color.TRANSPARENT)
         lifecycleScope.launchWhenStarted {
-            viewModel.movieDetails.collect {
+            viewModel.movieDetails.collect { movie ->
                 Glide.with(requireContext())
-                    .load(imageBaseUrl + backdropSize + it?.backdropPath)
+                    .load(imageBaseUrl + backdropSize + movie?.backdropPath)
                     .transition(DrawableTransitionOptions.withCrossFade(500))
                     .error(R.drawable.image1)
                     .into(bindingView.backdropImage)
 
                 Glide.with(requireContext())
-                    .load(imageBaseUrl + posterSize + it?.posterPath)
+                    .load(imageBaseUrl + posterSize + movie?.posterPath)
                     .transition(DrawableTransitionOptions.withCrossFade(500))
                     .error(R.drawable.image1)
                     .into(bindingView.posterImage)
 
-                bindingView.toolbar.title = it?.title
-
+                bindingView.apply {
+                    toolbar.title = movie?.title
+                    movieName.text = movie?.title
+                    ratingBar2.rating = movie?.voteAverage?.toFloat() ?: 0f
+                    movieRating.text =
+                        "(" + floatNumberFormatter(movie?.voteAverage?.toFloat() ?: 0f) + ")"
+                }
             }
         }
     }
@@ -67,9 +72,10 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bindingView.collapsingAppbar.setExpandedTitleColor(Color.TRANSPARENT)
+
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
-
         bindingView.toolbar.setupWithNavController(navController, appBarConfiguration)
 
     }
