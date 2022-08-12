@@ -21,6 +21,8 @@ import com.saiful.base.util.AppConstants.backdropSize
 import com.saiful.base.util.AppConstants.imageBaseUrl
 import com.saiful.base.util.AppConstants.posterSize
 import com.saiful.base.util.floatNumberFormatter
+import com.saiful.base.util.formatDate
+import com.saiful.base.util.formatToShortNumber
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
@@ -53,13 +55,13 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
             viewModel.movieDetails.collect { movie ->
                 Glide.with(requireContext())
                     .load(imageBaseUrl + backdropSize + movie?.backdropPath)
-                    .transition(DrawableTransitionOptions.withCrossFade(500))
+                    .transition(DrawableTransitionOptions.withCrossFade(100))
                     .error(R.drawable.image1)
                     .into(bindingView.backdropImage)
 
                 Glide.with(requireContext())
                     .load(imageBaseUrl + posterSize + movie?.posterPath)
-                    .transition(DrawableTransitionOptions.withCrossFade(500))
+                    .transition(DrawableTransitionOptions.withCrossFade(200))
                     .error(R.drawable.image1)
                     .into(bindingView.posterImage)
 
@@ -73,6 +75,17 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
                     addChips(movie?.genres)
 
                     movieTagline.text = movie?.tagline
+                    movieOverview.text = movie?.overview
+
+                    movieInfoLayout.apply {
+                        movieBudget.text = movie?.budget?.toLong()?.formatToShortNumber()
+                        movieRevenue.text = movie?.revenue?.toLong()?.formatToShortNumber()
+                        movieStatus.text = movie?.status
+                        movieReleaseDate.text = movie?.releaseDate?.formatDate()
+                        movieRuntime.text = movie?.runtime.toString().plus(" mins")
+                        movieProduction.text =
+                            movie?.productionCompanies?.map { it?.name }?.joinToString(", ")
+                    }
                 }
             }
         }
@@ -80,8 +93,13 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
 
     private fun addChips(genres: List<GenresItem?>?) {
         if (genres != null) {
-            for (chip in genres){
-                bindingView.chipGroup.addView(createTagChip(requireContext(), chip?.name.toString()))
+            for (chip in genres) {
+                bindingView.chipGroup.addView(
+                    createTagChip(
+                        requireContext(),
+                        chip?.name.toString()
+                    )
+                )
             }
         }
     }
