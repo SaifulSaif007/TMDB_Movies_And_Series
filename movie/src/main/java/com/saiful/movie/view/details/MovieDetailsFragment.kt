@@ -1,10 +1,13 @@
 package com.saiful.movie.view.details
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -13,6 +16,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.google.android.material.chip.Chip
 import com.saiful.base.util.AppConstants.backdropSize
 import com.saiful.base.util.AppConstants.imageBaseUrl
 import com.saiful.base.util.AppConstants.posterSize
@@ -21,6 +25,7 @@ import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
 import com.saiful.movie.databinding.FragmentMovieDetailsBinding
+import com.saiful.movie.model.GenresItem
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
@@ -64,7 +69,19 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
                     ratingBar2.rating = movie?.voteAverage?.toFloat() ?: 0f
                     movieRating.text =
                         "(" + floatNumberFormatter(movie?.voteAverage?.toFloat() ?: 0f) + ")"
+
+                    addChips(movie?.genres)
+
+                    movieTagline.text = movie?.tagline
                 }
+            }
+        }
+    }
+
+    private fun addChips(genres: List<GenresItem?>?) {
+        if (genres != null) {
+            for (chip in genres){
+                bindingView.chipGroup.addView(createTagChip(requireContext(), chip?.name.toString()))
             }
         }
     }
@@ -77,6 +94,16 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         bindingView.toolbar.setupWithNavController(navController, appBarConfiguration)
+
+    }
+
+    private fun createTagChip(context: Context, chipName: String): Chip {
+        return Chip(context).apply {
+            text = chipName
+            textStartPadding = 0f
+            textStartPadding = 0f
+
+        }
 
     }
 }
