@@ -3,7 +3,6 @@ package com.saiful.tmdbmoviesseries
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -25,7 +24,6 @@ class MainActivity : AppCompatActivity() {
     private var currentDestination: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -43,9 +41,16 @@ class MainActivity : AppCompatActivity() {
         val navBar = findViewById<BottomNavigationView>(R.id.nav_bar_container)
         navBar.setupWithNavController(navController)
 
-        navController.addOnDestinationChangedListener{_, destination, _->
+        navController.addOnDestinationChangedListener { _, destination, _ ->
             currentDestination = destination.id
+
+            if (currentDestination == com.saiful.movie.R.id.movieDetailsFragment) {
+                binding.appBarLayout.visibility = View.GONE
+            } else {
+                binding.appBarLayout.visibility = View.VISIBLE
+            }
         }
+
     }
 
     override fun onSupportNavigateUp(): Boolean {

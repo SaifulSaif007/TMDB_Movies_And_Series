@@ -1,9 +1,10 @@
 package com.saiful.movie.view.details
 
+import android.graphics.Color
+import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -12,7 +13,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.saiful.base.util.AppConstants
 import com.saiful.base.util.AppConstants.backdropSize
 import com.saiful.base.util.AppConstants.imageBaseUrl
 import com.saiful.base.util.AppConstants.posterSize
@@ -20,7 +20,6 @@ import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
 import com.saiful.movie.databinding.FragmentMovieDetailsBinding
-import com.saiful.movie.view.list.MovieListFragmentArgs
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
@@ -44,6 +43,7 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
     override fun initOnCreateView() {
         viewModel.fetchMovieDetails(args.movieId)
 
+        bindingView.collapsingAppbar.setExpandedTitleColor(Color.TRANSPARENT)
         lifecycleScope.launchWhenStarted {
             viewModel.movieDetails.collect {
                 Glide.with(requireContext())
@@ -58,10 +58,20 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
                     .error(R.drawable.image1)
                     .into(bindingView.posterImage)
 
-                (activity as AppCompatActivity).supportActionBar?.title = it?.title
+                bindingView.toolbar.title = it?.title
 
             }
         }
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        bindingView.toolbar.setupWithNavController(navController, appBarConfiguration)
+
     }
 }
 
