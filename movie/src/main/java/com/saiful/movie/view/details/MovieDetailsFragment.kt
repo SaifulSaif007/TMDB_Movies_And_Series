@@ -1,7 +1,10 @@
 package com.saiful.movie.view.details
 
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -28,6 +31,7 @@ import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
 import com.saiful.movie.databinding.FragmentMovieDetailsBinding
 import com.saiful.movie.model.GenresItem
+import com.saiful.movie.view.adapter.MovieTrailerAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
@@ -36,6 +40,7 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
 
     private val args: MovieDetailsFragmentArgs by navArgs()
     private val viewModel: MovieDetailsVM by viewModels()
+    private val trailerAdapter = MovieTrailerAdapter(::onTrailerClick)
 
     override fun layoutInflater(
         inflater: LayoutInflater,
@@ -86,6 +91,14 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
                         movieProduction.text =
                             movie?.productionCompanies?.map { it?.name }?.joinToString(", ")
                     }
+
+
+                    movieTrailerLayout.apply {
+                        trailerRecycler.adapter = trailerAdapter
+                        movie?.videos?.results?.let {
+                            trailerAdapter.submitList(it)
+                        }
+                    }
                 }
             }
         }
@@ -104,7 +117,6 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
         }
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bindingView.collapsingAppbar.setExpandedTitleColor(Color.TRANSPARENT)
@@ -113,6 +125,18 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         bindingView.toolbar.setupWithNavController(navController, appBarConfiguration)
 
+    }
+
+    private fun onTrailerClick(key: String) {
+        try {
+            val youtubeIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube://$key"))
+            youtubeIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(youtubeIntent)
+        } catch (e: ActivityNotFoundException) {
+            val otherIntent =
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://youtube.com/watch?v=$key"))
+            startActivity(otherIntent)
+        }
     }
 
     private fun createTagChip(context: Context, chipName: String): Chip {

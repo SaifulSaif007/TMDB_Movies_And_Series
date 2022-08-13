@@ -56,7 +56,7 @@ class MovieListLoadAdapter(private val listener: (Int) -> Unit) :
         }
     }
 
-    companion object {
+    private companion object {
         @SuppressLint("DiffUtilEquals")
         private val DIFF_UTIL = object : DiffUtil.ItemCallback<Movies>() {
             override fun areItemsTheSame(oldItem: Movies, newItem: Movies): Boolean {

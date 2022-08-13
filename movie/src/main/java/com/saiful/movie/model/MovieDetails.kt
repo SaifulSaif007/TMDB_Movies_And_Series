@@ -86,7 +86,7 @@ data class GenresItem(
 
 data class Videos(
 	@field:Json(name="results")
-	val results: List<ResultsItem?>? = null
+	val results: List<ResultsItem>? = null
 )
 
 data class ProductionCompaniesItem(
