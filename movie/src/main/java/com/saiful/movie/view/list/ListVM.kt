@@ -20,8 +20,13 @@ class ListVM @Inject constructor(
 
     lateinit var movieList: Flow<PagingData<Movies>>
     private var service = apiService::popularMovies
+    lateinit var selectedCat : String
 
     fun selectedCategory(category: MovieCategory) {
+        if (this::selectedCat.isInitialized){
+            return
+        }
+        selectedCat = category.value
         service = when (category) {
             MovieCategory.POPULAR -> {
                 apiService::popularMovies

@@ -1,5 +1,6 @@
 package com.saiful.movie.view.list
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +18,6 @@ import com.saiful.movie.view.adapter.MovieListLoadAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
-
 
 @AndroidEntryPoint
 class MovieListFragment : BaseFragment<FragmentMovieListBinding>() {
@@ -40,7 +40,6 @@ class MovieListFragment : BaseFragment<FragmentMovieListBinding>() {
 
     override fun initOnCreateView() {
         (activity as AppCompatActivity).supportActionBar?.title = args.movieCategory.value
-        viewModel.selectedCategory(args.movieCategory)
         val movieAdapter = MovieListLoadAdapter(::movieItemClick)
         bindingView.apply {
             movieListRecycler.apply {
@@ -56,6 +55,10 @@ class MovieListFragment : BaseFragment<FragmentMovieListBinding>() {
             }
         }
 
+    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.selectedCategory(args.movieCategory)
     }
 
     private fun movieItemClick(movieId: Int) {
