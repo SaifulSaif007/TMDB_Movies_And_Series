@@ -8,4 +8,6 @@ import javax.inject.Singleton
 class MovieDetailsRepo @Inject constructor(private val movieApiService: MovieApiService){
 
     suspend fun movieDetails(id: Int) =  movieApiService.movieDetails(id)
+
+    suspend fun movieCasts(id: Int) = movieApiService.movieCast(id)
 }

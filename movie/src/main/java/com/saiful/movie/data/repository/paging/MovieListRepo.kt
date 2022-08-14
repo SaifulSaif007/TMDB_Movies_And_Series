@@ -1,9 +1,10 @@
-package com.saiful.movie.data.repository
+package com.saiful.movie.data.repository.paging
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.saiful.base.network.model.GenericResponse
 import com.saiful.movie.data.api.MovieApiService
+import com.saiful.movie.data.repository.paging.MoviePagingSource
 import com.saiful.movie.model.MoviesResponse
 import javax.inject.Inject
 import javax.inject.Singleton

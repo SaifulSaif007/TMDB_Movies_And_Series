@@ -1,6 +1,7 @@
 package com.saiful.movie.data.api
 
 import com.saiful.base.network.model.GenericResponse
+import com.saiful.movie.model.MovieCastResponse
 import com.saiful.movie.model.MovieDetails
 import com.saiful.movie.model.MoviesResponse
 import retrofit2.http.GET
@@ -34,4 +35,10 @@ interface MovieApiService {
         @Path("id") id: Int,
         @Query("append_to_response") res: String = "videos"
     ): GenericResponse<MovieDetails>
+
+    @GET("movie/{id}/credits")
+    suspend fun movieCast(
+        @Path("id") id: Int,
+    ) : GenericResponse<MovieCastResponse>
+
 }
