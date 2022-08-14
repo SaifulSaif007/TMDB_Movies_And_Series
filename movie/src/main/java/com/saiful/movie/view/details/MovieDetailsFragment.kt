@@ -23,6 +23,7 @@ import com.google.android.material.chip.Chip
 import com.saiful.base.util.AppConstants.backdropSize
 import com.saiful.base.util.AppConstants.imageBaseUrl
 import com.saiful.base.util.AppConstants.posterSize
+import com.saiful.base.util.ItemDecorator
 import com.saiful.base.util.floatNumberFormatter
 import com.saiful.base.util.formatDate
 import com.saiful.base.util.formatToShortNumber
@@ -34,6 +35,7 @@ import com.saiful.movie.model.GenresItem
 import com.saiful.movie.view.adapter.MovieTrailerAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
@@ -41,6 +43,9 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
     private val args: MovieDetailsFragmentArgs by navArgs()
     private val viewModel: MovieDetailsVM by viewModels()
     private val trailerAdapter = MovieTrailerAdapter(::onTrailerClick)
+
+    @Inject
+    lateinit var itemDecorator: ItemDecorator
 
     override fun layoutInflater(
         inflater: LayoutInflater,
@@ -94,7 +99,10 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
 
 
                     movieTrailerLayout.apply {
-                        trailerRecycler.adapter = trailerAdapter
+                        trailerRecycler.apply {
+                            adapter = trailerAdapter
+                            addItemDecoration(itemDecorator)
+                        }
                         movie?.videos?.results?.let {
                             trailerAdapter.submitList(it)
                         }
