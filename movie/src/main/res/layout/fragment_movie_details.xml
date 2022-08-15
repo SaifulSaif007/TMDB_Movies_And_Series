@@ -17,8 +17,10 @@
             android:layout_width="match_parent"
             android:layout_height="320dp"
             android:fitsSystemWindows="true"
+            android:visibility="visible"
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
-            app:toolbarId="@id/toolbar">
+            app:toolbarId="@id/toolbar"
+            tools:visibility="gone">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -221,6 +223,16 @@
             </include>
 
             <include
+                android:id="@+id/movie_cast_layout"
+                layout="@layout/layout_movie_cast"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/movie_info_layout" />
+
+            <include
                 android:id="@+id/movie_trailer_layout"
                 layout="@layout/layout_movie_trailer"
                 android:layout_width="0dp"
@@ -228,7 +240,7 @@
                 android:layout_marginTop="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/movie_info_layout" />
+                app:layout_constraintTop_toBottomOf="@+id/movie_cast_layout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

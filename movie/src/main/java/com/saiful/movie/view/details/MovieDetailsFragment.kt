@@ -6,11 +6,9 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -32,6 +30,7 @@ import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
 import com.saiful.movie.databinding.FragmentMovieDetailsBinding
 import com.saiful.movie.model.GenresItem
+import com.saiful.movie.view.adapter.MovieCastAdapter
 import com.saiful.movie.view.adapter.MovieTrailerAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -43,6 +42,7 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
     private val args: MovieDetailsFragmentArgs by navArgs()
     private val viewModel: MovieDetailsVM by viewModels()
     private val trailerAdapter = MovieTrailerAdapter(::onTrailerClick)
+    private val castAdapter = MovieCastAdapter()
 
     @Inject
     lateinit var itemDecorator: ItemDecorator
@@ -110,6 +110,22 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
                 }
             }
         }
+
+        bindingView.apply {
+            movieCastLayout.apply {
+                castRecycler.apply {
+                    adapter = castAdapter
+                    addItemDecoration(itemDecorator)
+                }
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.movieCast.collect {
+                it?.cast?.let { casts -> castAdapter.submitList(casts) }
+            }
+        }
+
     }
 
     private fun addChips(genres: List<GenresItem?>?) {
