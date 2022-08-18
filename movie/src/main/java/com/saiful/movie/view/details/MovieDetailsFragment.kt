@@ -61,6 +61,21 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
     override fun initOnCreateView() {
         viewModel.fetchMovieDetails(args.movieId)
 
+        bindingView.apply {
+            movieCastLayout.apply {
+                castRecycler.apply {
+                    adapter = castAdapter
+                    addItemDecoration(itemDecorator)
+                }
+            }
+            movieTrailerLayout.apply {
+                trailerRecycler.apply {
+                    adapter = trailerAdapter
+                    addItemDecoration(itemDecorator)
+                }
+            }
+        }
+
         lifecycleScope.launchWhenStarted {
             viewModel.movieDetails.collect { movie ->
                 Glide.with(requireContext())
@@ -97,25 +112,19 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
                             movie?.productionCompanies?.map { it?.name }?.joinToString(", ")
                     }
 
-
-                    movieTrailerLayout.apply {
-                        trailerRecycler.apply {
-                            adapter = trailerAdapter
-                            addItemDecoration(itemDecorator)
-                        }
-                        movie?.videos?.results?.let {
-                            trailerAdapter.submitList(it)
-                        }
+                    movie?.videos?.results?.let {
+                        trailerAdapter.submitList(it)
                     }
-                }
-            }
-        }
 
-        bindingView.apply {
-            movieCastLayout.apply {
-                castRecycler.apply {
-                    adapter = castAdapter
-                    addItemDecoration(itemDecorator)
+                    movieCollectionLayout.apply {
+                        Glide.with(requireContext())
+                            .load(imageBaseUrl + posterSize + movie?.belongsToCollection?.posterPath)
+                            .transition(DrawableTransitionOptions.withCrossFade(200))
+                            .error(R.drawable.image1)
+                            .into(collectionImage)
+
+                        collectionName.text = movie?.belongsToCollection?.name
+                    }
                 }
             }
         }
