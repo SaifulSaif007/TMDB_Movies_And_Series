@@ -39,6 +39,10 @@ interface MovieApiService {
     @GET("movie/{id}/credits")
     suspend fun movieCast(
         @Path("id") id: Int,
-    ) : GenericResponse<MovieCastResponse>
+    ): GenericResponse<MovieCastResponse>
 
+    @GET("movie/{id}/recommendations")
+    suspend fun recommendation(
+        @Path("id") id: Int,
+    ): GenericResponse<MoviesResponse>
 }

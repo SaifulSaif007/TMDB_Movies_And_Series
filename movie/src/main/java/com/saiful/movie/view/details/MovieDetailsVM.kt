@@ -6,6 +6,7 @@ import com.saiful.base.viewmodel.BaseOpsViewModel
 import com.saiful.movie.data.repository.MovieDetailsRepo
 import com.saiful.movie.model.MovieCastResponse
 import com.saiful.movie.model.MovieDetails
+import com.saiful.movie.model.MoviesResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
@@ -16,6 +17,7 @@ class MovieDetailsVM
 
     val movieDetails = MutableStateFlow<MovieDetails?>(null)
     val movieCast = MutableStateFlow<MovieCastResponse?>(null)
+    val recommendation = MutableStateFlow<MoviesResponse?>(null)
 
     fun fetchMovieDetails(id: Int) {
         executeRestCodeBlock(movie_details) {
@@ -24,23 +26,36 @@ class MovieDetailsVM
         executeRestCodeBlock(movie_cast) {
             repo.movieCasts(id)
         }
+        executeRestCodeBlock(movie_recommendation) {
+            repo.recommendation(id)
+        }
     }
 
     override fun onSuccessResponse(operationTag: String, data: BaseResponse.Success<Any>) {
-        if (operationTag == movie_details) {
-            when (data as GenericResponse<*>) {
-                is BaseResponse.Success -> {
-                    movieDetails.value = data.body as MovieDetails
+        when (operationTag) {
+            movie_details -> {
+                when (data as GenericResponse<*>) {
+                    is BaseResponse.Success -> {
+                        movieDetails.value = data.body as MovieDetails
+                    }
+                    else -> {}
                 }
-                else -> {}
             }
-        }
-        else if (operationTag == movie_cast){
-            when(data as GenericResponse<*>){
-                is BaseResponse.Success ->{
-                    movieCast.value = data.body as MovieCastResponse
+            movie_cast -> {
+                when (data as GenericResponse<*>) {
+                    is BaseResponse.Success -> {
+                        movieCast.value = data.body as MovieCastResponse
+                    }
+                    else -> {}
                 }
-                else ->{}
+            }
+            movie_recommendation -> {
+                when (data as GenericResponse<*>) {
+                    is BaseResponse.Success -> {
+                        recommendation.value = data.body as MoviesResponse
+                    }
+                    else -> {}
+                }
             }
         }
     }
@@ -48,5 +63,6 @@ class MovieDetailsVM
     private companion object {
         const val movie_details = "MOVIE_DETAILS"
         const val movie_cast = "MOVIE_CAST"
+        const val movie_recommendation = "MOVIE_RECOMMENDATION"
     }
 }
