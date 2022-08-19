@@ -87,6 +87,13 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
                     addItemDecoration(itemDecorator)
                 }
             }
+
+            movieCollectionLayout.root.setOnClickListener {
+                val collectionId = viewModel.movieDetails.value?.belongsToCollection?.id ?: 0
+                findNavController().navigateSafe(
+                    MovieDetailsFragmentDirections.actionDetailsToCollection(collectionId)
+                )
+            }
         }
 
         lifecycleScope.launchWhenStarted {
@@ -207,7 +214,6 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
             text = chipName
             textStartPadding = 0f
             textStartPadding = 0f
-
         }
 
     }

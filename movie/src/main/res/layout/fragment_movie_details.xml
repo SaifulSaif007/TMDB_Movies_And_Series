@@ -20,8 +20,7 @@
             android:fitsSystemWindows="true"
             android:visibility="visible"
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
-            app:toolbarId="@id/toolbar"
-            tools:visibility="gone">
+            app:toolbarId="@id/toolbar">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/toolbar_layout"

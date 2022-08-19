@@ -44,7 +44,9 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             currentDestination = destination.id
 
-            if (currentDestination == com.saiful.movie.R.id.movieDetailsFragment) {
+            if (currentDestination == com.saiful.movie.R.id.movieDetailsFragment
+                || currentDestination == com.saiful.movie.R.id.collectionFragment
+            ) {
                 binding.appBarLayout.visibility = View.GONE
             } else {
                 binding.appBarLayout.visibility = View.VISIBLE

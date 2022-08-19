@@ -22,7 +22,7 @@
         android:id="@+id/movieListFragment"
         android:name="com.saiful.movie.view.list.MovieListFragment"
         android:label="List"
-        tools:layout="@layout/fragment_movie_list" >
+        tools:layout="@layout/fragment_movie_list">
         <argument
             android:name="movie_category"
             app:argType="com.saiful.movie.model.MovieCategory" />
@@ -42,6 +42,19 @@
         <action
             android:id="@+id/action_movieDetailsFragment_self"
             app:destination="@id/movieDetailsFragment" />
+        <action
+            android:id="@+id/action_details_to_collection"
+            app:destination="@id/collectionFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/collectionFragment"
+        android:name="com.saiful.movie.view.collection.CollectionFragment"
+        android:label="Collections"
+        tools:layout="@layout/fragment_movie_collection">
+        <argument
+            android:name="collection_id"
+            app:argType="integer" />
     </fragment>
 
 </navigation>
