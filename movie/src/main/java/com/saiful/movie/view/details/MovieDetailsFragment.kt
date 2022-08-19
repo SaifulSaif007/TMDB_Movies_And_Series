@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -18,20 +19,19 @@ import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.chip.Chip
+import com.saiful.base.util.*
 import com.saiful.base.util.AppConstants.backdropSize
 import com.saiful.base.util.AppConstants.imageBaseUrl
 import com.saiful.base.util.AppConstants.posterSize
-import com.saiful.base.util.ItemDecorator
-import com.saiful.base.util.floatNumberFormatter
-import com.saiful.base.util.formatDate
-import com.saiful.base.util.formatToShortNumber
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
 import com.saiful.movie.databinding.FragmentMovieDetailsBinding
 import com.saiful.movie.model.GenresItem
 import com.saiful.movie.view.adapter.MovieCastAdapter
+import com.saiful.movie.view.adapter.MovieDashboardAdapter
 import com.saiful.movie.view.adapter.MovieTrailerAdapter
+import com.saiful.movie.view.dashboard.MovieDashboardFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
@@ -43,6 +43,7 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
     private val viewModel: MovieDetailsVM by viewModels()
     private val trailerAdapter = MovieTrailerAdapter(::onTrailerClick)
     private val castAdapter = MovieCastAdapter()
+    private val recommendationAdapter = MovieDashboardAdapter(::movieItemClick)
 
     @Inject
     lateinit var itemDecorator: ItemDecorator
@@ -71,6 +72,13 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
             movieTrailerLayout.apply {
                 trailerRecycler.apply {
                     adapter = trailerAdapter
+                    addItemDecoration(itemDecorator)
+                }
+            }
+
+            movieRecommendationLayout.apply {
+                recommendationMovieRecycler.apply {
+                    adapter = recommendationAdapter
                     addItemDecoration(itemDecorator)
                 }
             }
@@ -116,15 +124,21 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
                         trailerAdapter.submitList(it)
                     }
 
-                    movieCollectionLayout.apply {
-                        Glide.with(requireContext())
-                            .load(imageBaseUrl + posterSize + movie?.belongsToCollection?.posterPath)
-                            .transition(DrawableTransitionOptions.withCrossFade(200))
-                            .error(R.drawable.image1)
-                            .into(collectionImage)
+                    if (movie?.belongsToCollection != null) {
+                        movieCollectionLayout.apply {
+                            Glide.with(requireContext())
+                                .load(imageBaseUrl + posterSize + movie.belongsToCollection.posterPath)
+                                .transition(DrawableTransitionOptions.withCrossFade(200))
+                                .error(R.drawable.image1)
+                                .into(collectionImage)
 
-                        collectionName.text = movie?.belongsToCollection?.name
+                            collectionName.text = movie.belongsToCollection.name
+                            movieCollectionLayout.root.visibility = View.VISIBLE
+                        }
+                    } else {
+                        movieCollectionLayout.root.visibility = View.GONE
                     }
+
                 }
             }
         }
@@ -135,6 +149,11 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
             }
         }
 
+        lifecycleScope.launchWhenStarted {
+            viewModel.recommendation.collect {
+                it?.results?.let { recommend -> recommendationAdapter.submitList(recommend) }
+            }
+        }
     }
 
     private fun addChips(genres: List<GenresItem?>?) {
@@ -180,6 +199,13 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
 
         }
 
+    }
+
+    private fun movieItemClick(movieId: Int) {
+        findNavController().navigateSafe(
+            R.id.action_movieDetailsFragment_self,
+            bundleOf("movie_id" to movieId)
+        )
     }
 }
 
