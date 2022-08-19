@@ -2,6 +2,7 @@ package com.saiful.movie.data.api
 
 import com.saiful.base.network.model.GenericResponse
 import com.saiful.movie.model.MovieCastResponse
+import com.saiful.movie.model.MovieCollection
 import com.saiful.movie.model.MovieDetails
 import com.saiful.movie.model.MoviesResponse
 import retrofit2.http.GET
@@ -52,5 +53,10 @@ interface MovieApiService {
         @Path("id") id: Int,
         @Query("page") page: Int = 1
     ): GenericResponse<MoviesResponse>
+
+    @GET("collection/{id}")
+    suspend fun collections(
+        @Path("id") id: Int
+    ): GenericResponse<MovieCollection>
 
 }
