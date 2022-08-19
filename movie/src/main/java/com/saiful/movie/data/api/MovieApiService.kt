@@ -44,5 +44,13 @@ interface MovieApiService {
     @GET("movie/{id}/recommendations")
     suspend fun recommendation(
         @Path("id") id: Int,
+        @Query("page") page: Int = 1
     ): GenericResponse<MoviesResponse>
+
+    @GET("movie/{id}/similar")
+    suspend fun similarMovie(
+        @Path("id") id: Int,
+        @Query("page") page: Int = 1
+    ): GenericResponse<MoviesResponse>
+
 }

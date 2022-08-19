@@ -31,7 +31,6 @@ import com.saiful.movie.model.GenresItem
 import com.saiful.movie.view.adapter.MovieCastAdapter
 import com.saiful.movie.view.adapter.MovieDashboardAdapter
 import com.saiful.movie.view.adapter.MovieTrailerAdapter
-import com.saiful.movie.view.dashboard.MovieDashboardFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
@@ -44,6 +43,7 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
     private val trailerAdapter = MovieTrailerAdapter(::onTrailerClick)
     private val castAdapter = MovieCastAdapter()
     private val recommendationAdapter = MovieDashboardAdapter(::movieItemClick)
+    private val similarAdapter = MovieDashboardAdapter(::movieItemClick)
 
     @Inject
     lateinit var itemDecorator: ItemDecorator
@@ -75,10 +75,15 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
                     addItemDecoration(itemDecorator)
                 }
             }
-
             movieRecommendationLayout.apply {
                 recommendationMovieRecycler.apply {
                     adapter = recommendationAdapter
+                    addItemDecoration(itemDecorator)
+                }
+            }
+            similarMovieLayout.apply {
+                similarMovieRecycler.apply {
+                    adapter = similarAdapter
                     addItemDecoration(itemDecorator)
                 }
             }
@@ -152,6 +157,12 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
         lifecycleScope.launchWhenStarted {
             viewModel.recommendation.collect {
                 it?.results?.let { recommend -> recommendationAdapter.submitList(recommend) }
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.similar.collect {
+                it?.results?.let { similar -> similarAdapter.submitList(similar) }
             }
         }
     }

@@ -12,4 +12,7 @@ class MovieDetailsRepo @Inject constructor(private val movieApiService: MovieApi
     suspend fun movieCasts(id: Int) = movieApiService.movieCast(id)
 
     suspend fun recommendation(id: Int) = movieApiService.recommendation(id)
+
+    suspend fun similarMovie(id: Int) = movieApiService.similarMovie(id)
+
 }

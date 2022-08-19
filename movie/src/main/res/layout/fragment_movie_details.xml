@@ -265,6 +265,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/movie_collection_layout" />
 
+            <include
+                android:id="@+id/similar_movie_layout"
+                layout="@layout/layout_similar_movie"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/movie_recommendation_layout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -18,6 +18,7 @@ class MovieDetailsVM
     val movieDetails = MutableStateFlow<MovieDetails?>(null)
     val movieCast = MutableStateFlow<MovieCastResponse?>(null)
     val recommendation = MutableStateFlow<MoviesResponse?>(null)
+    val similar = MutableStateFlow<MoviesResponse?>(null)
 
     fun fetchMovieDetails(id: Int) {
         executeRestCodeBlock(movie_details) {
@@ -28,6 +29,9 @@ class MovieDetailsVM
         }
         executeRestCodeBlock(movie_recommendation) {
             repo.recommendation(id)
+        }
+        executeRestCodeBlock(movie_similar) {
+            repo.similarMovie(id)
         }
     }
 
@@ -57,6 +61,14 @@ class MovieDetailsVM
                     else -> {}
                 }
             }
+            movie_similar -> {
+                when (data as GenericResponse<*>) {
+                    is BaseResponse.Success -> {
+                        similar.value = data.body as MoviesResponse
+                    }
+                    else -> {}
+                }
+            }
         }
     }
 
@@ -64,5 +76,6 @@ class MovieDetailsVM
         const val movie_details = "MOVIE_DETAILS"
         const val movie_cast = "MOVIE_CAST"
         const val movie_recommendation = "MOVIE_RECOMMENDATION"
+        const val movie_similar = "MOVIE_SIMILAR"
     }
 }
