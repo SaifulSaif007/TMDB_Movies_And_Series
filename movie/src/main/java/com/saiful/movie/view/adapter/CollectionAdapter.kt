@@ -3,7 +3,7 @@ package com.saiful.movie.view.adapter
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -11,31 +11,37 @@ import com.saiful.base.util.AppConstants
 import com.saiful.movie.databinding.LayoutMovieListItemBinding
 import com.saiful.movie.model.Movies
 
-class MovieListLoadAdapter(private val listener: (Int) -> Unit) :
-    PagingDataAdapter<Movies, MovieListLoadAdapter.MovieViewHolder>(DIFF_UTIL) {
+class CollectionAdapter(private val listener: (Int) -> Unit) :
+    RecyclerView.Adapter<CollectionAdapter.CollectionViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        val binding =
-            LayoutMovieListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MovieViewHolder(binding)
+    private val differ = AsyncListDiffer(this, DIFF_UTIL)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollectionViewHolder {
+        return CollectionViewHolder(
+            LayoutMovieListItemBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
-    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        val currentItem = getItem(position)
-        if (currentItem != null) {
-            holder.bind(currentItem)
-        }
+    override fun onBindViewHolder(holder: CollectionViewHolder, position: Int) {
+        holder.bind(differ.currentList[position])
     }
 
+    override fun getItemCount(): Int = differ.currentList.size
 
-    inner class MovieViewHolder(private val binding: LayoutMovieListItemBinding) :
+    fun submitList(list: List<Movies>) = differ.submitList(list)
+
+    inner class CollectionViewHolder(private val binding: LayoutMovieListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.root.setOnClickListener {
                 val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    val item = getItem(position)
+                    val item = differ.currentList[position]
                     if (item != null) listener.invoke(item.id)
                 }
             }
@@ -52,8 +58,8 @@ class MovieListLoadAdapter(private val listener: (Int) -> Unit) :
                 ratingBar.rating = movies.voteAverage?.toFloat() ?: 0f
                 movieRating.text = "(" + movies.voteAverage.toString() + ")"
             }
-
         }
+
     }
 
     private companion object {
@@ -66,8 +72,6 @@ class MovieListLoadAdapter(private val listener: (Int) -> Unit) :
             override fun areContentsTheSame(oldItem: Movies, newItem: Movies): Boolean {
                 return oldItem == newItem
             }
-
         }
     }
-
 }

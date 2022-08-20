@@ -1,12 +1,15 @@
 package com.saiful.movie.view.list
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.saiful.base.util.ItemDecorator
+import com.saiful.base.util.navigateSafe
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
@@ -16,14 +19,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
 class MovieListFragment : BaseFragment<FragmentMovieListBinding>() {
 
     @Inject
     lateinit var itemDecorator: ItemDecorator
     private val viewModel: ListVM by viewModels()
-    private val args : MovieListFragmentArgs by navArgs()
+    private val args: MovieListFragmentArgs by navArgs()
+    private val movieAdapter = MovieListLoadAdapter(::movieItemClick)
 
     override fun layoutInflater(
         inflater: LayoutInflater,
@@ -38,8 +41,6 @@ class MovieListFragment : BaseFragment<FragmentMovieListBinding>() {
 
     override fun initOnCreateView() {
         (activity as AppCompatActivity).supportActionBar?.title = args.movieCategory.value
-        viewModel.selectedCategory(args.movieCategory)
-        val movieAdapter = MovieListLoadAdapter()
         bindingView.apply {
             movieListRecycler.apply {
                 setHasFixedSize(true)
@@ -54,5 +55,13 @@ class MovieListFragment : BaseFragment<FragmentMovieListBinding>() {
             }
         }
 
+    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.selectedCategory(args.movieCategory)
+    }
+
+    private fun movieItemClick(movieId: Int) {
+        findNavController().navigateSafe(MovieListFragmentDirections.actionListToDetails(movieId))
     }
 }

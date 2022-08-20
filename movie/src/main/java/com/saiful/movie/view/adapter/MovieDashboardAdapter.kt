@@ -14,21 +14,10 @@ import com.saiful.movie.R
 import com.saiful.movie.databinding.LayoutMovieItemBinding
 import com.saiful.movie.model.Movies
 
-class MovieDashboardAdapter :
+class MovieDashboardAdapter (private val listener: (Int) -> Unit):
     RecyclerView.Adapter<MovieDashboardAdapter.MovieDashboardViewHolder>() {
 
-    @SuppressLint("DiffUtilEquals")
-    private val diffCallback = object : DiffUtil.ItemCallback<Movies>() {
-        override fun areItemsTheSame(oldItem: Movies, newItem: Movies): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: Movies, newItem: Movies): Boolean {
-            return oldItem == newItem
-        }
-    }
     private val differ = AsyncListDiffer(this, diffCallback)
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieDashboardViewHolder {
         val binding = LayoutMovieItemBinding.inflate(
@@ -54,12 +43,34 @@ class MovieDashboardAdapter :
     inner class MovieDashboardViewHolder(private val binding: LayoutMovieItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        init {
+            binding.root.setOnClickListener {
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val item = differ.currentList[position]
+                    listener.invoke(item.id)
+                }
+            }
+        }
         fun bind(item: Movies) {
             Glide.with(binding.root.context)
                 .load(imageBaseUrl + posterSize + item.posterPath)
                 .transition(DrawableTransitionOptions.withCrossFade(500))
                 .error(R.drawable.image1)
                 .into(binding.posterImage)
+        }
+    }
+
+    private companion object {
+        @SuppressLint("DiffUtilEquals")
+        private val diffCallback = object : DiffUtil.ItemCallback<Movies>() {
+            override fun areItemsTheSame(oldItem: Movies, newItem: Movies): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: Movies, newItem: Movies): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 }

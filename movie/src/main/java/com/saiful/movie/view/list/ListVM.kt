@@ -5,7 +5,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.data.api.MovieApiService
-import com.saiful.movie.data.repository.MovieListRepo
+import com.saiful.movie.data.repository.paging.MovieListRepo
 import com.saiful.movie.model.MovieCategory
 import com.saiful.movie.model.Movies
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,8 +20,13 @@ class ListVM @Inject constructor(
 
     lateinit var movieList: Flow<PagingData<Movies>>
     private var service = apiService::popularMovies
+    lateinit var selectedCat : String
 
     fun selectedCategory(category: MovieCategory) {
+        if (this::selectedCat.isInitialized){
+            return
+        }
+        selectedCat = category.value
         service = when (category) {
             MovieCategory.POPULAR -> {
                 apiService::popularMovies
