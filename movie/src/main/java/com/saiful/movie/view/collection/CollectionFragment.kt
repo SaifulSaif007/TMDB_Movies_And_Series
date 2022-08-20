@@ -14,18 +14,26 @@ import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.saiful.base.util.AppConstants
+import com.saiful.base.util.ItemDecorator
+import com.saiful.base.util.navigateSafe
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
 import com.saiful.movie.databinding.FragmentMovieCollectionBinding
+import com.saiful.movie.view.adapter.CollectionAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CollectionFragment : BaseFragment<FragmentMovieCollectionBinding>() {
 
     private val args: CollectionFragmentArgs by navArgs()
     private val viewModel: CollectionVM by viewModels()
+    private val collectionAdapter = CollectionAdapter(::movieItemClick)
+
+    @Inject
+    lateinit var itemDecorator: ItemDecorator
 
     override fun layoutInflater(
         inflater: LayoutInflater,
@@ -41,6 +49,11 @@ class CollectionFragment : BaseFragment<FragmentMovieCollectionBinding>() {
     override fun initOnCreateView() {
 
         viewModel.fetchCollections(args.collectionId)
+
+        bindingView.collectionRecycler.apply {
+            adapter = collectionAdapter
+            addItemDecoration(itemDecorator)
+        }
 
         lifecycleScope.launchWhenStarted {
             viewModel.collections.collect { collection ->
@@ -62,8 +75,18 @@ class CollectionFragment : BaseFragment<FragmentMovieCollectionBinding>() {
                     collectionOverview.text = collection?.overview
                     toolbar.title = collection?.name
                 }
+
+                collection?.parts?.let { movie ->
+                    collectionAdapter.submitList(movie)
+                }
             }
         }
+    }
+
+    private fun movieItemClick(id: Int) {
+        findNavController().navigateSafe(
+            CollectionFragmentDirections.actionCollectionFragmentToMovieDetailsFragment(id)
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

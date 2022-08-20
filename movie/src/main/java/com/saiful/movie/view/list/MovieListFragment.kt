@@ -26,6 +26,7 @@ class MovieListFragment : BaseFragment<FragmentMovieListBinding>() {
     lateinit var itemDecorator: ItemDecorator
     private val viewModel: ListVM by viewModels()
     private val args: MovieListFragmentArgs by navArgs()
+    private val movieAdapter = MovieListLoadAdapter(::movieItemClick)
 
     override fun layoutInflater(
         inflater: LayoutInflater,
@@ -40,7 +41,6 @@ class MovieListFragment : BaseFragment<FragmentMovieListBinding>() {
 
     override fun initOnCreateView() {
         (activity as AppCompatActivity).supportActionBar?.title = args.movieCategory.value
-        val movieAdapter = MovieListLoadAdapter(::movieItemClick)
         bindingView.apply {
             movieListRecycler.apply {
                 setHasFixedSize(true)
