@@ -112,7 +112,7 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
     private fun setUpImageSlider() {
         viewPager = bindingView.imageSlider
         mPageChangeHandler = Handler(Looper.getMainLooper())
-        val pageAdapter = SliderAdapter(viewModel.sliderList, viewPager)
+        val pageAdapter = SliderAdapter(viewModel.sliderList, viewPager, ::movieItemClick)
 
         val transformer = CompositePageTransformer()
         transformer.addTransformer(MarginPageTransformer(25))
@@ -189,6 +189,5 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
         super.onResume()
         mPageChangeHandler.postDelayed(runnable, 5000)
     }
-
 
 }
