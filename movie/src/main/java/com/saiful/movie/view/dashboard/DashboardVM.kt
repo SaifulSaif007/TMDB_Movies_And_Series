@@ -4,29 +4,97 @@ import com.saiful.base.network.model.BaseResponse
 import com.saiful.base.network.model.GenericResponse
 import com.saiful.base.viewmodel.BaseOpsViewModel
 import com.saiful.movie.data.repository.DashboardRepo
-import com.saiful.movie.model.PopularMovies
+import com.saiful.movie.model.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
 class DashboardVM
-    @Inject constructor(private val dashboardRepo: DashboardRepo) : BaseOpsViewModel() {
+@Inject constructor(private val dashboardRepo: DashboardRepo) : BaseOpsViewModel() {
 
-    var popularMoviesList = MutableStateFlow<PopularMovies?>(null)
+    var popularMoviesList = MutableStateFlow<MoviesResponse?>(null)
+    var nowPlayingMoviesList = MutableStateFlow<MoviesResponse?>(null)
+    var topRatedMoviesList = MutableStateFlow<MoviesResponse?>(null)
+    var upcomingMoviesList = MutableStateFlow<MoviesResponse?>(null)
+    var sliderList = arrayListOf<Movies>()
+    val sliderLoaded = MutableStateFlow<Boolean>(false)
 
     init {
-       executeRestCodeBlock(popularMovie) {
-           dashboardRepo.getPopularMovies()
-       }
+        fetchPopularMovies()
+        fetchNowPlayingMovies()
+        fetchTopRatedMovies()
+        fetchUpcomingMovies()
     }
 
+    private fun fetchPopularMovies() {
+        executeRestCodeBlock(popularMovie) {
+            dashboardRepo.getPopularMovies(1)
+        }
+    }
+
+    private fun fetchNowPlayingMovies() {
+        executeRestCodeBlock(nowPlayingMovie) {
+            dashboardRepo.getNowPlayingMovies(1)
+        }
+    }
+
+    private fun fetchTopRatedMovies() {
+        executeRestCodeBlock(topRatedMovie) {
+            dashboardRepo.getTopRatedMovies(1)
+        }
+    }
+
+    private fun fetchUpcomingMovies() {
+        executeRestCodeBlock(upcomingMovie) {
+            dashboardRepo.getUpcomingMovies(1)
+        }
+    }
+
+
     override fun onSuccessResponse(operationTag: String, data: BaseResponse.Success<Any>) {
-        when(operationTag){
+        when (operationTag) {
             popularMovie -> {
-                when(val response = data as GenericResponse<PopularMovies>){
-                    is BaseResponse.Success ->  {
-                        popularMoviesList.value = response.body
+                when (val response = data as GenericResponse<*>) {
+                    is BaseResponse.Success -> {
+                        popularMoviesList.value = response.body as MoviesResponse
+                        popularMoviesList.value?.results?.shuffled()?.subList(0, 2)?.let {
+                            sliderList.addAll(it)
+                        }
+                    }
+                    else -> {}
+                }
+            }
+            nowPlayingMovie -> {
+                when (val response = data as GenericResponse<*>) {
+                    is BaseResponse.Success -> {
+                        nowPlayingMoviesList.value = response.body as MoviesResponse
+                        nowPlayingMoviesList.value?.results?.shuffled()?.subList(0, 2)?.let {
+                            sliderList.addAll(it)
+                        }
+                    }
+                    else -> {}
+                }
+            }
+            topRatedMovie -> {
+                when (val response = data as GenericResponse<*>) {
+                    is BaseResponse.Success -> {
+                        topRatedMoviesList.value = response.body as MoviesResponse
+                        topRatedMoviesList.value?.results?.shuffled()?.subList(0, 2)?.let {
+                            sliderList.addAll(it)
+                        }
+                    }
+                    else -> {}
+                }
+            }
+            upcomingMovie -> {
+                when (val response = data as GenericResponse<*>) {
+                    is BaseResponse.Success -> {
+                        upcomingMoviesList.value = response.body as MoviesResponse
+                        upcomingMoviesList.value?.results?.shuffled()?.subList(0, 2)?.let {
+                            sliderList.addAll(it)
+                            sliderLoaded.value = true
+                        }
                     }
                     else -> {}
                 }
@@ -36,5 +104,8 @@ class DashboardVM
 
     private companion object {
         const val popularMovie = "POPULAR_MOVIE"
+        const val nowPlayingMovie = "NOW_PLAYING_MOVIE"
+        const val topRatedMovie = "TOP_RATED_MOVIE"
+        const val upcomingMovie = "UPCOMING_MOVIE"
     }
 }
