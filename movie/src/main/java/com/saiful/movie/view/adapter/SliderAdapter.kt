@@ -56,6 +56,10 @@ class SliderAdapter(
         fun bind(item: Movies) {
             Glide.with(itemView).load(imageBaseUrl + backdropSize + item.backdropPath)
                 .into(binding.posterImage)
+
+            binding.apply {
+                movieName.text = item.title
+            }
         }
     }
 
