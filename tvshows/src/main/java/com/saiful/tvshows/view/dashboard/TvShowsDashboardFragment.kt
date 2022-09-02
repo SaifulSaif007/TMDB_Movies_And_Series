@@ -1,4 +1,4 @@
-package com.saiful.tvshows.view
+package com.saiful.tvshows.view.dashboard
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
