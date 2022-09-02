@@ -61,13 +61,13 @@ class CollectionFragment : BaseFragment<FragmentMovieCollectionBinding>() {
                 Glide.with(requireContext())
                     .load(AppConstants.imageBaseUrl + AppConstants.backdropSize + collection?.backdropPath)
                     .transition(DrawableTransitionOptions.withCrossFade(100))
-                    .error(R.drawable.image1)
+                    //.error(R.drawable.image1)
                     .into(bindingView.backdropImage)
 
                 Glide.with(requireContext())
                     .load(AppConstants.imageBaseUrl + AppConstants.backdropSize + collection?.posterPath)
                     .transition(DrawableTransitionOptions.withCrossFade(100))
-                    .error(R.drawable.image1)
+                    //.error(R.drawable.image1)
                     .into(bindingView.posterImage)
 
                 bindingView.apply {

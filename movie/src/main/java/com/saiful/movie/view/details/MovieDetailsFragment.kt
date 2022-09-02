@@ -105,13 +105,13 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
                 Glide.with(requireContext())
                     .load(imageBaseUrl + backdropSize + movie?.backdropPath)
                     .transition(DrawableTransitionOptions.withCrossFade(100))
-                    .error(R.drawable.image1)
+                    //.error(R.drawable.image1)
                     .into(bindingView.backdropImage)
 
                 Glide.with(requireContext())
                     .load(imageBaseUrl + posterSize + movie?.posterPath)
                     .transition(DrawableTransitionOptions.withCrossFade(200))
-                    .error(R.drawable.image1)
+                    //.error(R.drawable.image1)
                     .into(bindingView.posterImage)
 
                 bindingView.apply {
@@ -145,7 +145,7 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
                             Glide.with(requireContext())
                                 .load(imageBaseUrl + posterSize + movie.belongsToCollection.posterPath)
                                 .transition(DrawableTransitionOptions.withCrossFade(200))
-                                .error(R.drawable.image1)
+                                //.error(R.drawable.image1)
                                 .into(collectionImage)
 
                             collectionName.text = movie.belongsToCollection.name

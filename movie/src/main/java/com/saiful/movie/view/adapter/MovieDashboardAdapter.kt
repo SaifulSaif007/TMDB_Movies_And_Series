@@ -56,7 +56,7 @@ class MovieDashboardAdapter (private val listener: (Int) -> Unit):
             Glide.with(binding.root.context)
                 .load(imageBaseUrl + posterSize + item.posterPath)
                 .transition(DrawableTransitionOptions.withCrossFade(500))
-                .error(R.drawable.image1)
+                //.error(R.drawable.image1)
                 .into(binding.posterImage)
         }
     }

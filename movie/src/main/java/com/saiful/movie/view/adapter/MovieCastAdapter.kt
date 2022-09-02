@@ -49,7 +49,7 @@ class MovieCastAdapter() : RecyclerView.Adapter<MovieCastAdapter.CastViewHolder>
                 Glide.with(binding.root.context)
                     .load(AppConstants.imageBaseUrl + AppConstants.posterSize + item.profilePath)
                     .transition(DrawableTransitionOptions.withCrossFade(500))
-                    .error(R.drawable.image1)
+                    //.error(R.drawable.image1)
                     .into(binding.castImage)
 
                 castName.text = item.originalName
