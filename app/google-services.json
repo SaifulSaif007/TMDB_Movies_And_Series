@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "39486523413",
+    "project_id": "tmdb-movie-series-app",
+    "storage_bucket": "tmdb-movie-series-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:39486523413:android:29e295fd1e753c271f661c",
+        "android_client_info": {
+          "package_name": "com.saiful.tmdbmoviesseries"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "39486523413-gi65s6tkfin06302o901sgqmi3ik0962.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkKRlNNsjQVjQONAzEJKtRpteDJx3yPv8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "39486523413-gi65s6tkfin06302o901sgqmi3ik0962.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

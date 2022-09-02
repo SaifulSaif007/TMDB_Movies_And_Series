@@ -14,7 +14,7 @@ data class MovieDetails(
 	val title: String? = null,
 	@field:Json(name="backdrop_path")
 	val backdropPath: String? = null,
-	val revenue: Int? = null,
+	val revenue: Double? = null,
 	val genres: List<GenresItem?>? = null,
 	val popularity: Double? = null,
 	@field:Json(name="production_countries")
