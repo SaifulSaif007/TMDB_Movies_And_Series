@@ -1,9 +1,10 @@
-package com.saiful.tvshows
+package com.saiful.tvshows.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
+import com.saiful.tvshows.R
 import com.saiful.tvshows.databinding.FragmentTvshowsDashboardBinding
 import dagger.hilt.android.AndroidEntryPoint
 

@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.saiful.base.util.AppConstants.imageBaseUrl
-import com.saiful.base.util.AppConstants.posterSize
+import com.saiful.shared.utils.AppConstants.imageBaseUrl
+import com.saiful.shared.utils.AppConstants.posterSize
 import com.saiful.movie.R
 import com.saiful.movie.databinding.LayoutMovieItemBinding
 import com.saiful.movie.model.Movies

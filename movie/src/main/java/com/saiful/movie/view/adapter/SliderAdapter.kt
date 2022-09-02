@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
-import com.saiful.base.util.AppConstants.backdropSize
-import com.saiful.base.util.AppConstants.imageBaseUrl
+import com.saiful.shared.utils.AppConstants.backdropSize
+import com.saiful.shared.utils.AppConstants.imageBaseUrl
 import com.saiful.movie.databinding.LayoutImageSliderBinding
 import com.saiful.movie.model.Movies
 

@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.saiful.base.util.AppConstants
+import com.saiful.shared.utils.AppConstants
 import com.saiful.movie.databinding.LayoutMovieListItemBinding
 import com.saiful.movie.model.Movies
 

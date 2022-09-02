@@ -1,10 +1,9 @@
-package com.saiful.base.util
+package com.saiful.shared.utils
 
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
 
 fun floatNumberFormatter(value: Float): String {
     val df = DecimalFormat("#.#")
