@@ -1,10 +1,7 @@
 package com.saiful.tvshows.view.dashboard
 
-import android.content.Context
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
@@ -13,13 +10,16 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.saiful.base.util.ItemDecorator
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.tvshows.R
 import com.saiful.tvshows.databinding.FragmentTvshowsDashboardBinding
+import com.saiful.tvshows.view.adapter.ShowsDashboardAdapter
 import com.saiful.tvshows.view.adapter.ShowsSliderAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class TvShowsDashboardFragment : BaseFragment<FragmentTvshowsDashboardBinding>() {
@@ -27,21 +27,80 @@ class TvShowsDashboardFragment : BaseFragment<FragmentTvshowsDashboardBinding>()
     private lateinit var viewPager: ViewPager2
     private lateinit var mPageChangeHandler: Handler
     private val viewModel: ShowsDashboardVM by viewModels()
+    private val trendingShowsAdapter = ShowsDashboardAdapter(::tvShowsItemClick)
+    private val onAirShowsAdapter = ShowsDashboardAdapter(::tvShowsItemClick)
+    private val topRatedShowsAdapter = ShowsDashboardAdapter(::tvShowsItemClick)
+    private val popularShowsAdapter = ShowsDashboardAdapter(::tvShowsItemClick)
+
+    @Inject
+    lateinit var itemDecorator: ItemDecorator
 
     override fun layoutInflater(
         inflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentTvshowsDashboardBinding {
-        return FragmentTvshowsDashboardBinding.inflate(inflater,container,false)
+        return FragmentTvshowsDashboardBinding.inflate(inflater, container, false)
     }
 
-    override fun layoutId(): Int  = R.layout.fragment_tvshows_dashboard
+    override fun layoutId(): Int = R.layout.fragment_tvshows_dashboard
 
     override fun getViewModel(): BaseViewModel = viewModel
 
     override fun initOnCreateView() {
 
         setUpImageSlider()
+
+        bindingView.trendingShowRecycler.apply {
+            addItemDecoration(itemDecorator)
+            adapter = trendingShowsAdapter
+        }
+
+        bindingView.onAirShowRecycler.apply {
+            addItemDecoration(itemDecorator)
+            adapter = onAirShowsAdapter
+        }
+
+        bindingView.topRatedShowRecycler.apply {
+            addItemDecoration(itemDecorator)
+            adapter = topRatedShowsAdapter
+        }
+
+        bindingView.popularShowRecycler.apply {
+            addItemDecoration(itemDecorator)
+            adapter = popularShowsAdapter
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.trendingShowsList.collect { trending ->
+                trending?.results?.let { shows ->
+                    trendingShowsAdapter.submitList(shows)
+                }
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.onAirShowsList.collect { onAir ->
+                onAir?.results?.let { shows ->
+                    onAirShowsAdapter.submitList(shows)
+                }
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.topRatedShowsList.collect { topRated ->
+                topRated?.results?.let { shows ->
+                    topRatedShowsAdapter.submitList(shows)
+                }
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.popularShowsList.collect { popular ->
+                popular?.results?.let { shows ->
+                    popularShowsAdapter.submitList(shows)
+                }
+            }
+        }
     }
 
     private fun setUpImageSlider() {
@@ -80,7 +139,7 @@ class TvShowsDashboardFragment : BaseFragment<FragmentTvshowsDashboardBinding>()
         }
     }
 
-    private fun tvShowsItemClick(showsId : Int){
+    private fun tvShowsItemClick(showsId: Int) {
         //
     }
 
