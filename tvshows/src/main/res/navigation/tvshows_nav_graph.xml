@@ -8,6 +8,6 @@
     <fragment
         android:id="@+id/tvShowsFragment"
         android:name="com.saiful.tvshows.view.dashboard.TvShowsDashboardFragment"
-        android:label="TvShowsFragment"
+        android:label="Tv Shows"
         tools:layout="@layout/fragment_tvshows_dashboard"/>
 </navigation>

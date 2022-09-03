@@ -60,7 +60,6 @@ class ShowsDashboardVM
                         trendingShowsList.value = response.body as TvShowsResponse
                         trendingShowsList.value?.results?.shuffled()?.subList(0, 2)?.let {
                             sliderList.addAll(it)
-                            sliderLoaded.value = true
                         }
                     }
                     else -> {}
@@ -72,7 +71,6 @@ class ShowsDashboardVM
                         popularShowsList.value = response.body as TvShowsResponse
                         popularShowsList.value?.results?.shuffled()?.subList(0, 2)?.let {
                             sliderList.addAll(it)
-                            sliderLoaded.value = true
                         }
                     }
                     else -> {}
@@ -84,7 +82,6 @@ class ShowsDashboardVM
                         topRatedShowsList.value = response.body as TvShowsResponse
                         topRatedShowsList.value?.results?.shuffled()?.subList(0, 2)?.let {
                             sliderList.addAll(it)
-                            sliderLoaded.value = true
                         }
                     }
                     else -> {}
@@ -94,7 +91,7 @@ class ShowsDashboardVM
                 when(val response = data as GenericResponse<*>){
                     is BaseResponse.Success->{
                         onAirShowsList.value = response.body as TvShowsResponse
-                        topRatedShowsList.value?.results?.shuffled()?.subList(0, 2)?.let {
+                        onAirShowsList.value?.results?.shuffled()?.subList(0, 2)?.let {
                             sliderList.addAll(it)
                             sliderLoaded.value = true
                         }
