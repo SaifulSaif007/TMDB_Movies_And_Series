@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
@@ -13,8 +14,10 @@ import androidx.viewpager2.widget.ViewPager2
 import com.saiful.base.util.ItemDecorator
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
+import com.saiful.shared.utils.navigateSafe
 import com.saiful.tvshows.R
 import com.saiful.tvshows.databinding.FragmentTvshowsDashboardBinding
+import com.saiful.tvshows.model.TvShowsCategory
 import com.saiful.tvshows.view.adapter.ShowsDashboardAdapter
 import com.saiful.tvshows.view.adapter.ShowsSliderAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,6 +52,8 @@ class TvShowsDashboardFragment : BaseFragment<FragmentTvshowsDashboardBinding>()
     override fun initOnCreateView() {
 
         setUpImageSlider()
+
+        seeAllClicks()
 
         bindingView.trendingShowRecycler.apply {
             addItemDecoration(itemDecorator)
@@ -139,8 +144,41 @@ class TvShowsDashboardFragment : BaseFragment<FragmentTvshowsDashboardBinding>()
         }
     }
 
+    private fun seeAllClicks() {
+        bindingView.apply {
+            onAirSeeAllLabel.setOnClickListener {
+                val action =
+                    TvShowsDashboardFragmentDirections.actionTvShowsFragmentToShowListFragment(
+                        TvShowsCategory.ON_AIR
+                    )
+                findNavController().navigateSafe(action)
+            }
+            popularSeeAllLabel.setOnClickListener {
+                val action =
+                    TvShowsDashboardFragmentDirections.actionTvShowsFragmentToShowListFragment(
+                        TvShowsCategory.POPULAR
+                    )
+                findNavController().navigateSafe(action)
+            }
+            topRatedSeeAllLabel.setOnClickListener {
+                val action =
+                    TvShowsDashboardFragmentDirections.actionTvShowsFragmentToShowListFragment(
+                        TvShowsCategory.TOP_RATED
+                    )
+                findNavController().navigateSafe(action)
+            }
+            trendingSeeAllLabel.setOnClickListener {
+                val action =
+                    TvShowsDashboardFragmentDirections.actionTvShowsFragmentToShowListFragment(
+                        TvShowsCategory.TRENDING
+                    )
+                findNavController().navigateSafe(action)
+            }
+        }
+    }
+
     private fun tvShowsItemClick(showsId: Int) {
-        //
+        // details page
     }
 
     private val runnable = Runnable {
