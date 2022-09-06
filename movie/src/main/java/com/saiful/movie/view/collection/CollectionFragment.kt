@@ -13,9 +13,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.saiful.base.util.AppConstants
+import com.saiful.shared.utils.AppConstants
 import com.saiful.base.util.ItemDecorator
-import com.saiful.base.util.navigateSafe
+import com.saiful.shared.utils.navigateSafe
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
@@ -61,13 +61,13 @@ class CollectionFragment : BaseFragment<FragmentMovieCollectionBinding>() {
                 Glide.with(requireContext())
                     .load(AppConstants.imageBaseUrl + AppConstants.backdropSize + collection?.backdropPath)
                     .transition(DrawableTransitionOptions.withCrossFade(100))
-                    .error(R.drawable.image1)
+                    //.error(R.drawable.image1)
                     .into(bindingView.backdropImage)
 
                 Glide.with(requireContext())
                     .load(AppConstants.imageBaseUrl + AppConstants.backdropSize + collection?.posterPath)
                     .transition(DrawableTransitionOptions.withCrossFade(100))
-                    .error(R.drawable.image1)
+                    //.error(R.drawable.image1)
                     .into(bindingView.posterImage)
 
                 bindingView.apply {

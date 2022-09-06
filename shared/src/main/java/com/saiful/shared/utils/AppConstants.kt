@@ -1,4 +1,4 @@
-package com.saiful.base.util
+package com.saiful.shared.utils
 
 object AppConstants {
 

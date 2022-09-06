@@ -1,4 +1,4 @@
-package com.saiful.base.util
+package com.saiful.shared.utils
 
 import android.os.Bundle
 import androidx.annotation.IdRes
@@ -36,7 +36,6 @@ fun NavController.navigateSafe(@IdRes resId: Int, args: Bundle? = null) {
 fun Int?.orEmpty(default: Int = 0): Int {
     return this ?: default
 }
-
 
 fun <T> Fragment.getNavigationResult(key: String = "key") =
     findNavController().currentBackStackEntry?.savedStateHandle?.get<T>(key)

@@ -20,9 +20,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.chip.Chip
 import com.saiful.base.util.*
-import com.saiful.base.util.AppConstants.backdropSize
-import com.saiful.base.util.AppConstants.imageBaseUrl
-import com.saiful.base.util.AppConstants.posterSize
+import com.saiful.shared.utils.AppConstants.backdropSize
+import com.saiful.shared.utils.AppConstants.imageBaseUrl
+import com.saiful.shared.utils.AppConstants.posterSize
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
@@ -31,6 +31,10 @@ import com.saiful.movie.model.GenresItem
 import com.saiful.movie.view.adapter.MovieCastAdapter
 import com.saiful.movie.view.adapter.MovieDashboardAdapter
 import com.saiful.movie.view.adapter.MovieTrailerAdapter
+import com.saiful.shared.utils.floatNumberFormatter
+import com.saiful.shared.utils.formatDate
+import com.saiful.shared.utils.formatToShortNumber
+import com.saiful.shared.utils.navigateSafe
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
@@ -101,13 +105,13 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
                 Glide.with(requireContext())
                     .load(imageBaseUrl + backdropSize + movie?.backdropPath)
                     .transition(DrawableTransitionOptions.withCrossFade(100))
-                    .error(R.drawable.image1)
+                    //.error(R.drawable.image1)
                     .into(bindingView.backdropImage)
 
                 Glide.with(requireContext())
                     .load(imageBaseUrl + posterSize + movie?.posterPath)
                     .transition(DrawableTransitionOptions.withCrossFade(200))
-                    .error(R.drawable.image1)
+                    //.error(R.drawable.image1)
                     .into(bindingView.posterImage)
 
                 bindingView.apply {
@@ -141,7 +145,7 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
                             Glide.with(requireContext())
                                 .load(imageBaseUrl + posterSize + movie.belongsToCollection.posterPath)
                                 .transition(DrawableTransitionOptions.withCrossFade(200))
-                                .error(R.drawable.image1)
+                                //.error(R.drawable.image1)
                                 .into(collectionImage)
 
                             collectionName.text = movie.belongsToCollection.name

@@ -12,7 +12,7 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.saiful.base.util.ItemDecorator
-import com.saiful.base.util.navigateSafe
+import com.saiful.shared.utils.navigateSafe
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="trending_tv_shows">Trending Shows</string>
+    <string name="airing_now">Airing Now</string>
+    <string name="top_rated">Top Rated</string>
+    <string name="popular_shows">Popular Shows</string>
+
+    <string name="see_all">See all</string>
+</resources>

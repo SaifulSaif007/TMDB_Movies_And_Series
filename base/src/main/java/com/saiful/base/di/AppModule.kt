@@ -4,7 +4,7 @@ import com.saiful.base.BuildConfig
 import com.saiful.base.network.ResponseAdapterFactory
 import com.saiful.base.network.ThrowableAdapter
 import com.saiful.base.network.UserInterceptor
-import com.saiful.base.util.AppConstants.baseUrl
+import com.saiful.shared.utils.AppConstants.baseUrl
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides

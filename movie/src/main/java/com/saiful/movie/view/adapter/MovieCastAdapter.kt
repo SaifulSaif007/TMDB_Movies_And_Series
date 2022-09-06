@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.saiful.base.util.AppConstants
+import com.saiful.shared.utils.AppConstants
 import com.saiful.movie.R
 import com.saiful.movie.databinding.LayoutCastItemBinding
 import com.saiful.movie.model.Cast
@@ -49,7 +49,7 @@ class MovieCastAdapter() : RecyclerView.Adapter<MovieCastAdapter.CastViewHolder>
                 Glide.with(binding.root.context)
                     .load(AppConstants.imageBaseUrl + AppConstants.posterSize + item.profilePath)
                     .transition(DrawableTransitionOptions.withCrossFade(500))
-                    .error(R.drawable.image1)
+                    //.error(R.drawable.image1)
                     .into(binding.castImage)
 
                 castName.text = item.originalName

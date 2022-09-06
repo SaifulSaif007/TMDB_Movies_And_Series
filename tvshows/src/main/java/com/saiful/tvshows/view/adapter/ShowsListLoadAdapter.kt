@@ -1,4 +1,4 @@
-package com.saiful.movie.view.adapter
+package com.saiful.tvshows.view.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -8,15 +8,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.saiful.shared.utils.AppConstants
-import com.saiful.movie.databinding.LayoutMovieListItemBinding
-import com.saiful.movie.model.Movies
+import com.saiful.tvshows.databinding.LayoutShowsListItemBinding
+import com.saiful.tvshows.model.TvShows
 
-class MovieListLoadAdapter(private val listener: (Int) -> Unit) :
-    PagingDataAdapter<Movies, MovieListLoadAdapter.MovieViewHolder>(DIFF_UTIL) {
+class ShowsListLoadAdapter(private val listener: (Int) -> Unit) :
+    PagingDataAdapter<TvShows, ShowsListLoadAdapter.MovieViewHolder>(DIFF_UTIL) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val binding =
-            LayoutMovieListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            LayoutShowsListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MovieViewHolder(binding)
     }
 
@@ -28,7 +28,7 @@ class MovieListLoadAdapter(private val listener: (Int) -> Unit) :
     }
 
 
-    inner class MovieViewHolder(private val binding: LayoutMovieListItemBinding) :
+    inner class MovieViewHolder(private val binding: LayoutShowsListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
@@ -41,16 +41,16 @@ class MovieListLoadAdapter(private val listener: (Int) -> Unit) :
             }
         }
 
-        fun bind(movies: Movies) {
+        fun bind(shows: TvShows) {
             binding.apply {
                 Glide.with(itemView)
-                    .load(AppConstants.imageBaseUrl + AppConstants.backdropSize + movies.posterPath)
+                    .load(AppConstants.imageBaseUrl + AppConstants.backdropSize + shows.posterPath)
                     .into(binding.posterImage)
 
-                movieTitle.text = movies.title
-                movieSubtitle.text = movies.overview
-                ratingBar.rating = movies.voteAverage?.toFloat() ?: 0f
-                movieRating.text = "(" + movies.voteAverage.toString() + ")"
+                showsTitle.text = shows.name
+                showsOverview.text = shows.overview
+                ratingBar.rating = shows.voteAverage?.toFloat() ?: 0f
+                showsRating.text = "(" + shows.voteAverage.toString() + ")"
             }
 
         }
@@ -58,12 +58,12 @@ class MovieListLoadAdapter(private val listener: (Int) -> Unit) :
 
     private companion object {
         @SuppressLint("DiffUtilEquals")
-        private val DIFF_UTIL = object : DiffUtil.ItemCallback<Movies>() {
-            override fun areItemsTheSame(oldItem: Movies, newItem: Movies): Boolean {
+        private val DIFF_UTIL = object : DiffUtil.ItemCallback<TvShows>() {
+            override fun areItemsTheSame(oldItem: TvShows, newItem: TvShows): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: Movies, newItem: Movies): Boolean {
+            override fun areContentsTheSame(oldItem: TvShows, newItem: TvShows): Boolean {
                 return oldItem == newItem
             }
 

@@ -1,4 +1,4 @@
-package com.saiful.movie.view.adapter
+package com.saiful.tvshows.view.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,17 +7,17 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.saiful.shared.utils.AppConstants.backdropSize
 import com.saiful.shared.utils.AppConstants.imageBaseUrl
-import com.saiful.movie.databinding.LayoutImageSliderBinding
-import com.saiful.movie.model.Movies
+import com.saiful.tvshows.databinding.LayoutShowsImageSliderBinding
+import com.saiful.tvshows.model.TvShows
 
-class SliderAdapter(
-    private val imageList: MutableList<Movies>,
+class ShowsSliderAdapter(
+    private val imageList: MutableList<TvShows>,
     private val viewPager2: ViewPager2,
     private val listener: (Int) -> Unit
-) : RecyclerView.Adapter<SliderAdapter.SliderViewHolder>() {
+) : RecyclerView.Adapter<ShowsSliderAdapter.SliderViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SliderViewHolder {
-        val binding = LayoutImageSliderBinding.inflate(
+        val binding = LayoutShowsImageSliderBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -40,7 +40,7 @@ class SliderAdapter(
 
     override fun getItemCount(): Int = imageList.size
 
-    inner class SliderViewHolder(private val binding: LayoutImageSliderBinding) :
+    inner class SliderViewHolder(private val binding: LayoutShowsImageSliderBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
@@ -53,12 +53,12 @@ class SliderAdapter(
             }
         }
 
-        fun bind(item: Movies) {
+        fun bind(item: TvShows) {
             Glide.with(itemView).load(imageBaseUrl + backdropSize + item.backdropPath)
                 .into(binding.posterImage)
 
             binding.apply {
-                movieName.text = item.title
+                showsName.text = item.name
             }
         }
     }

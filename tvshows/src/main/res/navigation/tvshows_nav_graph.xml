@@ -7,7 +7,19 @@
 
     <fragment
         android:id="@+id/tvShowsFragment"
-        android:name="com.saiful.tvshows.TvShowsFragment"
-        android:label="TvShowsFragment"
-        tools:layout="@layout/fragment_tvshows_dashboard"/>
+        android:name="com.saiful.tvshows.view.dashboard.TvShowsDashboardFragment"
+        android:label="Tv Shows"
+        tools:layout="@layout/fragment_tvshows_dashboard">
+        <action
+            android:id="@+id/action_tvShowsFragment_to_ShowListFragment"
+            app:destination="@id/showListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/showListFragment"
+        android:name="com.saiful.tvshows.view.list.ShowListFragment"
+        tools:layout="@layout/fragment_shows_list" >
+        <argument
+            android:name="show_category"
+            app:argType="com.saiful.tvshows.model.TvShowsCategory" />
+    </fragment>
 </navigation>
