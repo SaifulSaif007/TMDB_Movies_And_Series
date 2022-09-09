@@ -1,5 +1,6 @@
 package com.saiful.tvshows.view.dashboard
 
+import androidx.lifecycle.viewModelScope
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base.network.model.GenericResponse
 import com.saiful.base.viewmodel.BaseOpsViewModel
@@ -7,7 +8,9 @@ import com.saiful.tvshows.data.repository.DashboardRepo
 import com.saiful.tvshows.model.TvShows
 import com.saiful.tvshows.model.TvShowsResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,7 +21,7 @@ class ShowsDashboardVM
     val popularShowsList = MutableStateFlow<TvShowsResponse?>(null)
     val topRatedShowsList = MutableStateFlow<TvShowsResponse?>(null)
     val onAirShowsList = MutableStateFlow<TvShowsResponse?>(null)
-    var sliderList = arrayListOf<TvShows>()
+    val sliderList = arrayListOf<TvShows>()
     val sliderLoaded = MutableStateFlow<Boolean>(false)
 
     init {
@@ -26,6 +29,23 @@ class ShowsDashboardVM
         fetchPopularShows()
         fetchTopRatedShows()
         fetchOnAirShows()
+        fetchSliderStatus()
+    }
+
+    private fun fetchSliderStatus() {
+        viewModelScope.launch(Dispatchers.IO) {
+            combine(
+                topRatedShowsList,
+                popularShowsList,
+                trendingShowsList,
+                onAirShowsList
+            ) { top, pop, trend, on ->
+                top?.results != null || pop?.results != null || trend != null || on != null
+            }.collectLatest {
+                sliderLoaded.value = it
+            }
+        }
+
     }
 
     private fun fetchTrendingShows() {
@@ -77,8 +97,8 @@ class ShowsDashboardVM
                 }
             }
             topRatedShows -> {
-                when(val response = data as GenericResponse<*>){
-                    is BaseResponse.Success->{
+                when (val response = data as GenericResponse<*>) {
+                    is BaseResponse.Success -> {
                         topRatedShowsList.value = response.body as TvShowsResponse
                         topRatedShowsList.value?.results?.shuffled()?.subList(0, 2)?.let {
                             sliderList.addAll(it)
@@ -87,13 +107,12 @@ class ShowsDashboardVM
                     else -> {}
                 }
             }
-            onAirShows ->{
-                when(val response = data as GenericResponse<*>){
-                    is BaseResponse.Success->{
+            onAirShows -> {
+                when (val response = data as GenericResponse<*>) {
+                    is BaseResponse.Success -> {
                         onAirShowsList.value = response.body as TvShowsResponse
                         onAirShowsList.value?.results?.shuffled()?.subList(0, 2)?.let {
                             sliderList.addAll(it)
-                            sliderLoaded.value = true
                         }
                     }
                     else -> {}
