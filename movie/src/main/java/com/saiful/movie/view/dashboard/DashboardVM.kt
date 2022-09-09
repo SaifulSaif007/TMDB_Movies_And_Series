@@ -1,23 +1,28 @@
 package com.saiful.movie.view.dashboard
 
+import androidx.lifecycle.viewModelScope
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base.network.model.GenericResponse
 import com.saiful.base.viewmodel.BaseOpsViewModel
 import com.saiful.movie.data.repository.DashboardRepo
 import com.saiful.movie.model.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DashboardVM
 @Inject constructor(private val dashboardRepo: DashboardRepo) : BaseOpsViewModel() {
 
-    var popularMoviesList = MutableStateFlow<MoviesResponse?>(null)
-    var nowPlayingMoviesList = MutableStateFlow<MoviesResponse?>(null)
-    var topRatedMoviesList = MutableStateFlow<MoviesResponse?>(null)
-    var upcomingMoviesList = MutableStateFlow<MoviesResponse?>(null)
-    var sliderList = arrayListOf<Movies>()
+    val popularMoviesList = MutableStateFlow<MoviesResponse?>(null)
+    val nowPlayingMoviesList = MutableStateFlow<MoviesResponse?>(null)
+    val topRatedMoviesList = MutableStateFlow<MoviesResponse?>(null)
+    val upcomingMoviesList = MutableStateFlow<MoviesResponse?>(null)
+    val sliderList = arrayListOf<Movies>()
     val sliderLoaded = MutableStateFlow<Boolean>(false)
 
     init {
@@ -25,6 +30,22 @@ class DashboardVM
         fetchNowPlayingMovies()
         fetchTopRatedMovies()
         fetchUpcomingMovies()
+        fetchSliderStatus()
+    }
+
+    private fun fetchSliderStatus() {
+        viewModelScope.launch (Dispatchers.IO){
+            combine(
+                popularMoviesList,
+                nowPlayingMoviesList,
+                topRatedMoviesList,
+                upcomingMoviesList
+            ){ pop, now, top, up ->
+                pop?.results != null || now?.results != null || top?.results != null || up?.results != null
+            }.collectLatest {
+                sliderLoaded.value = it
+            }
+        }
     }
 
     private fun fetchPopularMovies() {
@@ -93,7 +114,6 @@ class DashboardVM
                         upcomingMoviesList.value = response.body as MoviesResponse
                         upcomingMoviesList.value?.results?.shuffled()?.subList(0, 2)?.let {
                             sliderList.addAll(it)
-                            sliderLoaded.value = true
                         }
                     }
                     else -> {}
