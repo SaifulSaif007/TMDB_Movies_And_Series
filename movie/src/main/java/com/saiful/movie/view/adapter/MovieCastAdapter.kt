@@ -7,9 +7,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.saiful.shared.utils.AppConstants
-import com.saiful.movie.R
 import com.saiful.movie.databinding.LayoutCastItemBinding
+import com.saiful.shared.utils.AppConstants
 import com.saiful.movie.model.Cast
 
 class MovieCastAdapter() : RecyclerView.Adapter<MovieCastAdapter.CastViewHolder>() {
