@@ -178,7 +178,11 @@ class TvShowsDashboardFragment : BaseFragment<FragmentTvshowsDashboardBinding>()
     }
 
     private fun tvShowsItemClick(showsId: Int) {
-        // details page
+        findNavController().navigateSafe(
+            TvShowsDashboardFragmentDirections.actionTvShowsFragmentToTvShowsDetailsFragment(
+                showsId
+            )
+        )
     }
 
     private val runnable = Runnable {
