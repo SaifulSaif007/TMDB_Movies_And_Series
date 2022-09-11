@@ -1,8 +1,10 @@
 package com.saiful.tvshows.data.api
 
 import com.saiful.base.network.model.GenericResponse
+import com.saiful.tvshows.model.TvShowDetails
 import com.saiful.tvshows.model.TvShowsResponse
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface TvShowsApiService {
@@ -27,4 +29,9 @@ interface TvShowsApiService {
         @Query("page") page: Int
     ): GenericResponse<TvShowsResponse>
 
+    @GET("tv/{show_id}")
+    suspend fun showDetails(
+        @Path("show_id") id: Int,
+        @Query("append_to_response") res: String = "videos"
+    ) : GenericResponse<TvShowDetails>
 }
