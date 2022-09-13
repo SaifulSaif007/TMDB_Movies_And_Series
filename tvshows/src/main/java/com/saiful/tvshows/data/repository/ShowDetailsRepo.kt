@@ -10,4 +10,6 @@ class ShowDetailsRepo
 
     suspend fun showDetails(id: Int) = apiService.showDetails(id)
 
+    suspend fun showCasts(id: Int) = apiService.showCasts(id)
+
 }

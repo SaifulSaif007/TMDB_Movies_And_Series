@@ -1,6 +1,7 @@
 package com.saiful.tvshows.data.api
 
 import com.saiful.base.network.model.GenericResponse
+import com.saiful.tvshows.model.TvShowCastResponse
 import com.saiful.tvshows.model.TvShowDetails
 import com.saiful.tvshows.model.TvShowsResponse
 import retrofit2.http.GET
@@ -33,5 +34,11 @@ interface TvShowsApiService {
     suspend fun showDetails(
         @Path("show_id") id: Int,
         @Query("append_to_response") res: String = "videos"
-    ) : GenericResponse<TvShowDetails>
+    ): GenericResponse<TvShowDetails>
+
+    @GET("tv/{show_id}/aggregate_credits")
+    suspend fun showCasts(
+        @Path("show_id") id: Int
+    ): GenericResponse<TvShowCastResponse>
+
 }

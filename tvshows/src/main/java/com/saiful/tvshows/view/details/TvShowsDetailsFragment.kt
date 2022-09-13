@@ -15,6 +15,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.chip.Chip
+import com.saiful.base.util.ItemDecorator
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.shared.utils.AppConstants
@@ -23,14 +24,20 @@ import com.saiful.shared.utils.formatDate
 import com.saiful.tvshows.R
 import com.saiful.tvshows.databinding.FragmentTvshowDetailsBinding
 import com.saiful.tvshows.model.TvShowDetails
+import com.saiful.tvshows.view.adapter.ShowCastAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
 
     private val args: TvShowsDetailsFragmentArgs by navArgs()
     private val viewModel: TvShowsDetailsVM by viewModels()
+    private val castAdapter = ShowCastAdapter()
+
+    @Inject
+    lateinit var itemDecorator: ItemDecorator
 
     override fun layoutInflater(
         inflater: LayoutInflater,
@@ -45,6 +52,15 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
 
     override fun initOnCreateView() {
         viewModel.fetchShowDetails(args.showId)
+
+        bindingView.apply {
+            showsCastLayout.apply {
+                castRecycler.apply {
+                    adapter = castAdapter
+                    addItemDecoration(itemDecorator)
+                }
+            }
+        }
 
         lifecycleScope.launchWhenStarted {
             viewModel.showDetails.collect { shows ->
@@ -80,13 +96,21 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
                             shows?.spokenLanguage?.map { it?.englishName }?.joinToString(", ")
                         showsNetwork.text =
                             shows?.networks?.map { it?.name }?.joinToString(", ")
-                        showProduction.text = shows?.productionCompanies?.map { it?.name }?.joinToString(", ")
+                        showProduction.text =
+                            shows?.productionCompanies?.map { it?.name }?.joinToString(", ")
+
                     }
 
                     shows?.videos?.results?.let {
 
                     }
                 }
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.showCasts.collect {
+                it?.cast?.let { casts -> castAdapter.submitList(casts) }
             }
         }
     }
