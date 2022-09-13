@@ -35,14 +35,19 @@ data class TvShowDetails(
     val popularity: Double? = null,
     @field:Json(name = "poster_path")
     val posterPath: String? = null,
+    @field:Json(name = "production_companies")
     val productionCompanies: List<ProductionCompany?>? = null,
     val seasons: List<Season?>? = null,
     val status: String? = null,
     val tagline: String? = null,
     val type: String? = null,
+    @field:Json(name = "vote_average")
     val voteAverage: Double? = null,
+    @field:Json(name = "vote_count")
     val voteCount: Int? = null,
-    val videos: Videos? = null
+    val videos: Videos? = null,
+    @field:Json(name = "spoken_languages")
+    val spokenLanguage:List<SpokenLanguagesItem?>? = null,
 ) {
     data class CreatedBy(
         @field:Json(name = "credit_id")
@@ -94,6 +99,12 @@ data class TvShowDetails(
 
     data class Videos(
         val results: List<VideoResult>? = null
+    )
+
+    data class SpokenLanguagesItem(
+        val name: String? = null,
+        @field:Json(name="english_name")
+        val englishName: String? = null
     )
 
     data class VideoResult(

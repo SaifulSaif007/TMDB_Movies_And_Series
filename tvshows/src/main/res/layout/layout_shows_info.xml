@@ -19,42 +19,44 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/budget_lable"
+        android:id="@+id/created_lable"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Budget"
+        android:text="Created By"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/info_label" />
 
     <TextView
-        android:id="@+id/shows_budget"
+        android:id="@+id/created_by"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:ellipsize="end"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/budget_lable"
+        app:layout_constraintTop_toBottomOf="@+id/created_lable"
         tools:text="$ 250 million" />
 
     <TextView
-        android:id="@+id/reveneu_label"
+        android:id="@+id/first_air_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Revenue"
+        android:text="First Air Date"
         android:textAlignment="textEnd"
-        app:layout_constraintBaseline_toBaselineOf="@+id/budget_lable"
+        app:layout_constraintBaseline_toBaselineOf="@+id/created_lable"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/budget_lable" />
+        app:layout_constraintStart_toEndOf="@+id/created_lable" />
 
     <TextView
-        android:id="@+id/shows_revenue"
+        android:id="@+id/first_air_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textAlignment="textEnd"
-        app:layout_constraintBaseline_toBaselineOf="@+id/shows_budget"
+        app:layout_constraintBaseline_toBaselineOf="@+id/created_by"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/shows_budget"
+        app:layout_constraintStart_toEndOf="@+id/created_by"
         tools:text="$ 400 milllion" />
 
     <TextView
@@ -65,7 +67,7 @@
         android:text="Status"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shows_budget" />
+        app:layout_constraintTop_toBottomOf="@+id/created_by" />
 
     <TextView
         android:id="@+id/shows_status"
@@ -80,14 +82,14 @@
         android:id="@+id/textView7"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Release Date"
+        android:text="Language"
         android:textAlignment="textEnd"
         app:layout_constraintBaseline_toBaselineOf="@+id/status_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/status_label" />
 
     <TextView
-        android:id="@+id/movie_release_date"
+        android:id="@+id/shows_language"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textAlignment="textEnd"
@@ -97,22 +99,22 @@
         tools:text="08 August, 2021" />
 
     <TextView
-        android:id="@+id/runnig_time_label"
+        android:id="@+id/networks_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Run time"
+        android:text="Networks"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shows_status" />
 
     <TextView
-        android:id="@+id/shows_runtime"
+        android:id="@+id/shows_network"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/runnig_time_label"
+        app:layout_constraintTop_toBottomOf="@+id/networks_label"
         tools:text="131 mins" />
 
     <TextView
@@ -121,20 +123,20 @@
         android:layout_height="wrap_content"
         android:text="Production"
         android:textAlignment="textEnd"
-        app:layout_constraintBaseline_toBaselineOf="@+id/runnig_time_label"
+        app:layout_constraintBaseline_toBaselineOf="@+id/networks_label"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/runnig_time_label" />
+        app:layout_constraintStart_toEndOf="@+id/networks_label" />
 
     <TextView
-        android:id="@+id/movie_production"
+        android:id="@+id/show_production"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
         android:textAlignment="textEnd"
-        app:layout_constraintBaseline_toBaselineOf="@+id/shows_runtime"
+        app:layout_constraintBaseline_toBaselineOf="@+id/shows_network"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/shows_runtime"
+        app:layout_constraintStart_toEndOf="@+id/shows_network"
         tools:text="@tools:sample/cities" />
 
     <androidx.constraintlayout.widget.Guideline
