@@ -29,8 +29,8 @@ import com.saiful.shared.utils.navigateSafe
 import com.saiful.tvshows.R
 import com.saiful.tvshows.databinding.FragmentTvshowDetailsBinding
 import com.saiful.tvshows.model.Genre
-import com.saiful.tvshows.model.TvShowDetails
 import com.saiful.tvshows.view.adapter.ShowCastAdapter
+import com.saiful.tvshows.view.adapter.ShowSeasonAdapter
 import com.saiful.tvshows.view.adapter.ShowsDashboardAdapter
 import com.saiful.tvshows.view.adapter.ShowsTrailerAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,6 +46,7 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
     private val trailerAdapter = ShowsTrailerAdapter(::onTrailerClick)
     private val recommendationAdapter = ShowsDashboardAdapter(::showItemClick)
     private val similarAdapter = ShowsDashboardAdapter(::showItemClick)
+    private val seasonAdapter = ShowSeasonAdapter()
 
     @Inject
     lateinit var itemDecorator: ItemDecorator
@@ -86,6 +87,12 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
             similarShowsLayout.apply {
                 similarMovieRecycler.apply {
                     adapter = similarAdapter
+                    addItemDecoration(itemDecorator)
+                }
+            }
+            showsSeasonLayout.apply {
+                seasonRecycler.apply {
+                    adapter = seasonAdapter
                     addItemDecoration(itemDecorator)
                 }
             }
@@ -132,6 +139,10 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
 
                     shows?.videos?.results?.let {
                         trailerAdapter.submitList(it)
+                    }
+
+                    shows?.seasons?.filter { it.seasonNumber > 0 }?.let {
+                        seasonAdapter.submitList(it)
                     }
                 }
             }

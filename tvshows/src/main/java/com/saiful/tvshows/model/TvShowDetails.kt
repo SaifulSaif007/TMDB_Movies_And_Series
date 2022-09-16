@@ -37,7 +37,7 @@ data class TvShowDetails(
     val posterPath: String? = null,
     @field:Json(name = "production_companies")
     val productionCompanies: List<ProductionCompany?>? = null,
-    val seasons: List<Season?>? = null,
+    val seasons: List<Season>? = null,
     val status: String? = null,
     val tagline: String? = null,
     val type: String? = null,
@@ -95,7 +95,7 @@ data class Season(
     @field:Json(name = "poster_path")
     val posterPath: String? = null,
     @field:Json(name = "season_number")
-    val seasonNumber: Int? = null
+    val seasonNumber: Int = 0
 )
 
 data class Videos(
