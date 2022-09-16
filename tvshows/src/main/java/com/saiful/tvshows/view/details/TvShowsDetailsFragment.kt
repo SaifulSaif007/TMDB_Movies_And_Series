@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -24,11 +25,13 @@ import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.shared.utils.AppConstants
 import com.saiful.shared.utils.floatNumberFormatter
 import com.saiful.shared.utils.formatDate
+import com.saiful.shared.utils.navigateSafe
 import com.saiful.tvshows.R
 import com.saiful.tvshows.databinding.FragmentTvshowDetailsBinding
 import com.saiful.tvshows.model.Genre
 import com.saiful.tvshows.model.TvShowDetails
 import com.saiful.tvshows.view.adapter.ShowCastAdapter
+import com.saiful.tvshows.view.adapter.ShowsDashboardAdapter
 import com.saiful.tvshows.view.adapter.ShowsTrailerAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -41,6 +44,8 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
     private val viewModel: TvShowsDetailsVM by viewModels()
     private val castAdapter = ShowCastAdapter()
     private val trailerAdapter = ShowsTrailerAdapter(::onTrailerClick)
+    private val recommendationAdapter = ShowsDashboardAdapter(::showItemClick)
+    private val similarAdapter = ShowsDashboardAdapter(::showItemClick)
 
     @Inject
     lateinit var itemDecorator: ItemDecorator
@@ -69,6 +74,18 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
             showsTrailerLayout.apply {
                 trailerRecycler.apply {
                     adapter = trailerAdapter
+                    addItemDecoration(itemDecorator)
+                }
+            }
+            showsRecommendationLayout.apply {
+                recommendationMovieRecycler.apply {
+                    adapter = recommendationAdapter
+                    addItemDecoration(itemDecorator)
+                }
+            }
+            similarShowsLayout.apply {
+                similarMovieRecycler.apply {
+                    adapter = similarAdapter
                     addItemDecoration(itemDecorator)
                 }
             }
@@ -125,6 +142,12 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
                 it?.cast?.let { casts -> castAdapter.submitList(casts) }
             }
         }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.recommendation.collect {
+                it?.results?.let { recommendation -> recommendationAdapter.submitList(recommendation) }
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -167,6 +190,11 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
             textStartPadding = 0f
             textStartPadding = 0f
         }
+    }
 
+    private fun showItemClick(showId: Int) {
+//        findNavController().navigateSafe(
+//
+//        )
     }
 }

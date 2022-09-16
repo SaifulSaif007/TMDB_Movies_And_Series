@@ -41,4 +41,8 @@ interface TvShowsApiService {
         @Path("show_id") id: Int
     ): GenericResponse<TvShowCastResponse>
 
+    @GET("tv/{show_id}/recommendations")
+    suspend fun recommendations(
+        @Path("show_id") id: Int
+    ): GenericResponse<TvShowsResponse>
 }

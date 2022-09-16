@@ -6,6 +6,7 @@ import com.saiful.base.viewmodel.BaseOpsViewModel
 import com.saiful.tvshows.data.repository.ShowDetailsRepo
 import com.saiful.tvshows.model.TvShowCastResponse
 import com.saiful.tvshows.model.TvShowDetails
+import com.saiful.tvshows.model.TvShowsResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
@@ -16,13 +17,17 @@ class TvShowsDetailsVM
 
     val showDetails = MutableStateFlow<TvShowDetails?>(null)
     val showCasts = MutableStateFlow<TvShowCastResponse?>(null)
+    val recommendation = MutableStateFlow<TvShowsResponse?>(null)
 
     fun fetchShowDetails(showId: Int) {
         executeRestCodeBlock(show_details) {
             repo.showDetails(showId)
         }
-        executeRestCodeBlock(show_cast){
+        executeRestCodeBlock(show_cast) {
             repo.showCasts(showId)
+        }
+        executeRestCodeBlock(show_recommendation) {
+            repo.showRecommendation(showId)
         }
     }
 
@@ -36,12 +41,20 @@ class TvShowsDetailsVM
                     else -> {}
                 }
             }
-            show_cast ->{
-                when(data as GenericResponse<*>){
+            show_cast -> {
+                when (data as GenericResponse<*>) {
                     is BaseResponse.Success -> {
                         showCasts.value = data.body as TvShowCastResponse
                     }
-                    else ->{}
+                    else -> {}
+                }
+            }
+            show_recommendation -> {
+                when(data as GenericResponse<*>){
+                    is BaseResponse.Success ->{
+                        recommendation.value = data.body as TvShowsResponse
+                    }
+                    else -> {}
                 }
             }
         }
@@ -50,5 +63,6 @@ class TvShowsDetailsVM
     private companion object {
         const val show_details = "SHOW_DETAILS"
         const val show_cast = "SHOW_CAST"
+        const val show_recommendation = "SHOW_RECOMMENDATION"
     }
 }
