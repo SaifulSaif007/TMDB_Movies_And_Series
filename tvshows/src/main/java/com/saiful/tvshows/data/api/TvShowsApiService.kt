@@ -1,6 +1,7 @@
 package com.saiful.tvshows.data.api
 
 import com.saiful.base.network.model.GenericResponse
+import com.saiful.tvshows.model.SeasonDetails
 import com.saiful.tvshows.model.TvShowCastResponse
 import com.saiful.tvshows.model.TvShowDetails
 import com.saiful.tvshows.model.TvShowsResponse
@@ -50,4 +51,10 @@ interface TvShowsApiService {
     suspend fun similarShows(
         @Path("show_id") id: Int
     ): GenericResponse<TvShowsResponse>
+
+    @GET("tv/{show_id}}/season/{season_no}")
+    suspend fun seasonDetails(
+        @Path("show_id") id: Int,
+        @Path("season_no") no: Int
+    ): GenericResponse<SeasonDetails>
 }
