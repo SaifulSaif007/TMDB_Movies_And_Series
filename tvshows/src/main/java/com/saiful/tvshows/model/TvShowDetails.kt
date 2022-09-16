@@ -47,72 +47,73 @@ data class TvShowDetails(
     val voteCount: Int? = null,
     val videos: Videos? = null,
     @field:Json(name = "spoken_languages")
-    val spokenLanguage:List<SpokenLanguagesItem?>? = null,
-) {
-    data class CreatedBy(
-        @field:Json(name = "credit_id")
-        val creditId: String? = null,
-        @field:Json(name = "gender")
-        val gender: Int? = null,
-        val id: Int? = null,
-        val name: String? = null,
-        @field:Json(name = "profile_path")
-        val profilePath: Any? = null
-    )
+    val spokenLanguage: List<SpokenLanguagesItem?>? = null,
+)
 
-    data class Genre(
-        val id: Int? = null,
-        val name: String? = null
-    )
+data class CreatedBy(
+    @field:Json(name = "credit_id")
+    val creditId: String? = null,
+    @field:Json(name = "gender")
+    val gender: Int? = null,
+    val id: Int? = null,
+    val name: String? = null,
+    @field:Json(name = "profile_path")
+    val profilePath: Any? = null
+)
 
-    data class Network(
-        val id: Int? = null,
-        @field:Json(name = "logo_path")
-        val logoPath: String? = null,
-        val name: String? = null,
-        @field:Json(name = "origin_country")
-        val originCountry: String? = null
-    )
+data class Genre(
+    val id: Int? = null,
+    val name: String? = null
+)
 
-    data class ProductionCompany(
-        val id: Int? = null,
-        @field:Json(name = "logo_path")
-        val logoPath: String? = null,
-        val name: String? = null,
-        @field:Json(name = "origin_country")
-        val originCountry: String? = null
-    )
+data class Network(
+    val id: Int? = null,
+    @field:Json(name = "logo_path")
+    val logoPath: String? = null,
+    val name: String? = null,
+    @field:Json(name = "origin_country")
+    val originCountry: String? = null
+)
 
-    data class Season(
-        @field:Json(name = "air_date")
-        val airDate: String? = null,
-        @field:Json(name = "episode_count")
-        val episodeCount: Int? = null,
-        val id: Int? = null,
-        val name: String? = null,
-        val overview: String? = null,
-        @field:Json(name = "poster_path")
-        val posterPath: String? = null,
-        @field:Json(name = "season_number")
-        val seasonNumber: Int? = null
-    )
+data class ProductionCompany(
+    val id: Int? = null,
+    @field:Json(name = "logo_path")
+    val logoPath: String? = null,
+    val name: String? = null,
+    @field:Json(name = "origin_country")
+    val originCountry: String? = null
+)
 
-    data class Videos(
-        val results: List<VideoResult>? = null
-    )
+data class Season(
+    @field:Json(name = "air_date")
+    val airDate: String? = null,
+    @field:Json(name = "episode_count")
+    val episodeCount: Int? = null,
+    val id: Int? = null,
+    val name: String? = null,
+    val overview: String? = null,
+    @field:Json(name = "poster_path")
+    val posterPath: String? = null,
+    @field:Json(name = "season_number")
+    val seasonNumber: Int? = null
+)
 
-    data class SpokenLanguagesItem(
-        val name: String? = null,
-        @field:Json(name="english_name")
-        val englishName: String? = null
-    )
+data class Videos(
+    val results: List<VideoResult>? = null
+)
 
-    data class VideoResult(
-        val video_id: String?,
-        val key: String? = null,
-        val name: String? = null,
-        val site: String? = null,
-        val size: String? = null,
-        val type: String? = null
-    )
-}
+data class SpokenLanguagesItem(
+    val name: String? = null,
+    @field:Json(name = "english_name")
+    val englishName: String? = null
+)
+
+data class VideoResult(
+    @field:Json(name = "video_id")
+    val videoId: String?,
+    val key: String? = null,
+    val name: String? = null,
+    val site: String? = null,
+    val size: String? = null,
+    val type: String? = null
+)

@@ -1,7 +1,10 @@
 package com.saiful.tvshows.view.details
 
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,8 +26,10 @@ import com.saiful.shared.utils.floatNumberFormatter
 import com.saiful.shared.utils.formatDate
 import com.saiful.tvshows.R
 import com.saiful.tvshows.databinding.FragmentTvshowDetailsBinding
+import com.saiful.tvshows.model.Genre
 import com.saiful.tvshows.model.TvShowDetails
 import com.saiful.tvshows.view.adapter.ShowCastAdapter
+import com.saiful.tvshows.view.adapter.ShowsTrailerAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
@@ -35,6 +40,7 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
     private val args: TvShowsDetailsFragmentArgs by navArgs()
     private val viewModel: TvShowsDetailsVM by viewModels()
     private val castAdapter = ShowCastAdapter()
+    private val trailerAdapter = ShowsTrailerAdapter(::onTrailerClick)
 
     @Inject
     lateinit var itemDecorator: ItemDecorator
@@ -57,6 +63,12 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
             showsCastLayout.apply {
                 castRecycler.apply {
                     adapter = castAdapter
+                    addItemDecoration(itemDecorator)
+                }
+            }
+            showsTrailerLayout.apply {
+                trailerRecycler.apply {
+                    adapter = trailerAdapter
                     addItemDecoration(itemDecorator)
                 }
             }
@@ -102,7 +114,7 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
                     }
 
                     shows?.videos?.results?.let {
-
+                        trailerAdapter.submitList(it)
                     }
                 }
             }
@@ -124,7 +136,19 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
         bindingView.toolbar.setupWithNavController(navController, appBarConfiguration)
     }
 
-    private fun addChips(genres: List<TvShowDetails.Genre?>?) {
+    private fun onTrailerClick(key: String) {
+        try {
+            val youtubeIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube://$key"))
+            youtubeIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(youtubeIntent)
+        } catch (e: ActivityNotFoundException) {
+            val otherIntent =
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://youtube.com/watch?v=$key"))
+            startActivity(otherIntent)
+        }
+    }
+
+    private fun addChips(genres: List<Genre?>?) {
         if (genres != null) {
             for (chip in genres) {
                 bindingView.chipGroup.addView(
