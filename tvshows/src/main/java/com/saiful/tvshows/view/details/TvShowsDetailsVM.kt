@@ -18,6 +18,7 @@ class TvShowsDetailsVM
     val showDetails = MutableStateFlow<TvShowDetails?>(null)
     val showCasts = MutableStateFlow<TvShowCastResponse?>(null)
     val recommendation = MutableStateFlow<TvShowsResponse?>(null)
+    val similarShow = MutableStateFlow<TvShowsResponse?>(null)
 
     fun fetchShowDetails(showId: Int) {
         executeRestCodeBlock(show_details) {
@@ -28,6 +29,9 @@ class TvShowsDetailsVM
         }
         executeRestCodeBlock(show_recommendation) {
             repo.showRecommendation(showId)
+        }
+        executeRestCodeBlock(similar_show) {
+            repo.similarShows(showId)
         }
     }
 
@@ -50,9 +54,17 @@ class TvShowsDetailsVM
                 }
             }
             show_recommendation -> {
-                when(data as GenericResponse<*>){
-                    is BaseResponse.Success ->{
+                when (data as GenericResponse<*>) {
+                    is BaseResponse.Success -> {
                         recommendation.value = data.body as TvShowsResponse
+                    }
+                    else -> {}
+                }
+            }
+            similar_show -> {
+                when (data as GenericResponse<*>) {
+                    is BaseResponse.Success -> {
+                        similarShow.value = data.body as TvShowsResponse
                     }
                     else -> {}
                 }
@@ -64,5 +76,6 @@ class TvShowsDetailsVM
         const val show_details = "SHOW_DETAILS"
         const val show_cast = "SHOW_CAST"
         const val show_recommendation = "SHOW_RECOMMENDATION"
+        const val similar_show = "SIMILAR_SHOW"
     }
 }

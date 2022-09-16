@@ -36,5 +36,8 @@
         <argument
             android:name="show_id"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_tvShowsDetailsFragment_self"
+            app:destination="@id/tvShowsDetailsFragment" />
     </fragment>
 </navigation>

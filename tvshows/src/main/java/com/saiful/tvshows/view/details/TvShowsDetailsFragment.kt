@@ -148,6 +148,12 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
                 it?.results?.let { recommendation -> recommendationAdapter.submitList(recommendation) }
             }
         }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.similarShow.collect {
+                it?.results?.let { similar -> similarAdapter.submitList(similar) }
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -193,8 +199,9 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
     }
 
     private fun showItemClick(showId: Int) {
-//        findNavController().navigateSafe(
-//
-//        )
+        findNavController().navigateSafe(
+            R.id.action_tvShowsDetailsFragment_self,
+            bundleOf("show_id" to showId)
+        )
     }
 }
