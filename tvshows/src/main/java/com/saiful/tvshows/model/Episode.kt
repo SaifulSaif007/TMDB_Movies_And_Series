@@ -10,13 +10,13 @@ data class Episode(
     val id: Int,
     val name: String,
     val overview: String,
-    val runtime: Int,
+    val runtime: Int? = 0,
     @field:Json(name = "season_number")
-    val seasonNumber: Int,
+    val seasonNumber: Int? = 1,
     @field:Json(name = "still_path")
     val stillPath: String,
     @field:Json(name = "vote_average")
     val voteAverage: Double,
     @field:Json(name = "vote_count")
-    val voteCount: Int
+    val voteCount: Int? = 0
 )

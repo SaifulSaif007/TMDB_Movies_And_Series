@@ -59,7 +59,7 @@ class ShowSeasonAdapter(private val listener: (Int) -> Unit) :
                     //.error(R.drawable.image1)
                     .into(binding.seasonImage)
 
-                seasonNo.text = "Season ${item.seasonNumber.toString()}"
+                seasonNo.text = "Season ${item.seasonNumber}"
 
             }
         }
