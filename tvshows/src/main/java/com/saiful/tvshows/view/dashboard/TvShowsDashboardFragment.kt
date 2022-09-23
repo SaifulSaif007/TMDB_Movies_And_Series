@@ -132,7 +132,7 @@ class TvShowsDashboardFragment : BaseFragment<FragmentTvshowsDashboardBinding>()
 
         lifecycleScope.launchWhenStarted {
             viewModel.sliderLoaded.collect {
-                if (it) {
+                if (it == true) {
                     viewPager.apply {
                         adapter = pageAdapter
                         offscreenPageLimit = 3

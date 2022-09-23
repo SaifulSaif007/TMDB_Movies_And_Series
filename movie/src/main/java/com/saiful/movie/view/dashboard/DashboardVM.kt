@@ -5,13 +5,13 @@ import com.saiful.base.network.model.BaseResponse
 import com.saiful.base.network.model.GenericResponse
 import com.saiful.base.viewmodel.BaseOpsViewModel
 import com.saiful.movie.data.repository.DashboardRepo
-import com.saiful.movie.model.*
+import com.saiful.movie.model.Movies
+import com.saiful.movie.model.MoviesResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,29 +23,21 @@ class DashboardVM
     val topRatedMoviesList = MutableStateFlow<MoviesResponse?>(null)
     val upcomingMoviesList = MutableStateFlow<MoviesResponse?>(null)
     val sliderList = arrayListOf<Movies>()
-    val sliderLoaded = MutableStateFlow<Boolean>(false)
+
+    val sliderLoaded = combine(
+        popularMoviesList,
+        nowPlayingMoviesList,
+        topRatedMoviesList,
+        upcomingMoviesList
+    ) { pop, now, top, up ->
+        pop?.results != null || now?.results != null || top?.results != null || up?.results != null
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     init {
         fetchPopularMovies()
         fetchNowPlayingMovies()
         fetchTopRatedMovies()
         fetchUpcomingMovies()
-        fetchSliderStatus()
-    }
-
-    private fun fetchSliderStatus() {
-        viewModelScope.launch (Dispatchers.IO){
-            combine(
-                popularMoviesList,
-                nowPlayingMoviesList,
-                topRatedMoviesList,
-                upcomingMoviesList
-            ){ pop, now, top, up ->
-                pop?.results != null || now?.results != null || top?.results != null || up?.results != null
-            }.collectLatest {
-                sliderLoaded.value = it
-            }
-        }
     }
 
     private fun fetchPopularMovies() {

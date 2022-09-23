@@ -34,9 +34,10 @@ android {
     buildFeatures {
         viewBinding true
     }
-    lintOptions {
+    lint {
         abortOnError false
     }
+    namespace 'com.saiful.movie'
 }
 
 dependencies {

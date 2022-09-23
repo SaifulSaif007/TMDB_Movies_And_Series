@@ -8,9 +8,10 @@ import com.saiful.tvshows.data.repository.DashboardRepo
 import com.saiful.tvshows.model.TvShows
 import com.saiful.tvshows.model.TvShowsResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,30 +23,21 @@ class ShowsDashboardVM
     val topRatedShowsList = MutableStateFlow<TvShowsResponse?>(null)
     val onAirShowsList = MutableStateFlow<TvShowsResponse?>(null)
     val sliderList = arrayListOf<TvShows>()
-    val sliderLoaded = MutableStateFlow<Boolean>(false)
+
+    val sliderLoaded = combine(
+        topRatedShowsList,
+        popularShowsList,
+        trendingShowsList,
+        onAirShowsList
+    ) { top, pop, trend, on ->
+        top?.results != null || pop?.results != null || trend != null || on != null
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     init {
         fetchTrendingShows()
         fetchPopularShows()
         fetchTopRatedShows()
         fetchOnAirShows()
-        fetchSliderStatus()
-    }
-
-    private fun fetchSliderStatus() {
-        viewModelScope.launch(Dispatchers.IO) {
-            combine(
-                topRatedShowsList,
-                popularShowsList,
-                trendingShowsList,
-                onAirShowsList
-            ) { top, pop, trend, on ->
-                top?.results != null || pop?.results != null || trend != null || on != null
-            }.collectLatest {
-                sliderLoaded.value = it
-            }
-        }
-
     }
 
     private fun fetchTrendingShows() {
