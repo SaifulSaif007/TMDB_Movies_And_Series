@@ -46,7 +46,7 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
     private val trailerAdapter = ShowsTrailerAdapter(::onTrailerClick)
     private val recommendationAdapter = ShowsDashboardAdapter(::showItemClick)
     private val similarAdapter = ShowsDashboardAdapter(::showItemClick)
-    private val seasonAdapter = ShowSeasonAdapter()
+    private val seasonAdapter = ShowSeasonAdapter(::seasonItemClick)
 
     @Inject
     lateinit var itemDecorator: ItemDecorator
@@ -214,5 +214,11 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
             R.id.action_tvShowsDetailsFragment_self,
             bundleOf("show_id" to showId)
         )
+    }
+
+    private fun seasonItemClick(seasonNo: Int){
+        findNavController().navigateSafe(TvShowsDetailsFragmentDirections.actionTvShowsDetailsFragmentToShowSeason(
+            args.showId, seasonNo
+        ))
     }
 }

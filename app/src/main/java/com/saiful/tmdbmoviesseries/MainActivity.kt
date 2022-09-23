@@ -47,7 +47,8 @@ class MainActivity : AppCompatActivity() {
             when (currentDestination) {
                 com.saiful.movie.R.id.movieDetailsFragment,
                 com.saiful.movie.R.id.collectionFragment,
-                com.saiful.tvshows.R.id.tvShowsDetailsFragment -> {
+                com.saiful.tvshows.R.id.tvShowsDetailsFragment,
+                com.saiful.tvshows.R.id.showSeasonFragment -> {
                     binding.appBarLayout.visibility = View.GONE
                 }
                 else -> {

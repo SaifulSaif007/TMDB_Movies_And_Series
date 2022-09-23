@@ -12,7 +12,8 @@ import com.saiful.tvshows.databinding.LayoutSeasonItemBinding
 import com.saiful.tvshows.databinding.LayoutShowItemBinding
 import com.saiful.tvshows.model.Season
 
-class ShowSeasonAdapter() : RecyclerView.Adapter<ShowSeasonAdapter.SeasonViewHolder>() {
+class ShowSeasonAdapter(private val listener: (Int) -> Unit) :
+    RecyclerView.Adapter<ShowSeasonAdapter.SeasonViewHolder>() {
 
     private val differ = AsyncListDiffer(this, DIFF_UTIL)
 
@@ -27,12 +28,12 @@ class ShowSeasonAdapter() : RecyclerView.Adapter<ShowSeasonAdapter.SeasonViewHol
     }
 
     override fun onBindViewHolder(holder: SeasonViewHolder, position: Int) {
-       holder.bind(differ.currentList[position])
+        holder.bind(differ.currentList[position])
     }
 
     override fun getItemCount(): Int = differ.currentList.size
 
-    fun submitList(list: List<Season>){
+    fun submitList(list: List<Season>) {
         differ.submitList(list)
         notifyDataSetChanged()
     }
@@ -41,7 +42,13 @@ class ShowSeasonAdapter() : RecyclerView.Adapter<ShowSeasonAdapter.SeasonViewHol
         RecyclerView.ViewHolder(binding.root) {
 
         init {
-            //on click
+            binding.root.setOnClickListener {
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val item = differ.currentList[position]
+                    listener.invoke(item.seasonNumber)
+                }
+            }
         }
 
         fun bind(item: Season) {
@@ -59,7 +66,7 @@ class ShowSeasonAdapter() : RecyclerView.Adapter<ShowSeasonAdapter.SeasonViewHol
     }
 
     private companion object {
-        val DIFF_UTIL = object : DiffUtil.ItemCallback<Season>(){
+        val DIFF_UTIL = object : DiffUtil.ItemCallback<Season>() {
             override fun areItemsTheSame(oldItem: Season, newItem: Season): Boolean {
                 return oldItem.id == newItem.id
             }
