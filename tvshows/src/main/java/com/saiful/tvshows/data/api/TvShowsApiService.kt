@@ -57,4 +57,5 @@ interface TvShowsApiService {
         @Path("show_id") id: Int,
         @Path("season_no") no: Int
     ): GenericResponse<SeasonDetails>
+
 }
