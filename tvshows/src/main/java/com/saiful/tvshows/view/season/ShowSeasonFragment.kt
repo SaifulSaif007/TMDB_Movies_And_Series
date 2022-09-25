@@ -13,19 +13,26 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.saiful.base.util.ItemDecorator
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.shared.utils.AppConstants
 import com.saiful.tvshows.R
 import com.saiful.tvshows.databinding.FragmentSeasonsDetailsBinding
+import com.saiful.tvshows.view.adapter.EpisodeListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ShowSeasonFragment : BaseFragment<FragmentSeasonsDetailsBinding>() {
 
     private val viewModel: ShowSeasonVM by viewModels()
     private val args: ShowSeasonFragmentArgs by navArgs()
+    private val episodeAdapter = EpisodeListAdapter()
+
+    @Inject
+    lateinit var itemDecorator: ItemDecorator
 
     override fun layoutInflater(
         inflater: LayoutInflater,
@@ -41,6 +48,11 @@ class ShowSeasonFragment : BaseFragment<FragmentSeasonsDetailsBinding>() {
     override fun initOnCreateView() {
 
         viewModel.fetchSeason(showId = args.showId, seasonNo = args.seasonNo)
+
+        bindingView.episodeRecycler.apply {
+            adapter = episodeAdapter
+            addItemDecoration(itemDecorator)
+        }
 
         lifecycleScope.launchWhenCreated {
             viewModel.seasonDetails.collect { season ->
@@ -58,6 +70,8 @@ class ShowSeasonFragment : BaseFragment<FragmentSeasonsDetailsBinding>() {
                         seasonOverview.visibility = View.VISIBLE
                         seasonOverview.text = it
                     }
+
+                    season?.episodes?.let { episodeAdapter.submitList(it) }
                 }
             }
         }
