@@ -1,4 +1,4 @@
-package com.saiful.movie.view.adapter
+package com.saiful.tvshows.view.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,11 +7,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.saiful.movie.databinding.LayoutCastItemBinding
 import com.saiful.shared.utils.AppConstants
-import com.saiful.movie.model.Cast
+import com.saiful.tvshows.databinding.LayoutCastItemBinding
+import com.saiful.tvshows.model.Cast
 
-class MovieCastAdapter() : RecyclerView.Adapter<MovieCastAdapter.CastViewHolder>() {
+class ShowCastAdapter() : RecyclerView.Adapter<ShowCastAdapter.CastViewHolder>() {
 
     private val differ = AsyncListDiffer(this, DIFF_UTIL)
 
@@ -52,7 +52,7 @@ class MovieCastAdapter() : RecyclerView.Adapter<MovieCastAdapter.CastViewHolder>
                     .into(binding.castImage)
 
                 castName.text = item.originalName
-                castCharacterName.text = item.character
+                castCharacterName.text = item.roles.joinToString(", ") { it.character }
             }
         }
     }
@@ -60,7 +60,7 @@ class MovieCastAdapter() : RecyclerView.Adapter<MovieCastAdapter.CastViewHolder>
     private companion object {
         val DIFF_UTIL = object : DiffUtil.ItemCallback<Cast>() {
             override fun areItemsTheSame(oldItem: Cast, newItem: Cast): Boolean {
-                return oldItem.castId == newItem.castId
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(oldItem: Cast, newItem: Cast): Boolean {

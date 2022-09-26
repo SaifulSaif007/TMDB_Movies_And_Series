@@ -13,13 +13,45 @@
         <action
             android:id="@+id/action_tvShowsFragment_to_ShowListFragment"
             app:destination="@id/showListFragment" />
+        <action
+            android:id="@+id/action_tvShowsFragment_to_tvShowsDetailsFragment"
+            app:destination="@id/tvShowsDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/showListFragment"
         android:name="com.saiful.tvshows.view.list.ShowListFragment"
-        tools:layout="@layout/fragment_shows_list" >
+        tools:layout="@layout/fragment_shows_list">
         <argument
             android:name="show_category"
             app:argType="com.saiful.tvshows.model.TvShowsCategory" />
+        <action
+            android:id="@+id/action_showListFragment_to_tvShowsDetailsFragment"
+            app:destination="@id/tvShowsDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/tvShowsDetailsFragment"
+        android:name="com.saiful.tvshows.view.details.TvShowsDetailsFragment"
+        tools:layout="@layout/fragment_tvshow_details" >
+        <argument
+            android:name="show_id"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_tvShowsDetailsFragment_self"
+            app:destination="@id/tvShowsDetailsFragment" />
+        <action
+            android:id="@+id/action_tvShowsDetailsFragment_to_showSeason"
+            app:destination="@id/showSeasonFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/showSeasonFragment"
+        android:name="com.saiful.tvshows.view.season.ShowSeasonFragment"
+        tools:layout="@layout/fragment_seasons_details" >
+        <argument
+            android:name="show_id"
+            app:argType="integer" />
+        <argument
+            android:name="season_no"
+            app:argType="integer" />
     </fragment>
 </navigation>

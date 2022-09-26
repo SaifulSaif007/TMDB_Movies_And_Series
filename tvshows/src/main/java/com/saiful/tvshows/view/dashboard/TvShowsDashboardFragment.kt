@@ -132,7 +132,7 @@ class TvShowsDashboardFragment : BaseFragment<FragmentTvshowsDashboardBinding>()
 
         lifecycleScope.launchWhenStarted {
             viewModel.sliderLoaded.collect {
-                if (it) {
+                if (it == true) {
                     viewPager.apply {
                         adapter = pageAdapter
                         offscreenPageLimit = 3
@@ -178,7 +178,11 @@ class TvShowsDashboardFragment : BaseFragment<FragmentTvshowsDashboardBinding>()
     }
 
     private fun tvShowsItemClick(showsId: Int) {
-        // details page
+        findNavController().navigateSafe(
+            TvShowsDashboardFragmentDirections.actionTvShowsFragmentToTvShowsDetailsFragment(
+                showsId
+            )
+        )
     }
 
     private val runnable = Runnable {

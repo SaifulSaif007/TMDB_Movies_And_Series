@@ -6,10 +6,12 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.saiful.base.util.ItemDecorator
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
+import com.saiful.shared.utils.navigateSafe
 import com.saiful.tvshows.R
 import com.saiful.tvshows.databinding.FragmentShowsListBinding
 import com.saiful.tvshows.view.adapter.ShowsListLoadAdapter
@@ -59,6 +61,10 @@ class ShowListFragment : BaseFragment<FragmentShowsListBinding>() {
     }
 
     private fun showsItemClick(showId: Int) {
-
+        findNavController().navigateSafe(
+            ShowListFragmentDirections.actionShowListFragmentToTvShowsDetailsFragment(
+                showId
+            )
+        )
     }
 }

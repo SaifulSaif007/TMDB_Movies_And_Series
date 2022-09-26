@@ -44,12 +44,16 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             currentDestination = destination.id
 
-            if (currentDestination == com.saiful.movie.R.id.movieDetailsFragment
-                || currentDestination == com.saiful.movie.R.id.collectionFragment
-            ) {
-                binding.appBarLayout.visibility = View.GONE
-            } else {
-                binding.appBarLayout.visibility = View.VISIBLE
+            when (currentDestination) {
+                com.saiful.movie.R.id.movieDetailsFragment,
+                com.saiful.movie.R.id.collectionFragment,
+                com.saiful.tvshows.R.id.tvShowsDetailsFragment,
+                com.saiful.tvshows.R.id.showSeasonFragment -> {
+                    binding.appBarLayout.visibility = View.GONE
+                }
+                else -> {
+                    binding.appBarLayout.visibility = View.VISIBLE
+                }
             }
         }
 
