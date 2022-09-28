@@ -1,5 +1,6 @@
 package com.saiful.person.di
 
+import com.saiful.person.data.api.PersonApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,6 +14,6 @@ object PersonService {
 
     @Provides
     @Singleton
-    fun providePersonApi(retrofit: Retrofit): PersonService =
-        retrofit.create(PersonService::class.java)
+    fun providePersonApi(retrofit: Retrofit): PersonApiService =
+        retrofit.create(PersonApiService::class.java)
 }
