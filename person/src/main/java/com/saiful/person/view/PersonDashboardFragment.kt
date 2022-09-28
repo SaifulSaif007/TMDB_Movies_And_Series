@@ -1,9 +1,10 @@
-package com.saiful.person
+package com.saiful.person.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
+import com.saiful.person.R
 import com.saiful.person.databinding.FragmentPersonDashboardBinding
 import dagger.hilt.android.AndroidEntryPoint
 
