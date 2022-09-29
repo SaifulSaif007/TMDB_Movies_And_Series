@@ -13,7 +13,7 @@ import javax.inject.Inject
 class PersonDashboardVM
 @Inject constructor(private val repo: DashboardRepo) : BaseOpsViewModel() {
 
-    private val popularPersonList = MutableStateFlow<PersonResponse?>(null)
+    val popularPersonList = MutableStateFlow<PersonResponse?>(null)
     private val trendingPersonList = MutableStateFlow<PersonResponse?>(null)
 
     init {

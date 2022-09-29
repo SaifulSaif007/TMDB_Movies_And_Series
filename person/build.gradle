@@ -38,6 +38,7 @@ android {
 dependencies {
 
     implementation project(path: ':base')
+    implementation project(path: ':shared')
 
     implementation rootProject.ext.allModuleDep
     kapt rootProject.ext.allModuleAnno
