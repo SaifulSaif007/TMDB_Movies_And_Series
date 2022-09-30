@@ -11,7 +11,8 @@ import com.saiful.person.databinding.LayoutPersonItemBinding
 import com.saiful.person.model.Person
 import com.saiful.shared.utils.AppConstants
 
-class PersonDashboardAdapter : RecyclerView.Adapter<PersonDashboardAdapter.PersonViewHolder>() {
+class PersonDashboardAdapter(val listener: (Int) -> Unit) :
+    RecyclerView.Adapter<PersonDashboardAdapter.PersonViewHolder>() {
 
     private val differ = AsyncListDiffer(this, DIFF_UTIL)
 
@@ -40,7 +41,13 @@ class PersonDashboardAdapter : RecyclerView.Adapter<PersonDashboardAdapter.Perso
         RecyclerView.ViewHolder(binding.root) {
 
         init {
-            // on click
+            binding.root.setOnClickListener {
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val item = differ.currentList[position]
+                    if (item != null) listener.invoke(item.id)
+                }
+            }
         }
 
         fun bind(person: Person) {

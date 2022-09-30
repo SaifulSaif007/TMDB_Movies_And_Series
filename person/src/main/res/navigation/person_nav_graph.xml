@@ -9,5 +9,20 @@
         android:id="@+id/personDashboardFragment"
         android:name="com.saiful.person.view.dashboard.PersonDashboardFragment"
         android:label="Celebrity"
-        tools:layout="@layout/fragment_person_dashboard"/>
+        tools:layout="@layout/fragment_person_dashboard">
+        <action
+            android:id="@+id/action_personDashboardFragment_to_personListFragment"
+            app:destination="@id/personListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/personListFragment"
+        android:name="com.saiful.person.view.list.PersonListFragment"
+        tools:layout="@layout/fragment_person_list" >
+        <argument
+            android:name="category"
+            app:argType="com.saiful.person.model.PersonCategory" />
+    </fragment>
+
+
 </navigation>
