@@ -20,6 +20,9 @@ class PersonDashboardFragment : BaseFragment<FragmentPersonDashboardBinding>() {
 
     private val viewModel: PersonDashboardVM by viewModels()
     private val popularAdapter = PersonDashboardAdapter()
+    private val popularAdapterSecond = PersonDashboardAdapter()
+    private val trendingAdapter = PersonDashboardAdapter()
+    private val trendingAdapterSecond = PersonDashboardAdapter()
 
     @Inject
     lateinit var itemDecorator: ItemDecorator
@@ -36,18 +39,38 @@ class PersonDashboardFragment : BaseFragment<FragmentPersonDashboardBinding>() {
     override fun getViewModel(): BaseViewModel = viewModel
 
     override fun initOnCreateView() {
-        val gridlayoutManager = GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
         bindingView.apply {
             popularPersonRecycler.apply {
-                layoutManager = gridlayoutManager
                 adapter = popularAdapter
+                addItemDecoration(itemDecorator)
+            }
+
+            popularPersonRecyclerSecond.apply {
+                adapter = popularAdapterSecond
+                addItemDecoration(itemDecorator)
+            }
+
+            trendingPersonRecycler.apply {
+                adapter = trendingAdapter
+                addItemDecoration(itemDecorator)
+            }
+
+            trendingPersonRecyclerSecond.apply {
+                adapter = trendingAdapterSecond
                 addItemDecoration(itemDecorator)
             }
         }
 
         lifecycleScope.launchWhenStarted {
             viewModel.popularPersonList.collect {
-                it?.results?.let { list -> popularAdapter.submitList(list) }
+                it?.results?.let { list -> popularAdapter.submitList(list.subList(0, 9)) }
+                it?.results?.let { list -> popularAdapterSecond.submitList(list.subList(10, 19)) }
+            }
+        }
+        lifecycleScope.launchWhenStarted {
+            viewModel.trendingPersonList.collect {
+                it?.results?.let { list -> trendingAdapter.submitList(list.subList(0, 9)) }
+                it?.results?.let { list -> trendingAdapterSecond.submitList(list.subList(10, 19)) }
             }
         }
     }

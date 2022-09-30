@@ -2,4 +2,5 @@
 <resources>
     <string name="popular_person">Popular</string>
     <string name="see_all">see all</string>
+    <string name="trending">Trending</string>
 </resources>

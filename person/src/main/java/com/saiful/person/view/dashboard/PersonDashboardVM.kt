@@ -14,7 +14,7 @@ class PersonDashboardVM
 @Inject constructor(private val repo: DashboardRepo) : BaseOpsViewModel() {
 
     val popularPersonList = MutableStateFlow<PersonResponse?>(null)
-    private val trendingPersonList = MutableStateFlow<PersonResponse?>(null)
+    val trendingPersonList = MutableStateFlow<PersonResponse?>(null)
 
     init {
         popularPerson()
