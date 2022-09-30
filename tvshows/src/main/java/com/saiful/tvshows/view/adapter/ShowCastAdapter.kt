@@ -11,7 +11,7 @@ import com.saiful.shared.utils.AppConstants
 import com.saiful.tvshows.databinding.LayoutCastItemBinding
 import com.saiful.tvshows.model.Cast
 
-class ShowCastAdapter() : RecyclerView.Adapter<ShowCastAdapter.CastViewHolder>() {
+class ShowCastAdapter : RecyclerView.Adapter<ShowCastAdapter.CastViewHolder>() {
 
     private val differ = AsyncListDiffer(this, DIFF_UTIL)
 

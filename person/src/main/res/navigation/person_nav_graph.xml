@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/personDashboardFragment"
-        android:name="com.saiful.person.PersonDashboardFragment"
-        android:label="PersonDashboardFragment"
+        android:name="com.saiful.person.view.dashboard.PersonDashboardFragment"
+        android:label="Celebrity"
         tools:layout="@layout/fragment_person_dashboard"/>
 </navigation>
