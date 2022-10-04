@@ -25,9 +25,17 @@ data class KnownFor(
     val id: Int,
     @field:Json(name = "media_type")
     val mediaType: String,
-    val name: String,
+
+    //series
+    val title: String? = null,
     @field:Json(name = "original_name")
     val originalName: String,
+
+    //tv
+    val name: String? = null,
+    @field:Json(name = "original_title")
+    val originalTitle: String,
+
     val overview: String,
     @field:Json(name = "poster_path")
     val posterPath: String,
