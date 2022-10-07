@@ -101,7 +101,11 @@ class PersonDashboardFragment : BaseFragment<FragmentPersonDashboardBinding>() {
     }
 
     private fun onClickPerson(personId: Int) {
-        // todo -> person details  page
+        findNavController().navigateSafe(
+            PersonDashboardFragmentDirections.actionPersonDashboardFragmentToDetailsFragment(
+                personId
+            )
+        )
     }
 
 

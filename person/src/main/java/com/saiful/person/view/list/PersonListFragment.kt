@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.saiful.base.util.ItemDecorator
 import com.saiful.base.view.BaseFragment
@@ -13,6 +14,7 @@ import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.person.R
 import com.saiful.person.databinding.FragmentPersonListBinding
 import com.saiful.person.view.adapter.PersonListAdapter
+import com.saiful.shared.utils.navigateSafe
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
@@ -61,6 +63,10 @@ class PersonListFragment : BaseFragment<FragmentPersonListBinding>() {
     }
 
     private fun personItemClick(personId: Int) {
-
+        findNavController().navigateSafe(
+            PersonListFragmentDirections.actionPersonListFragmentToDetailsFragment(
+                personId
+            )
+        )
     }
 }

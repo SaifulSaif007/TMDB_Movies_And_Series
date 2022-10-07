@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/similar_movie_label"
+        android:id="@+id/person_image_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -16,14 +16,14 @@
         android:layout_margin="10dp"
         android:textColor="@color/text_color_black"
         android:textSize="@dimen/font_medium_large"
-        app:layout_constraintEnd_toStartOf="@+id/upcoming_see_all_label"
+        app:layout_constraintEnd_toStartOf="@+id/image_see_all_label"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/upcoming_see_all_label"
+        android:id="@+id/image_see_all_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -35,11 +35,11 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/similar_movie_label"
+        app:layout_constraintStart_toEndOf="@+id/person_image_label"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/similar_movie_recycler"
+        android:id="@+id/person_image_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -49,7 +49,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/similar_movie_label"
+        app:layout_constraintTop_toBottomOf="@+id/person_image_label"
         tools:itemCount="5"
         tools:listitem="@layout/layout_person_image_item" />
 
