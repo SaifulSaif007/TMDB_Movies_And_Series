@@ -7,5 +7,6 @@ class PersonDetailsRepo
 @Inject constructor(private val apiService: PersonApiService) {
 
     suspend fun personDetails(personId: Int) = apiService.personDetails(personId)
+    suspend fun personImages(personId: Int) = apiService.personImage(personId)
 
 }
