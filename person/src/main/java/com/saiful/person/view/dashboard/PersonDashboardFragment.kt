@@ -108,5 +108,4 @@ class PersonDashboardFragment : BaseFragment<FragmentPersonDashboardBinding>() {
         )
     }
 
-
 }
