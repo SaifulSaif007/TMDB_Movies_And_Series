@@ -1,4 +1,4 @@
-package com.saiful.tvshows.model
+package com.saiful.shared.model
 
 import com.squareup.moshi.Json
 

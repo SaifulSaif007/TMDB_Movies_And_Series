@@ -1,5 +1,6 @@
 package com.saiful.tvshows.model
 
+import com.saiful.shared.model.TvShows
 import com.squareup.moshi.Json
 
 data class TvShowsResponse(

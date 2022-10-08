@@ -1,10 +1,7 @@
 package com.saiful.person.data.api
 
 import com.saiful.base.network.model.GenericResponse
-import com.saiful.person.model.MovieCredits
-import com.saiful.person.model.PersonDetails
-import com.saiful.person.model.PersonImage
-import com.saiful.person.model.PersonResponse
+import com.saiful.person.model.*
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -35,4 +32,10 @@ interface PersonApiService {
     suspend fun movieCredits(
         @Path("person_id") personId: Int
     ): GenericResponse<MovieCredits>
+
+    @GET("person/{person_id}/tv_credits")
+    suspend fun tvShowsCredits(
+        @Path("person_id") personId: Int
+    ): GenericResponse<TvShowsCredits>
+
 }

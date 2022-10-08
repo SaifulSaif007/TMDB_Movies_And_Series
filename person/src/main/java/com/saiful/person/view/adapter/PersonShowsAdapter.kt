@@ -1,4 +1,4 @@
-package com.saiful.tvshows.view.adapter
+package com.saiful.person.view.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -8,27 +8,26 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.saiful.shared.utils.AppConstants.imageBaseUrl
-import com.saiful.shared.utils.AppConstants.posterSize
-import com.saiful.tvshows.databinding.LayoutShowItemBinding
+import com.saiful.person.databinding.LayoutPersonCommonItemBinding
 import com.saiful.shared.model.TvShows
+import com.saiful.shared.utils.AppConstants
 
-class ShowsDashboardAdapter (private val listener: (Int) -> Unit):
-    RecyclerView.Adapter<ShowsDashboardAdapter.MovieDashboardViewHolder>() {
+class PersonShowsAdapter(private val listener: (Int) -> Unit) :
+    RecyclerView.Adapter<PersonShowsAdapter.ShowsViewHolder>() {
 
     private val differ = AsyncListDiffer(this, diffCallback)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieDashboardViewHolder {
-        val binding = LayoutShowItemBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowsViewHolder {
+        return ShowsViewHolder(
+            LayoutPersonCommonItemBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
         )
-
-        return MovieDashboardViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: MovieDashboardViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ShowsViewHolder, position: Int) {
         holder.bind(differ.currentList[position])
     }
 
@@ -39,7 +38,7 @@ class ShowsDashboardAdapter (private val listener: (Int) -> Unit):
         notifyDataSetChanged()
     }
 
-    inner class MovieDashboardViewHolder(private val binding: LayoutShowItemBinding) :
+    inner class ShowsViewHolder(private val binding: LayoutPersonCommonItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
@@ -51,9 +50,10 @@ class ShowsDashboardAdapter (private val listener: (Int) -> Unit):
                 }
             }
         }
-        fun bind(item: TvShows) {
+
+        fun bind(shows: TvShows) {
             Glide.with(binding.root.context)
-                .load(imageBaseUrl + posterSize + item.posterPath)
+                .load(AppConstants.imageBaseUrl + AppConstants.posterSize + shows.posterPath)
                 .transition(DrawableTransitionOptions.withCrossFade(500))
                 //.error(R.drawable.image1)
                 .into(binding.posterImage)
@@ -72,4 +72,5 @@ class ShowsDashboardAdapter (private val listener: (Int) -> Unit):
             }
         }
     }
+
 }

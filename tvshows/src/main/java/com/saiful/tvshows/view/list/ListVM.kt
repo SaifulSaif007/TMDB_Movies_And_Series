@@ -6,7 +6,7 @@ import androidx.paging.cachedIn
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.tvshows.data.api.TvShowsApiService
 import com.saiful.tvshows.data.repository.paging.ShowsListRepo
-import com.saiful.tvshows.model.TvShows
+import com.saiful.shared.model.TvShows
 import com.saiful.tvshows.model.TvShowsCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

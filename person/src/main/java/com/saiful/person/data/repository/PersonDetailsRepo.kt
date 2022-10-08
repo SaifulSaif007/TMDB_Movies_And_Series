@@ -9,4 +9,5 @@ class PersonDetailsRepo
     suspend fun personDetails(personId: Int) = apiService.personDetails(personId)
     suspend fun personImages(personId: Int) = apiService.personImage(personId)
     suspend fun personMovieCredits(personId: Int) = apiService.movieCredits(personId)
+    suspend fun personTvShowsCredits(personId: Int) = apiService.tvShowsCredits(personId)
 }
