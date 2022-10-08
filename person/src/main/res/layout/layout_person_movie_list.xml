@@ -51,6 +51,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/person_movie_label"
         tools:itemCount="5"
-        tools:listitem="@layout/layout_person_image_item" />
+        tools:listitem="@layout/layout_person_common_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

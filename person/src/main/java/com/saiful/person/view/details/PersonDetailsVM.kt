@@ -4,6 +4,7 @@ import com.saiful.base.network.model.BaseResponse
 import com.saiful.base.network.model.GenericResponse
 import com.saiful.base.viewmodel.BaseOpsViewModel
 import com.saiful.person.data.repository.PersonDetailsRepo
+import com.saiful.person.model.MovieCredits
 import com.saiful.person.model.PersonDetails
 import com.saiful.person.model.PersonImage
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,6 +17,7 @@ class PersonDetailsVM
 
     val personDetails = MutableStateFlow<PersonDetails?>(null)
     val personImageList = MutableStateFlow<PersonImage?>(null)
+    val personMovieList = MutableStateFlow<MovieCredits?>(null)
 
     fun fetchPersonDetails(personId: Int) {
         executeRestCodeBlock(person_details) {
@@ -23,6 +25,9 @@ class PersonDetailsVM
         }
         executeRestCodeBlock(person_image) {
             repo.personImages(personId)
+        }
+        executeRestCodeBlock(person_movie_credits) {
+            repo.personMovieCredits(personId)
         }
     }
 
@@ -44,6 +49,14 @@ class PersonDetailsVM
                     else -> {}
                 }
             }
+            person_movie_credits -> {
+                when (data as GenericResponse<*>) {
+                    is BaseResponse.Success -> {
+                        personMovieList.value = data.body as MovieCredits
+                    }
+                    else -> {}
+                }
+            }
         }
     }
 
@@ -51,6 +64,7 @@ class PersonDetailsVM
     private companion object {
         const val person_details = "PERSON_DETAILS"
         const val person_image = "PERSON_IMAGE"
+        const val person_movie_credits = "MOVIE_CREDITS"
     }
 
 }

@@ -7,7 +7,7 @@ import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.data.api.MovieApiService
 import com.saiful.movie.data.repository.paging.MovieListRepo
 import com.saiful.movie.model.MovieCategory
-import com.saiful.movie.model.Movies
+import com.saiful.shared.model.Movies
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

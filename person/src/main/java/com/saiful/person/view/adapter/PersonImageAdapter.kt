@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.saiful.person.databinding.LayoutPersonImageItemBinding
+import com.saiful.person.databinding.LayoutPersonCommonItemBinding
 import com.saiful.person.model.Image
 import com.saiful.shared.utils.AppConstants
 
@@ -18,7 +18,7 @@ class PersonImageAdapter : RecyclerView.Adapter<PersonImageAdapter.PersonImageVi
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PersonImageViewHolder {
         return PersonImageViewHolder(
-            LayoutPersonImageItemBinding.inflate(
+            LayoutPersonCommonItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -36,7 +36,7 @@ class PersonImageAdapter : RecyclerView.Adapter<PersonImageAdapter.PersonImageVi
         differ.submitList(list)
     }
 
-    inner class PersonImageViewHolder(private val binding: LayoutPersonImageItemBinding) :
+    inner class PersonImageViewHolder(private val binding: LayoutPersonCommonItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {

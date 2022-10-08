@@ -33,6 +33,7 @@ android {
 }
 
 dependencies {
+    implementation project(path: ':base')
 
     implementation rootProject.ext.allModuleDep
     kapt rootProject.ext.allModuleAnno

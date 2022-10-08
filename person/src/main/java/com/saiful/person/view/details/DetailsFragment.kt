@@ -14,6 +14,7 @@ import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.person.R
 import com.saiful.person.databinding.FragmentPersonDetailsBinding
 import com.saiful.person.view.adapter.PersonImageAdapter
+import com.saiful.person.view.adapter.PersonMovieAdapter
 import com.saiful.shared.utils.AppConstants
 import com.saiful.shared.utils.formatDate
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,6 +27,7 @@ class DetailsFragment : BaseFragment<FragmentPersonDetailsBinding>() {
     private val args: DetailsFragmentArgs by navArgs()
     private val viewModel: PersonDetailsVM by viewModels()
     private val imageAdapter = PersonImageAdapter()
+    private val movieAdapter = PersonMovieAdapter(::movieItemClick)
 
     @Inject
     lateinit var itemDecorator: ItemDecorator
@@ -48,6 +50,10 @@ class DetailsFragment : BaseFragment<FragmentPersonDetailsBinding>() {
         bindingView.apply {
             personImageLayout.personImageRecycler.apply {
                 adapter = imageAdapter
+                addItemDecoration(itemDecorator)
+            }
+            personMovieLayout.personMovieRecycler.apply {
+                adapter = movieAdapter
                 addItemDecoration(itemDecorator)
             }
         }
@@ -78,6 +84,15 @@ class DetailsFragment : BaseFragment<FragmentPersonDetailsBinding>() {
                 if (images != null) imageAdapter.submitList(images.profiles)
             }
         }
+        lifecycleScope.launchWhenStarted {
+            viewModel.personMovieList.collect { movies ->
+                if (movies != null) movieAdapter.submitList(movies.cast.sortedByDescending { it.releaseDate })
+            }
+        }
+    }
+
+    private fun movieItemClick(movieId: Int) {
+
     }
 
 }

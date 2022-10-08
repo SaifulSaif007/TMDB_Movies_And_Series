@@ -42,7 +42,7 @@ android {
 
 dependencies {
 
-    implementation project(path: ':shared')
+//    implementation project(path: ':shared')
     // Added retrofit and it's dependency lib
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     api 'com.squareup.retrofit2:converter-moshi:2.9.0'
