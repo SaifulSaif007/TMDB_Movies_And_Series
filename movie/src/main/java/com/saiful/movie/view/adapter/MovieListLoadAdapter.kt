@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.saiful.shared.utils.AppConstants
 import com.saiful.movie.databinding.LayoutMovieListItemBinding
-import com.saiful.movie.model.Movies
+import com.saiful.shared.model.Movies
 
 class MovieListLoadAdapter(private val listener: (Int) -> Unit) :
     PagingDataAdapter<Movies, MovieListLoadAdapter.MovieViewHolder>(DIFF_UTIL) {

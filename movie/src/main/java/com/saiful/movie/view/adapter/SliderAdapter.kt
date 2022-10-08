@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.saiful.shared.utils.AppConstants.backdropSize
 import com.saiful.shared.utils.AppConstants.imageBaseUrl
 import com.saiful.movie.databinding.LayoutImageSliderBinding
-import com.saiful.movie.model.Movies
+import com.saiful.shared.model.Movies
 
 class SliderAdapter(
     private val imageList: MutableList<Movies>,

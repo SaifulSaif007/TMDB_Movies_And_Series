@@ -4,7 +4,6 @@ import com.saiful.base.BuildConfig
 import com.saiful.base.network.ResponseAdapterFactory
 import com.saiful.base.network.ThrowableAdapter
 import com.saiful.base.network.UserInterceptor
-import com.saiful.shared.utils.AppConstants.baseUrl
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -50,7 +49,7 @@ object AppModule {
     fun provideRetrofit(client: OkHttpClient, moshi: Moshi) : Retrofit =
         Retrofit.Builder()
             .client(client)
-            .baseUrl(baseUrl)
+            .baseUrl("https://api.themoviedb.org/3/")
             .addCallAdapterFactory(ResponseAdapterFactory())
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()

@@ -1,5 +1,6 @@
 package com.saiful.movie.model
 
+import com.saiful.shared.model.Movies
 import com.squareup.moshi.Json
 
 data class MoviesResponse(

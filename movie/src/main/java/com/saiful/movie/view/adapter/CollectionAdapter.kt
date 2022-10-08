@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.saiful.shared.utils.AppConstants
 import com.saiful.movie.databinding.LayoutMovieListItemBinding
-import com.saiful.movie.model.Movies
+import com.saiful.shared.model.Movies
 
 class CollectionAdapter(private val listener: (Int) -> Unit) :
     RecyclerView.Adapter<CollectionAdapter.CollectionViewHolder>() {

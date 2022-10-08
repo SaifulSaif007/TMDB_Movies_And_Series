@@ -5,7 +5,7 @@ import com.saiful.base.network.model.BaseResponse
 import com.saiful.base.network.model.GenericResponse
 import com.saiful.base.viewmodel.BaseOpsViewModel
 import com.saiful.movie.data.repository.DashboardRepo
-import com.saiful.movie.model.Movies
+import com.saiful.shared.model.Movies
 import com.saiful.movie.model.MoviesResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -4,7 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base.network.model.GenericResponse
-import com.saiful.movie.model.Movies
+import com.saiful.shared.model.Movies
 import com.saiful.movie.model.MoviesResponse
 
 class MoviePagingSource(private val apiCall: suspend (page:Int)-> GenericResponse<MoviesResponse>) : PagingSource<Int, Movies>() {
