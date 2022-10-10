@@ -4,7 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base.network.model.GenericResponse
-import com.saiful.tvshows.model.TvShows
+import com.saiful.shared.model.TvShows
 import com.saiful.tvshows.model.TvShowsResponse
 
 class ShowsPagingSource(private val apiCall: suspend (page: Int) -> GenericResponse<TvShowsResponse>) :

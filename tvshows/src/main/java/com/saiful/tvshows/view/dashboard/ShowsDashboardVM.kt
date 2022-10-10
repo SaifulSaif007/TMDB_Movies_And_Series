@@ -5,7 +5,7 @@ import com.saiful.base.network.model.BaseResponse
 import com.saiful.base.network.model.GenericResponse
 import com.saiful.base.viewmodel.BaseOpsViewModel
 import com.saiful.tvshows.data.repository.DashboardRepo
-import com.saiful.tvshows.model.TvShows
+import com.saiful.shared.model.TvShows
 import com.saiful.tvshows.model.TvShowsResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

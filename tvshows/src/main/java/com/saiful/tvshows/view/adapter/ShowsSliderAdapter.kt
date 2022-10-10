@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.saiful.shared.utils.AppConstants.backdropSize
 import com.saiful.shared.utils.AppConstants.imageBaseUrl
 import com.saiful.tvshows.databinding.LayoutShowsImageSliderBinding
-import com.saiful.tvshows.model.TvShows
+import com.saiful.shared.model.TvShows
 
 class ShowsSliderAdapter(
     private val imageList: MutableList<TvShows>,

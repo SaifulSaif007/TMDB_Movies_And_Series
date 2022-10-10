@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.saiful.shared.utils.AppConstants
 import com.saiful.tvshows.databinding.LayoutShowsListItemBinding
-import com.saiful.tvshows.model.TvShows
+import com.saiful.shared.model.TvShows
 
 class ShowsListLoadAdapter(private val listener: (Int) -> Unit) :
     PagingDataAdapter<TvShows, ShowsListLoadAdapter.MovieViewHolder>(DIFF_UTIL) {
