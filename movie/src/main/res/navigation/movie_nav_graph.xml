@@ -44,20 +44,10 @@
             app:destination="@id/movieDetailsFragment" />
         <action
             android:id="@+id/action_details_to_collection"
-            app:destination="@id/collectionFragment" />
+            app:destination="@id/movie_collection_nav_graph" />
     </fragment>
 
-    <fragment
-        android:id="@+id/collectionFragment"
-        android:name="com.saiful.movie.view.collection.CollectionFragment"
-        android:label="Collections"
-        tools:layout="@layout/fragment_movie_collection">
-        <argument
-            android:name="collection_id"
-            app:argType="integer" />
-        <action
-            android:id="@+id/action_collectionFragment_to_movieDetailsFragment"
-            app:destination="@id/movieDetailsFragment" />
-    </fragment>
+
+    <include app:graph="@navigation/movie_collection_nav_graph" />
 
 </navigation>
