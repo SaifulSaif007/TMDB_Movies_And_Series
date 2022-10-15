@@ -5,10 +5,13 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.saiful.base.util.ItemDecorator
+import com.saiful.base.util.navigation.MovieModuleNavigation
+import com.saiful.base.util.navigation.TvShowModuleNavigation
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.person.R
@@ -33,6 +36,12 @@ class DetailsFragment : BaseFragment<FragmentPersonDetailsBinding>() {
 
     @Inject
     lateinit var itemDecorator: ItemDecorator
+
+    @Inject
+    lateinit var movieModuleNavigation: MovieModuleNavigation
+
+    @Inject
+    lateinit var tvShowModuleNavigation: TvShowModuleNavigation
 
     override fun layoutInflater(
         inflater: LayoutInflater,
@@ -103,11 +112,10 @@ class DetailsFragment : BaseFragment<FragmentPersonDetailsBinding>() {
     }
 
     private fun movieItemClick(movieId: Int) {
-
+        movieModuleNavigation.navigateMovieDetails(movieId, findNavController())
     }
 
     private fun showsItemClick(showsId: Int) {
-
+        tvShowModuleNavigation.navigateToShowDetails(showsId, findNavController())
     }
-
 }

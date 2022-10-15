@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -13,14 +14,13 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.saiful.shared.utils.AppConstants
 import com.saiful.base.util.ItemDecorator
-import com.saiful.shared.utils.navigateSafe
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
 import com.saiful.movie.databinding.FragmentMovieCollectionBinding
 import com.saiful.movie.view.adapter.CollectionAdapter
+import com.saiful.shared.utils.AppConstants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
@@ -84,8 +84,8 @@ class CollectionFragment : BaseFragment<FragmentMovieCollectionBinding>() {
     }
 
     private fun movieItemClick(id: Int) {
-        findNavController().navigateSafe(
-            CollectionFragmentDirections.actionCollectionFragmentToMovieDetailsFragment(id)
+        findNavController().navigate(
+            R.id.movie_details_nav_graph, bundleOf("movie_id" to id)
         )
     }
 

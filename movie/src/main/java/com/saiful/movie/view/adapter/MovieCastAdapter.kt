@@ -11,7 +11,7 @@ import com.saiful.movie.databinding.LayoutCastItemBinding
 import com.saiful.shared.utils.AppConstants
 import com.saiful.movie.model.Cast
 
-class MovieCastAdapter() : RecyclerView.Adapter<MovieCastAdapter.CastViewHolder>() {
+class MovieCastAdapter(private val listener: (Int) -> Unit) : RecyclerView.Adapter<MovieCastAdapter.CastViewHolder>() {
 
     private val differ = AsyncListDiffer(this, DIFF_UTIL)
 
@@ -40,7 +40,13 @@ class MovieCastAdapter() : RecyclerView.Adapter<MovieCastAdapter.CastViewHolder>
         RecyclerView.ViewHolder(binding.root) {
 
         init {
-            //todo -> onclick
+           binding.root.setOnClickListener {
+               val position = bindingAdapterPosition
+               if (position != RecyclerView.NO_POSITION){
+                   val item = differ.currentList[position]
+                   listener.invoke(item.id)
+               }
+           }
         }
 
         fun bind(item: Cast) {

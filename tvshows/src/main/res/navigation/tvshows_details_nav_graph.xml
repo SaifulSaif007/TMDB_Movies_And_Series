@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tvshows_details_nav_graph"
+    app:startDestination="@id/tvShowsDetailsFragment">
+
+    <fragment
+        android:id="@+id/tvShowsDetailsFragment"
+        android:name="com.saiful.tvshows.view.details.TvShowsDetailsFragment"
+        tools:layout="@layout/fragment_tvshow_details" >
+        <argument
+            android:name="show_id"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_tvShowsDetailsFragment_self"
+            app:destination="@id/tvShowsDetailsFragment" />
+        <action
+            android:id="@+id/action_tvShowsDetailsFragment_to_showSeason"
+            app:destination="@id/showSeasonFragment" />
+    </fragment>
+
+</navigation>

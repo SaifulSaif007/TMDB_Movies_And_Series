@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.chip.Chip
 import com.saiful.base.util.ItemDecorator
+import com.saiful.base.util.navigation.PersonModuleNavigation
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.shared.utils.AppConstants
@@ -42,7 +43,7 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
 
     private val args: TvShowsDetailsFragmentArgs by navArgs()
     private val viewModel: TvShowsDetailsVM by viewModels()
-    private val castAdapter = ShowCastAdapter()
+    private val castAdapter = ShowCastAdapter(::castItemClick)
     private val trailerAdapter = ShowsTrailerAdapter(::onTrailerClick)
     private val recommendationAdapter = ShowsDashboardAdapter(::showItemClick)
     private val similarAdapter = ShowsDashboardAdapter(::showItemClick)
@@ -50,6 +51,9 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
 
     @Inject
     lateinit var itemDecorator: ItemDecorator
+
+    @Inject
+    lateinit var personModuleNavigation: PersonModuleNavigation
 
     override fun layoutInflater(
         inflater: LayoutInflater,
@@ -216,9 +220,14 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
         )
     }
 
-    private fun seasonItemClick(seasonNo: Int){
-        findNavController().navigateSafe(TvShowsDetailsFragmentDirections.actionTvShowsDetailsFragmentToShowSeason(
-            args.showId, seasonNo
-        ))
+    private fun seasonItemClick(seasonNo: Int) {
+        findNavController().navigate(
+            R.id.tvshow_season_nav_graph,
+            bundleOf("show_id" to args.showId, "season_no" to seasonNo)
+        )
+    }
+
+    private fun castItemClick(personId: Int) {
+        personModuleNavigation.navigateToPersonDetails(personId, findNavController())
     }
 }

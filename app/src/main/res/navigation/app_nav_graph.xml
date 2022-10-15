@@ -8,4 +8,10 @@
     <include app:graph="@navigation/tvshows_nav_graph" />
     <include app:graph="@navigation/person_nav_graph" />
 
+    <include app:graph="@navigation/person_details_nav_graph" />
+    <include app:graph="@navigation/movie_details_nav_graph" />
+    <include app:graph="@navigation/movie_collection_nav_graph" />
+    <include app:graph="@navigation/tvshows_details_nav_graph" />
+    <include app:graph="@navigation/tvshow_season_nav_graph" />
+
 </navigation>

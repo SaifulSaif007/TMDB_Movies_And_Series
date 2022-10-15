@@ -35,7 +35,13 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
         navController = navHostFragment.findNavController()
 
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                com.saiful.movie.R.id.movieDashboardFragment,
+                com.saiful.tvshows.R.id.tvShowsFragment,
+                com.saiful.person.R.id.personDashboardFragment
+            )
+        )
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         val navBar = findViewById<BottomNavigationView>(R.id.nav_bar_container)
@@ -49,14 +55,33 @@ class MainActivity : AppCompatActivity() {
                 com.saiful.movie.R.id.collectionFragment,
                 com.saiful.tvshows.R.id.tvShowsDetailsFragment,
                 com.saiful.tvshows.R.id.showSeasonFragment -> {
-                    binding.appBarLayout.visibility = View.GONE
+                    toggleAppBarLayoutVisibility(false)
                 }
                 else -> {
-                    binding.appBarLayout.visibility = View.VISIBLE
+                    toggleAppBarLayoutVisibility(true)
+                }
+            }
+
+            when (currentDestination) {
+                com.saiful.movie.R.id.movieDashboardFragment,
+                com.saiful.tvshows.R.id.tvShowsFragment,
+                com.saiful.person.R.id.personDashboardFragment -> {
+                    toggleBottomBarVisibility(true)
+                }
+                else -> {
+                    toggleBottomBarVisibility(false)
                 }
             }
         }
 
+    }
+
+    private fun toggleAppBarLayoutVisibility(visible: Boolean) {
+        binding.appBarLayout.visibility = if (visible) View.VISIBLE else View.GONE
+    }
+
+    private fun toggleBottomBarVisibility(visible: Boolean) {
+        binding.navBarContainer.visibility = if (visible) View.VISIBLE else View.GONE
     }
 
     override fun onSupportNavigateUp(): Boolean {
