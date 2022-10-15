@@ -43,6 +43,7 @@
             android:id="@+id/action_tvShowsDetailsFragment_to_showSeason"
             app:destination="@id/showSeasonFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/showSeasonFragment"
         android:name="com.saiful.tvshows.view.season.ShowSeasonFragment"
