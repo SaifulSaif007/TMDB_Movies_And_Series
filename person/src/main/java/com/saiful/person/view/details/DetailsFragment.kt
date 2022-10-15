@@ -109,5 +109,4 @@ class DetailsFragment : BaseFragment<FragmentPersonDetailsBinding>() {
     private fun showsItemClick(showsId: Int) {
 
     }
-
 }

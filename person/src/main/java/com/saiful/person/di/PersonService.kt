@@ -1,6 +1,8 @@
 package com.saiful.person.di
 
+import com.saiful.base.util.navigation.PersonModuleNavigation
 import com.saiful.person.data.api.PersonApiService
+import com.saiful.person.navigation.NavigationImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,4 +18,9 @@ object PersonService {
     @Singleton
     fun providePersonApi(retrofit: Retrofit): PersonApiService =
         retrofit.create(PersonApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideNavigation(): PersonModuleNavigation = NavigationImpl()
+
 }

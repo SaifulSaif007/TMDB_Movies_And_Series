@@ -20,9 +20,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.chip.Chip
 import com.saiful.base.util.*
-import com.saiful.shared.utils.AppConstants.backdropSize
-import com.saiful.shared.utils.AppConstants.imageBaseUrl
-import com.saiful.shared.utils.AppConstants.posterSize
+import com.saiful.base.util.navigation.PersonModuleNavigation
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
@@ -31,6 +29,9 @@ import com.saiful.movie.model.GenresItem
 import com.saiful.movie.view.adapter.MovieCastAdapter
 import com.saiful.movie.view.adapter.MovieDashboardAdapter
 import com.saiful.movie.view.adapter.MovieTrailerAdapter
+import com.saiful.shared.utils.AppConstants.backdropSize
+import com.saiful.shared.utils.AppConstants.imageBaseUrl
+import com.saiful.shared.utils.AppConstants.posterSize
 import com.saiful.shared.utils.floatNumberFormatter
 import com.saiful.shared.utils.formatDate
 import com.saiful.shared.utils.formatToShortNumber
@@ -45,12 +46,15 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
     private val args: MovieDetailsFragmentArgs by navArgs()
     private val viewModel: MovieDetailsVM by viewModels()
     private val trailerAdapter = MovieTrailerAdapter(::onTrailerClick)
-    private val castAdapter = MovieCastAdapter()
+    private val castAdapter = MovieCastAdapter(::castItemClick)
     private val recommendationAdapter = MovieDashboardAdapter(::movieItemClick)
     private val similarAdapter = MovieDashboardAdapter(::movieItemClick)
 
     @Inject
     lateinit var itemDecorator: ItemDecorator
+
+    @Inject
+    lateinit var personNavigation: PersonModuleNavigation
 
     override fun layoutInflater(
         inflater: LayoutInflater,
@@ -227,6 +231,10 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
             R.id.action_movieDetailsFragment_self,
             bundleOf("movie_id" to movieId)
         )
+    }
+
+    private fun castItemClick(personId: Int) {
+        personNavigation.navigateToPersonDetails(personId, findNavController())
     }
 }
 
