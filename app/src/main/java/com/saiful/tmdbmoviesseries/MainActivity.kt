@@ -35,7 +35,13 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
         navController = navHostFragment.findNavController()
 
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                com.saiful.movie.R.id.movieDashboardFragment,
+                com.saiful.tvshows.R.id.tvShowsFragment,
+                com.saiful.person.R.id.personDashboardFragment
+            )
+        )
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         val navBar = findViewById<BottomNavigationView>(R.id.nav_bar_container)
