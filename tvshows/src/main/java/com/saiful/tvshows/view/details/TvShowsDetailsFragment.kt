@@ -220,13 +220,14 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
         )
     }
 
-    private fun seasonItemClick(seasonNo: Int){
-        findNavController().navigateSafe(TvShowsDetailsFragmentDirections.actionTvShowsDetailsFragmentToShowSeason(
-            args.showId, seasonNo
-        ))
+    private fun seasonItemClick(seasonNo: Int) {
+        findNavController().navigate(
+            R.id.tvshow_season_nav_graph,
+            bundleOf("show_id" to args.showId, "season_no" to seasonNo)
+        )
     }
 
-    private fun castItemClick(personId: Int){
+    private fun castItemClick(personId: Int) {
         personModuleNavigation.navigateToPersonDetails(personId, findNavController())
     }
 }

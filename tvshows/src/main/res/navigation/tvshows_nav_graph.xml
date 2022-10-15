@@ -32,27 +32,16 @@
     <fragment
         android:id="@+id/tvShowsDetailsFragment"
         android:name="com.saiful.tvshows.view.details.TvShowsDetailsFragment"
-        tools:layout="@layout/fragment_tvshow_details" >
+        tools:layout="@layout/fragment_tvshow_details">
         <argument
             android:name="show_id"
             app:argType="integer" />
         <action
             android:id="@+id/action_tvShowsDetailsFragment_self"
             app:destination="@id/tvShowsDetailsFragment" />
-        <action
-            android:id="@+id/action_tvShowsDetailsFragment_to_showSeason"
-            app:destination="@id/showSeasonFragment" />
+
     </fragment>
 
-    <fragment
-        android:id="@+id/showSeasonFragment"
-        android:name="com.saiful.tvshows.view.season.ShowSeasonFragment"
-        tools:layout="@layout/fragment_seasons_details" >
-        <argument
-            android:name="show_id"
-            app:argType="integer" />
-        <argument
-            android:name="season_no"
-            app:argType="integer" />
-    </fragment>
+    <include app:graph="@navigation/tvshow_season_nav_graph" />
+
 </navigation>
