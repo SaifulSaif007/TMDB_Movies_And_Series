@@ -5,10 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.saiful.movie.databinding.LayoutTrailerItemBinding
 import com.saiful.movie.model.ResultsItem
+import com.saiful.shared.utils.loadYoutubeImage
 
 class MovieTrailerAdapter(private val listener: (String) -> Unit) :
     RecyclerView.Adapter<MovieTrailerAdapter.MovieTrailerViewHolder>() {
@@ -50,13 +49,7 @@ class MovieTrailerAdapter(private val listener: (String) -> Unit) :
 
         fun bind(item: ResultsItem) {
             binding.trailerName.text = item.name
-
-            val imageUrl = "https://img.youtube.com/vi/" + item.key + "/0.jpg"
-
-            Glide.with(itemView.context)
-                .load(imageUrl)
-                .transition(DrawableTransitionOptions.withCrossFade(500))
-                .into(binding.trailerImage)
+            binding.trailerImage.loadYoutubeImage(item.key)
         }
     }
 

@@ -6,10 +6,9 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.saiful.person.databinding.LayoutPersonListItemBinding
 import com.saiful.person.model.Person
-import com.saiful.shared.utils.AppConstants
+import com.saiful.shared.utils.loadBackDropSizeImage
 
 class PersonListAdapter(private val listener: (Int) -> Unit) :
     PagingDataAdapter<Person, PersonListAdapter.PersonViewHolder>(DIFF_UTIL) {
@@ -50,13 +49,11 @@ class PersonListAdapter(private val listener: (Int) -> Unit) :
 
         fun bind(persons: Person) {
             binding.apply {
-                Glide.with(itemView)
-                    .load(AppConstants.imageBaseUrl + AppConstants.backdropSize + persons.profilePath)
-                    .into(binding.personImage)
-
+                binding.personImage.loadBackDropSizeImage(persons.profilePath)
                 personDepartment.text = persons.knownForDepartment
                 personName.text = persons.name
-                personKnownFor.text = persons.knownFor?.joinToString(", ") { (it.title ?: it.name).toString() }
+                personKnownFor.text =
+                    persons.knownFor?.joinToString(", ") { (it.title ?: it.name).toString() }
             }
         }
     }

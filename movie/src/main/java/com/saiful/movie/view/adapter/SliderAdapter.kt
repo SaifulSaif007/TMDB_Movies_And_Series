@@ -4,11 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
-import com.saiful.shared.utils.AppConstants.backdropSize
-import com.saiful.shared.utils.AppConstants.imageBaseUrl
 import com.saiful.movie.databinding.LayoutImageSliderBinding
 import com.saiful.shared.model.Movies
+import com.saiful.shared.utils.loadBackDropSizeImage
 
 class SliderAdapter(
     private val imageList: MutableList<Movies>,
@@ -54,11 +52,9 @@ class SliderAdapter(
         }
 
         fun bind(item: Movies) {
-            Glide.with(itemView).load(imageBaseUrl + backdropSize + item.backdropPath)
-                .into(binding.posterImage)
-
             binding.apply {
                 movieName.text = item.title
+                posterImage.loadBackDropSizeImage(item.backdropPath)
             }
         }
     }

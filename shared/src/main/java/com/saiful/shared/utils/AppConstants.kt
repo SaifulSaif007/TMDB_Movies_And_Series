@@ -7,4 +7,6 @@ object AppConstants {
     const val backdropSize = "w780" //w1280 // original
     const val posterSize = "w342" // w500 // w780 // original
 
+    const val youtubeImageUrlPrefix = "https://img.youtube.com/vi/"
+    const val youtubeImageUrlSuffix = "/0.jpg"
 }

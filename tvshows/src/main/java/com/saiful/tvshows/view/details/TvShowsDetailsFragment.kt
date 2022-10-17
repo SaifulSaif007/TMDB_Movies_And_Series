@@ -16,17 +16,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.chip.Chip
 import com.saiful.base.util.ItemDecorator
 import com.saiful.base.util.navigation.PersonModuleNavigation
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
-import com.saiful.shared.utils.AppConstants
-import com.saiful.shared.utils.floatNumberFormatter
-import com.saiful.shared.utils.formatDate
-import com.saiful.shared.utils.navigateSafe
+import com.saiful.shared.utils.*
 import com.saiful.tvshows.R
 import com.saiful.tvshows.databinding.FragmentTvshowDetailsBinding
 import com.saiful.tvshows.model.Genre
@@ -104,19 +99,9 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
 
         lifecycleScope.launchWhenStarted {
             viewModel.showDetails.collect { shows ->
-                Glide.with(requireContext())
-                    .load(AppConstants.imageBaseUrl + AppConstants.backdropSize + shows?.backdropPath)
-                    .transition(DrawableTransitionOptions.withCrossFade(100))
-                    //.error(R.drawable.image1)
-                    .into(bindingView.backdropImage)
-
-                Glide.with(requireContext())
-                    .load(AppConstants.imageBaseUrl + AppConstants.posterSize + shows?.posterPath)
-                    .transition(DrawableTransitionOptions.withCrossFade(200))
-                    //.error(R.drawable.image1)
-                    .into(bindingView.posterImage)
-
                 bindingView.apply {
+                    backdropImage.loadBackDropSizeImage(shows?.backdropPath)
+                    posterImage.loadPosterSizeImage(shows?.posterPath)
                     toolbar.title = shows?.name
                     showsName.text = shows?.name
                     ratingBar2.rating = shows?.voteAverage?.toFloat() ?: 0f

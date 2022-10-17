@@ -3,16 +3,12 @@ package com.saiful.person.view.adapter
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.os.persistableBundleOf
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.saiful.person.R
 import com.saiful.person.databinding.LayoutPersonCommonItemBinding
 import com.saiful.shared.model.Movies
-import com.saiful.shared.utils.AppConstants
+import com.saiful.shared.utils.loadPosterSizeImage
 
 class PersonMovieAdapter(private val listener: (Int) -> Unit) :
     RecyclerView.Adapter<PersonMovieAdapter.MovieViewHolder>() {
@@ -54,11 +50,7 @@ class PersonMovieAdapter(private val listener: (Int) -> Unit) :
         }
 
         fun bind(movies: Movies) {
-            Glide.with(binding.root.context)
-                .load(AppConstants.imageBaseUrl + AppConstants.posterSize + movies.posterPath)
-                .transition(DrawableTransitionOptions.withCrossFade(500))
-                //.error(R.drawable.image1)
-                .into(binding.posterImage)
+            binding.posterImage.loadPosterSizeImage(movies.posterPath)
         }
     }
 

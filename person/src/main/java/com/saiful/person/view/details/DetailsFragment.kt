@@ -7,8 +7,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.saiful.base.util.ItemDecorator
 import com.saiful.base.util.navigation.MovieModuleNavigation
 import com.saiful.base.util.navigation.TvShowModuleNavigation
@@ -19,8 +17,8 @@ import com.saiful.person.databinding.FragmentPersonDetailsBinding
 import com.saiful.person.view.adapter.PersonImageAdapter
 import com.saiful.person.view.adapter.PersonMovieAdapter
 import com.saiful.person.view.adapter.PersonShowsAdapter
-import com.saiful.shared.utils.AppConstants
 import com.saiful.shared.utils.formatDate
+import com.saiful.shared.utils.loadPosterSizeImage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
@@ -81,15 +79,11 @@ class DetailsFragment : BaseFragment<FragmentPersonDetailsBinding>() {
                     personName.text = details?.name
                     personBiography.text = details?.biography
                     knownFor.text =
-                        "Also known as: \n" + details?.knowAs?.let { it.take(2).joinToString(", ") }
+                        "Also known as: \n" + details?.knowAs?.take(2)?.joinToString(", ")
                     bornOn.text = "Born on: " + details?.birthday?.formatDate()
                     bornIn.text = "Birth place: \n" + details?.birthPlace
 
-                    Glide.with(bindingView.root.context)
-                        .load(AppConstants.imageBaseUrl + AppConstants.posterSize + details?.profilePath)
-                        .transition(DrawableTransitionOptions.withCrossFade(500))
-                        //.error(R.drawable.image1)
-                        .into(bindingView.profileImage)
+                    profileImage.loadPosterSizeImage(details?.profilePath)
                 }
             }
         }

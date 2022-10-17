@@ -6,12 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.saiful.shared.utils.AppConstants.imageBaseUrl
-import com.saiful.shared.utils.AppConstants.posterSize
 import com.saiful.movie.databinding.LayoutMovieItemBinding
 import com.saiful.shared.model.Movies
+import com.saiful.shared.utils.loadPosterSizeImage
 
 class MovieDashboardAdapter (private val listener: (Int) -> Unit):
     RecyclerView.Adapter<MovieDashboardAdapter.MovieDashboardViewHolder>() {
@@ -52,11 +49,7 @@ class MovieDashboardAdapter (private val listener: (Int) -> Unit):
             }
         }
         fun bind(item: Movies) {
-            Glide.with(binding.root.context)
-                .load(imageBaseUrl + posterSize + item.posterPath)
-                .transition(DrawableTransitionOptions.withCrossFade(500))
-                //.error(R.drawable.image1)
-                .into(binding.posterImage)
+            binding.posterImage.loadPosterSizeImage(item.posterPath)
         }
     }
 
