@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.saiful.shared.utils.AppConstants
 import com.saiful.tvshows.databinding.LayoutShowsListItemBinding
 import com.saiful.shared.model.TvShows
+import com.saiful.shared.utils.loadBackDropSizeImage
 
 class ShowsListLoadAdapter(private val listener: (Int) -> Unit) :
     PagingDataAdapter<TvShows, ShowsListLoadAdapter.MovieViewHolder>(DIFF_UTIL) {
@@ -43,10 +44,7 @@ class ShowsListLoadAdapter(private val listener: (Int) -> Unit) :
 
         fun bind(shows: TvShows) {
             binding.apply {
-                Glide.with(itemView)
-                    .load(AppConstants.imageBaseUrl + AppConstants.backdropSize + shows.posterPath)
-                    .into(binding.posterImage)
-
+                binding.posterImage.loadBackDropSizeImage(shows.posterPath)
                 showsTitle.text = shows.name
                 showsOverview.text = shows.overview
                 ratingBar.rating = shows.voteAverage?.toFloat() ?: 0f

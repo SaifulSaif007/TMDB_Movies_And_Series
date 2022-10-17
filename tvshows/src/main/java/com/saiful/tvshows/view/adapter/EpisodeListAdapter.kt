@@ -5,11 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.saiful.shared.utils.AppConstants
 import com.saiful.shared.utils.floatNumberFormatter
+import com.saiful.shared.utils.loadBackDropSizeImage
 import com.saiful.tvshows.databinding.LayoutEpisodeItemBinding
-import com.saiful.tvshows.databinding.LayoutShowsListItemBinding
 import com.saiful.tvshows.model.Episode
 
 class EpisodeListAdapter() : RecyclerView.Adapter<EpisodeListAdapter.EpisodeVH>() {
@@ -40,10 +38,7 @@ class EpisodeListAdapter() : RecyclerView.Adapter<EpisodeListAdapter.EpisodeVH>(
 
         fun bind(episode: Episode) {
             binding.apply {
-                Glide.with(itemView)
-                    .load(AppConstants.imageBaseUrl + AppConstants.backdropSize + episode.stillPath)
-                    .into(binding.posterImage)
-
+                binding.posterImage.loadBackDropSizeImage(url = episode.stillPath)
                 airDate.text = episode.airDate
                 showsTitle.text = episode.name
                 showsOverview.text = episode.overview

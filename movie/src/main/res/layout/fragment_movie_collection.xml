@@ -38,7 +38,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/image1" />
+                    app:srcCompat="@drawable/no_image_icon" />
 
                 <View
                     android:id="@+id/view"
@@ -60,7 +60,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize5Percent"
-                    app:srcCompat="@drawable/image1" />
+                    app:srcCompat="@drawable/no_image_icon" />
 
                 <TextView
                     android:id="@+id/collection_name"

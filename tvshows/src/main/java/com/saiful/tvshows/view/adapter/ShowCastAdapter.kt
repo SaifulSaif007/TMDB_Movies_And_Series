@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.saiful.shared.utils.AppConstants
+import com.saiful.shared.utils.loadPosterSizeImage
 import com.saiful.tvshows.databinding.LayoutCastItemBinding
 import com.saiful.tvshows.model.Cast
 
@@ -43,7 +44,7 @@ class ShowCastAdapter(private val listener: (Int) -> Unit) :
         init {
             binding.root.setOnClickListener {
                 val position = bindingAdapterPosition
-                if (position != RecyclerView.NO_POSITION){
+                if (position != RecyclerView.NO_POSITION) {
                     val item = differ.currentList[position]
                     listener.invoke(item.id)
                 }
@@ -53,11 +54,7 @@ class ShowCastAdapter(private val listener: (Int) -> Unit) :
         fun bind(item: Cast) {
             binding.apply {
                 Glide.with(binding.root.context)
-                    .load(AppConstants.imageBaseUrl + AppConstants.posterSize + item.profilePath)
-                    .transition(DrawableTransitionOptions.withCrossFade(500))
-                    //.error(R.drawable.image1)
-                    .into(binding.castImage)
-
+                binding.castImage.loadPosterSizeImage(item.profilePath)
                 castName.text = item.originalName
                 castCharacterName.text = item.roles.joinToString(", ") { it.character }
             }
