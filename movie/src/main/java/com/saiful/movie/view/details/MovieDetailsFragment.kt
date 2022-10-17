@@ -16,10 +16,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.chip.Chip
-import com.saiful.base.util.*
+import com.saiful.base.util.ItemDecorator
 import com.saiful.base.util.navigation.PersonModuleNavigation
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
@@ -29,13 +27,7 @@ import com.saiful.movie.model.GenresItem
 import com.saiful.movie.view.adapter.MovieCastAdapter
 import com.saiful.movie.view.adapter.MovieDashboardAdapter
 import com.saiful.movie.view.adapter.MovieTrailerAdapter
-import com.saiful.shared.utils.AppConstants.backdropSize
-import com.saiful.shared.utils.AppConstants.imageBaseUrl
-import com.saiful.shared.utils.AppConstants.posterSize
-import com.saiful.shared.utils.floatNumberFormatter
-import com.saiful.shared.utils.formatDate
-import com.saiful.shared.utils.formatToShortNumber
-import com.saiful.shared.utils.navigateSafe
+import com.saiful.shared.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
@@ -107,19 +99,9 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
 
         lifecycleScope.launchWhenStarted {
             viewModel.movieDetails.collect { movie ->
-                Glide.with(requireContext())
-                    .load(imageBaseUrl + backdropSize + movie?.backdropPath)
-                    .transition(DrawableTransitionOptions.withCrossFade(100))
-                    //.error(R.drawable.image1)
-                    .into(bindingView.backdropImage)
-
-                Glide.with(requireContext())
-                    .load(imageBaseUrl + posterSize + movie?.posterPath)
-                    .transition(DrawableTransitionOptions.withCrossFade(200))
-                    //.error(R.drawable.image1)
-                    .into(bindingView.posterImage)
-
                 bindingView.apply {
+                    backdropImage.loadBackDropSizeImage(movie?.backdropPath)
+                    posterImage.loadPosterSizeImage(movie?.posterPath)
                     toolbar.title = movie?.title
                     movieName.text = movie?.title
                     ratingBar2.rating = movie?.voteAverage?.toFloat() ?: 0f
@@ -147,11 +129,7 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
 
                     if (movie?.belongsToCollection != null) {
                         movieCollectionLayout.apply {
-                            Glide.with(requireContext())
-                                .load(imageBaseUrl + posterSize + movie.belongsToCollection.posterPath)
-                                .transition(DrawableTransitionOptions.withCrossFade(200))
-                                //.error(R.drawable.image1)
-                                .into(collectionImage)
+                            collectionImage.loadPosterSizeImage(movie.belongsToCollection.posterPath)
 
                             collectionName.text = movie.belongsToCollection.name
                             movieCollectionLayout.root.visibility = View.VISIBLE

@@ -6,10 +6,9 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.saiful.shared.utils.AppConstants
 import com.saiful.movie.databinding.LayoutMovieListItemBinding
 import com.saiful.shared.model.Movies
+import com.saiful.shared.utils.loadBackDropSizeImage
 
 class MovieListLoadAdapter(private val listener: (Int) -> Unit) :
     PagingDataAdapter<Movies, MovieListLoadAdapter.MovieViewHolder>(DIFF_UTIL) {
@@ -43,10 +42,7 @@ class MovieListLoadAdapter(private val listener: (Int) -> Unit) :
 
         fun bind(movies: Movies) {
             binding.apply {
-                Glide.with(itemView)
-                    .load(AppConstants.imageBaseUrl + AppConstants.backdropSize + movies.posterPath)
-                    .into(binding.posterImage)
-
+                binding.posterImage.loadBackDropSizeImage(movies.posterPath)
                 movieTitle.text = movies.title
                 movieSubtitle.text = movies.overview
                 ratingBar.rating = movies.voteAverage?.toFloat() ?: 0f

@@ -5,12 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.saiful.shared.utils.AppConstants
 import com.saiful.shared.utils.loadPosterSizeImage
 import com.saiful.tvshows.databinding.LayoutSeasonItemBinding
-import com.saiful.tvshows.databinding.LayoutShowItemBinding
 import com.saiful.tvshows.model.Season
 
 class ShowSeasonAdapter(private val listener: (Int) -> Unit) :

@@ -5,11 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.saiful.person.databinding.LayoutPersonItemBinding
 import com.saiful.person.model.Person
-import com.saiful.shared.utils.AppConstants
+import com.saiful.shared.utils.loadPosterSizeImage
 
 class PersonDashboardAdapter(val listener: (Int) -> Unit) :
     RecyclerView.Adapter<PersonDashboardAdapter.PersonViewHolder>() {
@@ -52,12 +50,7 @@ class PersonDashboardAdapter(val listener: (Int) -> Unit) :
 
         fun bind(person: Person) {
             binding.knownDepartment.text = person.name
-
-            Glide.with(binding.root.context)
-                .load(AppConstants.imageBaseUrl + AppConstants.posterSize + person.profilePath)
-                .transition(DrawableTransitionOptions.withCrossFade(500))
-                //.error(R.drawable.image1)
-                .into(binding.posterImage)
+            binding.posterImage.loadPosterSizeImage(person.profilePath)
         }
     }
 

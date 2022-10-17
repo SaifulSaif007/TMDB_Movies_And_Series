@@ -5,11 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.saiful.movie.databinding.LayoutCastItemBinding
-import com.saiful.shared.utils.AppConstants
 import com.saiful.movie.model.Cast
+import com.saiful.shared.utils.loadPosterSizeImage
 
 class MovieCastAdapter(private val listener: (Int) -> Unit) : RecyclerView.Adapter<MovieCastAdapter.CastViewHolder>() {
 
@@ -51,12 +49,7 @@ class MovieCastAdapter(private val listener: (Int) -> Unit) : RecyclerView.Adapt
 
         fun bind(item: Cast) {
             binding.apply {
-                Glide.with(binding.root.context)
-                    .load(AppConstants.imageBaseUrl + AppConstants.posterSize + item.profilePath)
-                    .transition(DrawableTransitionOptions.withCrossFade(500))
-                    //.error(R.drawable.image1)
-                    .into(binding.castImage)
-
+                binding.castImage.loadPosterSizeImage(item.profilePath)
                 castName.text = item.originalName
                 castCharacterName.text = item.character
             }

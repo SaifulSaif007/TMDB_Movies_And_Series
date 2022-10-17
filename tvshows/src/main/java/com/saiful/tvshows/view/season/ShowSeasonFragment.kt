@@ -11,12 +11,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.saiful.base.util.ItemDecorator
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
-import com.saiful.shared.utils.AppConstants
+import com.saiful.shared.utils.loadBackDropSizeImage
 import com.saiful.tvshows.R
 import com.saiful.tvshows.databinding.FragmentSeasonsDetailsBinding
 import com.saiful.tvshows.view.adapter.EpisodeListAdapter
@@ -56,14 +54,8 @@ class ShowSeasonFragment : BaseFragment<FragmentSeasonsDetailsBinding>() {
 
         lifecycleScope.launchWhenCreated {
             viewModel.seasonDetails.collect { season ->
-
-                Glide.with(requireContext())
-                    .load(AppConstants.imageBaseUrl + AppConstants.backdropSize + season?.posterPath)
-                    .transition(DrawableTransitionOptions.withCrossFade(100))
-                    //.error(R.drawable.image1)
-                    .into(bindingView.backdropImage)
-
                 bindingView.apply {
+                    backdropImage.loadBackDropSizeImage(season?.posterPath)
                     seasonName.text = season?.name
                     toolbar.title = season?.name
                     season?.overview.takeIf { !it.isNullOrEmpty() }?.let {

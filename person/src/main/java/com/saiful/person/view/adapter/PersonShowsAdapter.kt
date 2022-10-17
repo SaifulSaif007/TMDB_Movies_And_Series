@@ -6,11 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.saiful.person.databinding.LayoutPersonCommonItemBinding
 import com.saiful.shared.model.TvShows
-import com.saiful.shared.utils.AppConstants
+import com.saiful.shared.utils.loadPosterSizeImage
 
 class PersonShowsAdapter(private val listener: (Int) -> Unit) :
     RecyclerView.Adapter<PersonShowsAdapter.ShowsViewHolder>() {
@@ -52,11 +50,7 @@ class PersonShowsAdapter(private val listener: (Int) -> Unit) :
         }
 
         fun bind(shows: TvShows) {
-            Glide.with(binding.root.context)
-                .load(AppConstants.imageBaseUrl + AppConstants.posterSize + shows.posterPath)
-                .transition(DrawableTransitionOptions.withCrossFade(500))
-                //.error(R.drawable.image1)
-                .into(binding.posterImage)
+            binding.posterImage.loadPosterSizeImage(shows.posterPath)
         }
     }
 

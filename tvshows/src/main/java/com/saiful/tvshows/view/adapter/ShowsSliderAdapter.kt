@@ -4,12 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
-import com.saiful.shared.utils.AppConstants.backdropSize
-import com.saiful.shared.utils.AppConstants.imageBaseUrl
-import com.saiful.tvshows.databinding.LayoutShowsImageSliderBinding
 import com.saiful.shared.model.TvShows
 import com.saiful.shared.utils.loadBackDropSizeImage
+import com.saiful.tvshows.databinding.LayoutShowsImageSliderBinding
 
 class ShowsSliderAdapter(
     private val imageList: MutableList<TvShows>,
