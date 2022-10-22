@@ -28,6 +28,8 @@ object AppModule {
         logger.setLevel(HttpLoggingInterceptor.Level.NONE)
     }
 
+    private const val baseUrl = BuildConfig.BASE_URL
+
     @Provides
     @Singleton
     fun httpClient(): OkHttpClient = OkHttpClient.Builder()
@@ -49,7 +51,7 @@ object AppModule {
     fun provideRetrofit(client: OkHttpClient, moshi: Moshi) : Retrofit =
         Retrofit.Builder()
             .client(client)
-            .baseUrl("https://api.themoviedb.org/3/")
+            .baseUrl(baseUrl)
             .addCallAdapterFactory(ResponseAdapterFactory())
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()

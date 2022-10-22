@@ -1,5 +1,6 @@
 package com.saiful.base.network
 
+import com.saiful.base.BuildConfig
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -9,8 +10,9 @@ class UserInterceptor : Interceptor {
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
-        val url: HttpUrl = chain.request().url.newBuilder()
-            .addQueryParameter("api_key", "697bf3a9a65fafc6982838746d30694b").build()
+        val token = BuildConfig.ACCESS_TOKEN
+        val url: HttpUrl =
+            chain.request().url.newBuilder().addQueryParameter("api_key", token).build()
 
         val userAgentRequest = chain.request()
             .newBuilder()
