@@ -9,12 +9,12 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.saiful.tmdbmoviesseries"
         minSdk 24
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -50,15 +50,14 @@ dependencies {
     implementation project(path: ':tvshows')
     implementation project(path: ':person')
 
-    implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'androidx.appcompat:appcompat:1.4.2'
-    implementation 'com.google.android.material:material:1.7.0-alpha02'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation libs.androidx.ktx
+    implementation libs.google.material
+    implementation libs.androidx.constainlayout
 
-    implementation rootProject.ext.allModuleDep
-    kapt rootProject.ext.allModuleAnno
+    implementation libs.dagger.hilt
+    implementation libs.bundles.androidxNavigation
+    kapt libs.hilt.compiler
 
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    testImplementation libs.junit
+    androidTestImplementation libs.espresso
 }
