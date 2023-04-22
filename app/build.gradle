@@ -59,5 +59,6 @@ dependencies {
     kapt libs.hilt.compiler
 
     testImplementation libs.junit
+    testImplementation libs.bundles.mockito
     androidTestImplementation libs.espresso
 }

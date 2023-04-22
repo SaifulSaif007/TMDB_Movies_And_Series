@@ -49,4 +49,7 @@ dependencies {
     implementation libs.bundles.androidxNavigation
     kapt libs.hilt.compiler
 
+    testImplementation libs.junit
+    testImplementation libs.mockito.kotlin
+    androidTestImplementation libs.espresso
 }

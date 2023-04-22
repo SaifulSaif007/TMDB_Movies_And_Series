@@ -5,7 +5,7 @@ import com.saiful.base.network.model.GenericResponse
 import com.saiful.base.viewmodel.BaseOpsViewModel
 import com.saiful.movie.data.repository.MovieDetailsRepo
 import com.saiful.movie.model.MovieCastResponse
-import com.saiful.movie.model.MovieDetails
+import com.saiful.movie.model.MovieDetailsResponse
 import com.saiful.movie.model.MoviesResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +15,7 @@ import javax.inject.Inject
 class MovieDetailsVM
 @Inject constructor(private val repo: MovieDetailsRepo) : BaseOpsViewModel() {
 
-    val movieDetails = MutableStateFlow<MovieDetails?>(null)
+    val movieDetailsResponse = MutableStateFlow<MovieDetailsResponse?>(null)
     val movieCast = MutableStateFlow<MovieCastResponse?>(null)
     val recommendation = MutableStateFlow<MoviesResponse?>(null)
     val similar = MutableStateFlow<MoviesResponse?>(null)
@@ -40,7 +40,7 @@ class MovieDetailsVM
             movie_details -> {
                 when (data as GenericResponse<*>) {
                     is BaseResponse.Success -> {
-                        movieDetails.value = data.body as MovieDetails
+                        movieDetailsResponse.value = data.body as MovieDetailsResponse
                     }
                     else -> {}
                 }
