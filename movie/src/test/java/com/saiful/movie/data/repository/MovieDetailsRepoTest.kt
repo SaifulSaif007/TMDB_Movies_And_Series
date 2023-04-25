@@ -16,7 +16,8 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-class MovieDetailsResponseRepoTest {
+class MovieDetailsRepoTest {
+
     private val movieApiService: MovieApiService = mock()
     private lateinit var movieDetailsRepo: MovieDetailsRepo
     private lateinit var movieDetailsResponse: MovieDetailsResponse
