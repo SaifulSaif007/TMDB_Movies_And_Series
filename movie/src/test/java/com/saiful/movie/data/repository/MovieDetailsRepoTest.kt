@@ -4,19 +4,18 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.reset
 import com.nhaarman.mockito_kotlin.whenever
 import com.saiful.base.network.model.BaseResponse
-import com.saiful.base.network.model.GenericError
+import com.saiful.base_unit_test.BaseRepositoryTest
 import com.saiful.movie.data.api.MovieApiService
 import com.saiful.movie.model.DateRange
 import com.saiful.movie.model.MovieCastResponse
 import com.saiful.movie.model.MovieDetailsResponse
 import com.saiful.movie.model.MoviesResponse
 import kotlinx.coroutines.runBlocking
-import okio.IOException
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-class MovieDetailsRepoTest {
+class MovieDetailsRepoTest : BaseRepositoryTest() {
 
     private val movieApiService: MovieApiService = mock()
     private lateinit var movieDetailsRepo: MovieDetailsRepo
@@ -26,7 +25,7 @@ class MovieDetailsRepoTest {
     private val movieId = 1
 
     @Before
-    fun setup() {
+    override fun setup() {
         movieDetailsResponse = MovieDetailsResponse(
             id = movieId,
         )
@@ -45,7 +44,7 @@ class MovieDetailsRepoTest {
     }
 
     @After
-    fun tearDown() {
+    override fun tearDown() {
         reset(movieApiService)
     }
 
@@ -65,13 +64,7 @@ class MovieDetailsRepoTest {
     fun `verify movie details fetch returns fail result`() {
         runBlocking {
             whenever(movieApiService.movieDetails(movieId)).thenReturn(
-                BaseResponse.ApiError(
-                    errorBody = GenericError(
-                        status_code = "200",
-                        status_message = "exception"
-                    ),
-                    code = 200
-                )
+                apiError
             )
 
             assert(movieDetailsRepo.movieDetails(movieId) is BaseResponse.ApiError)
@@ -95,9 +88,7 @@ class MovieDetailsRepoTest {
     fun `verify movie casts fetch causes network error`() {
         runBlocking {
             whenever(movieApiService.movieCast(movieId)).thenReturn(
-                BaseResponse.NetworkError(
-                    error = IOException("error")
-                )
+                networkError
             )
 
             assert(movieDetailsRepo.movieCasts(movieId) is BaseResponse.NetworkError)
@@ -119,9 +110,7 @@ class MovieDetailsRepoTest {
     fun `verify recommendation movie fetch returns unknown error`() {
         runBlocking {
             whenever(movieApiService.recommendation(movieId)).thenReturn(
-                BaseResponse.UnknownError(
-                    error = Throwable("exception")
-                )
+                unknownError
             )
 
             assert(movieDetailsRepo.recommendation(movieId) is BaseResponse.UnknownError)
@@ -151,13 +140,7 @@ class MovieDetailsRepoTest {
                     movieId
                 )
             ).thenReturn(
-                BaseResponse.ApiError(
-                    errorBody = GenericError(
-                        status_code = "200",
-                        status_message = "exception"
-                    ),
-                    code = 200
-                )
+                apiError
             )
 
             assert(movieDetailsRepo.similarMovie(movieId) is BaseResponse.ApiError)

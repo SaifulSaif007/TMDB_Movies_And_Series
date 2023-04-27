@@ -4,7 +4,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.reset
 import com.nhaarman.mockito_kotlin.whenever
 import com.saiful.base.network.model.BaseResponse
-import com.saiful.base.network.model.GenericError
+import com.saiful.base_unit_test.BaseRepositoryTest
 import com.saiful.movie.data.api.MovieApiService
 import com.saiful.movie.model.MovieCollection
 import kotlinx.coroutines.runBlocking
@@ -12,14 +12,14 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-class CollectionRepoTest {
+class CollectionRepoRepositoryTest: BaseRepositoryTest() {
     private val apiService: MovieApiService = mock()
     private lateinit var collectionRepo: CollectionRepo
     private lateinit var movieCollection: MovieCollection
     private val id: Int = 1
 
     @Before
-    fun setup() {
+    override fun setup() {
         collectionRepo = CollectionRepo(apiService)
 
         movieCollection =  MovieCollection(
@@ -33,7 +33,7 @@ class CollectionRepoTest {
     }
 
     @After
-    fun tearDown() {
+    override fun tearDown() {
         reset(apiService)
     }
 
@@ -52,13 +52,7 @@ class CollectionRepoTest {
     fun `verify movie collection returns api error`() {
         runBlocking {
             whenever(apiService.collections(id)).thenReturn(
-                BaseResponse.ApiError(
-                    errorBody = GenericError(
-                        status_code = "200",
-                        status_message = "exception"
-                    ),
-                    code = 200
-                )
+               apiError
             )
 
             assert(collectionRepo.movieCollection(id) is BaseResponse.ApiError)

@@ -1,13 +1,10 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
-    id 'androidx.navigation.safeargs'
-    id 'com.google.firebase.crashlytics'
 }
 
 android {
+    namespace 'com.saiful.base_unit_test'
     compileSdk 33
 
     defaultConfig {
@@ -31,26 +28,12 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    buildFeatures {
-        viewBinding true
-    }
-    lint {
-        abortOnError false
-    }
-    namespace 'com.saiful.movie'
 }
 
 dependencies {
-
     implementation project(path: ':base')
-    implementation project(path: ':shared')
-    testImplementation project(path: ':base-unit-test')
 
-    implementation libs.dagger.hilt
-    implementation libs.bundles.androidxNavigation
-    kapt libs.hilt.compiler
-
-    testImplementation libs.junit
-    testImplementation libs.bundles.mockito
-    androidTestImplementation libs.espresso
+    implementation libs.junit
+    implementation libs.bundles.mockito
+    implementation libs.espresso
 }

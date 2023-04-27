@@ -4,7 +4,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.reset
 import com.nhaarman.mockito_kotlin.whenever
 import com.saiful.base.network.model.BaseResponse
-import com.saiful.base.network.model.GenericError
+import com.saiful.base_unit_test.BaseRepositoryTest
 import com.saiful.movie.data.api.MovieApiService
 import com.saiful.movie.model.DateRange
 import com.saiful.movie.model.MoviesResponse
@@ -12,16 +12,15 @@ import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import java.io.IOException
 
-class DashboardRepoTest {
+class DashboardRepoTest : BaseRepositoryTest() {
     private val movieApiService: MovieApiService = mock()
     private lateinit var dashboardRepo: DashboardRepo
     private lateinit var movieResponse: MoviesResponse
     private val pageNo: Int = 1
 
     @Before
-    fun setup() {
+    override fun setup() {
         dashboardRepo = DashboardRepo(movieApiService)
 
         movieResponse = MoviesResponse(
@@ -34,7 +33,7 @@ class DashboardRepoTest {
     }
 
     @After
-    fun tearDown() {
+    override fun tearDown() {
         reset(movieApiService)
     }
 
@@ -53,13 +52,7 @@ class DashboardRepoTest {
     fun `verify popular movie fetch causes api error`() {
         runBlocking {
             whenever(movieApiService.popularMovies(pageNo)).thenReturn(
-                BaseResponse.ApiError(
-                    errorBody = GenericError(
-                        status_code = "200",
-                        status_message = "exception"
-                    ),
-                    code = 200
-                )
+                apiError
             )
 
             assert(dashboardRepo.getPopularMovies(1) is BaseResponse.ApiError)
@@ -81,7 +74,7 @@ class DashboardRepoTest {
     fun `verify now playing movie fetch returns network error`() {
         runBlocking {
             whenever(movieApiService.nowPlayingMovies(pageNo)).thenReturn(
-                BaseResponse.NetworkError(error = IOException("network error"))
+               networkError
             )
 
             assert(dashboardRepo.getNowPlayingMovies(pageNo) is BaseResponse.NetworkError)
@@ -103,11 +96,7 @@ class DashboardRepoTest {
     fun `verify top rated movie fetch returns unknown error`() {
         runBlocking {
             whenever(movieApiService.topRatedMovies(pageNo)).thenReturn(
-                BaseResponse.UnknownError(
-                    error = Throwable(
-                        "Exception"
-                    )
-                )
+                unknownError
             )
 
             assert(dashboardRepo.getTopRatedMovies(pageNo) is BaseResponse.UnknownError)
