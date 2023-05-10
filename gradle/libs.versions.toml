@@ -21,6 +21,7 @@ expresso = "3.5.1"
 firebase-bom = "30.3.2"
 mockito = "5.2.0"
 mockito-kotlin = "1.5.0"
+jacoco = "0.8.8"
 
 [libraries]
 
@@ -61,6 +62,8 @@ mockito-kotlin = { group = "com.nhaarman", name = "mockito-kotlin-kt1.1", versio
 firebase-analytics-bom = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-crashlytics-bom = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 
+jococo = { group = "org.jacoco", name = "org.jacoco.core", version.ref = "jacoco" }
+
 [bundles]
 
 androidxLifecycle = ["androidx-lifecycle-viewModel", "androidx-lifecycle-runtime"]
@@ -71,6 +74,6 @@ mockito = ["mockito", "mockito-kotlin"]
 
 [plugins]
 
-android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
-android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+android-application = { id = "com.android.application", version = "8.0.0" }
+android-library = { id = "com.android.library", version = "8.0.0" }
 kotlin-jetbrains = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinJetbrains" }
