@@ -15,60 +15,48 @@ project.afterEvaluate {
     }
 }
 ext{
-    excludes = [
-            '**/databinding/*Binding.*',
+    app_excludes = [
             '**/R.class',
             '**/R$*.class',
             '**/BuildConfig.*',
             '**/Manifest*.*',
             '**/*Test*.*',
             'android/**/*.*',
-            // butterKnife
+            'androidx/**/*.*',
             '**/*$ViewInjector*.*',
-            '**/*$ViewBinder*.*',
-            '**/Lambda$*.class',
-            '**/Lambda.class',
-            '**/*Lambda.class',
-            '**/*Lambda*.class',
-            '**/*_MembersInjector.class',
-            '**/Dagger*Component*.*',
-            '**/*Module_*Factory.class',
-            '**/di/module/*',
-            '**/*_Factory*.*',
-            '**/*Module*.*',
             '**/*Dagger*.*',
             '**/*Hilt*.*',
-            // kotlin
-            '**/*MapperImpl*.*',
-            '**/*$ViewInjector*.*',
-            '**/*$ViewBinder*.*',
-            '**/BuildConfig.*',
-            '**/*Component*.*',
-            '**/*BR*.*',
-            '**/Manifest*.*',
-            '**/*$Lambda$*.*',
-            '**/*Companion*.*',
-            '**/*Module*.*',
-            '**/*Dagger*.*',
-            '**/*Hilt*.*',
+            '**/hilt_aggregated*/*',
             '**/*MembersInjector*.*',
-            '**/*_MembersInjector.class',
-            '**/*_Factory*.*',
+            '**/*_Factory.*',
             '**/*_Provide*Factory*.*',
-            '**/*Extensions*.*'
+            '**/*_ViewBinding*.*',
+            '**/AutoValue_*.*',
+            '**/R2.class',
+            '**/R2$*.class',
+            '**/*Directions$*',
+            '**/*Directions.*',
+            '**/*Binding.*',
+            '**/mock/*',
+            '**/remote/*',
+            '**/di/**',
+            '**/ui/**',
+            '**/*DispatcherProvider*/',
     ]
+    app_includes = []
 
-    findClassDirectories = { project, exc, inc ->
-        def jClasses = "${project.buildDir}/intermediates/javac/${variantName}/classes"
-        def kClasses = "${project.buildDir}/tmp/kotlin-classes/${variantName}"
-        def javaClasses = fileTree(dir: jClasses, excludes: exc)
-        def kotlinClasses = fileTree(dir: kClasses, excludes: exc)
-        if (inc.size() > 0) {
-            javaClasses += fileTree(dir: jClasses, includes: inc)
-            kotlinClasses += fileTree(dir: kClasses, includes: inc)
-        }
-        return files([javaClasses, kotlinClasses])
-    }
+    movie_exclude = [
+            '**/*Fragment*',
+            '**/view/adapter/*',
+            '**/navigation/*',
+            '**/data/repository/paging/*'
+
+    ]
+    movie_include = []
+
+    excludes = app_excludes.plus(movie_exclude)
+    includes = app_includes.plus(movie_include)
+
 }
 
 def createVariantCoverage(variant) {
@@ -87,7 +75,9 @@ def createVariantCoverage(variant) {
         }
 
         def javaClasses = fileTree(dir: variant.javaCompileProvider.get().destinationDir, excludes: project.excludes)
+
         def kotlinClasses = fileTree(dir: "${buildDir}/tmp/kotlin-classes/${variantName}", excludes: project.excludes)
+
         getClassDirectories().setFrom(files([javaClasses, kotlinClasses]))
 
         getSourceDirectories().setFrom(files([
