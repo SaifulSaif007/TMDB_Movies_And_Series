@@ -9,6 +9,8 @@ plugins {
     id 'jacoco'
 }
 
+apply from: "$project.rootDir/jacoco.gradle"
+
 android {
     compileSdk 33
 
@@ -53,6 +55,7 @@ dependencies {
     implementation project(path: ':movie')
     implementation project(path: ':tvshows')
     implementation project(path: ':person')
+    testImplementation project(path: ':base-unit-test')
 
     implementation libs.androidx.ktx
     implementation libs.google.material
@@ -66,5 +69,3 @@ dependencies {
     testImplementation libs.bundles.mockito
     androidTestImplementation libs.espresso
 }
-
-apply from: "$project.rootDir/jacoco.gradle"
