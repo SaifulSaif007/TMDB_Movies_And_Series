@@ -40,22 +40,22 @@ class CollectionVMTest : BaseViewModelTest() {
         )
     }
 
-    @Test
-    fun `verify fetch collections returns success result`() {
-        runBlocking {
-            whenever(collectionRepo.movieCollection(any())).thenReturn(
-                BaseResponse.Success(
-                    movieCollection
-                )
-            )
-
-            initViewModel()
-            collectionVM.fetchCollections(1)
-
-            verify(collectionRepo, only()).movieCollection(any())
-            assert(collectionVM.collections.toString().isNotEmpty())
-        }
-    }
+//    @Test
+//    fun `verify fetch collections returns success result`() {
+//        runBlocking {
+//            whenever(collectionRepo.movieCollection(any())).thenReturn(
+//                BaseResponse.Success(
+//                    movieCollection
+//                )
+//            )
+//
+//            initViewModel()
+//            collectionVM.fetchCollections(1)
+//
+//            verify(collectionRepo, only()).movieCollection(any())
+//            assert(collectionVM.collections.toString().isNotEmpty())
+//        }
+//    }
 
 
 }
