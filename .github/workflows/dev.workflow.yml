@@ -34,13 +34,13 @@ jobs:
         uses: actions/upload-artifact@v2.2.4
         with:
           name: report.xml
-          path: ${{ github.workspace }}/movie/build/reports/jacoco/testDebugUnitTestCoverage/testDebugUnitTestCoverage.xml
+          path: ${{ github.workspace }}/build/reports/jacoco/testDebugUnitTestCoverage.xml
 
       - name: Add coverage to PR
         id: jacoco
         uses: madrapps/jacoco-report@v1.3
         with:
-          paths: ${{ github.workspace }}/movie/build/reports/jacoco/testDebugUnitTestCoverage/testDebugUnitTestCoverage.xml
-          token: ${{ secrets.GIT_TOKEN }}
+          paths: ${{ github.workspace }}/build/reports/jacoco/testDebugUnitTestCoverage.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 20
           min-coverage-changed-files: 20
