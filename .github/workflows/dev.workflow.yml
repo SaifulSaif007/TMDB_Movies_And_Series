@@ -30,12 +30,6 @@ jobs:
           chmod +x gradlew
           ./gradlew clean testDebugUnitTestCoverage
 
-      - name: Upload Report
-        uses: actions/upload-artifact@v2.2.4
-        with:
-          name: report.xml
-          path: ${{ github.workspace }}/build/reports/jacoco/testDebugUnitTestCoverage.xml
-
       - name: Add coverage to PR
         id: jacoco
         uses: madrapps/jacoco-report@v1.3
