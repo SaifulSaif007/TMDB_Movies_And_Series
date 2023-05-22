@@ -10,10 +10,17 @@ import com.saiful.base.network.model.BaseResponse
 import com.saiful.base_unit_test.BaseViewModelTest
 import com.saiful.movie.data.repository.CollectionRepo
 import com.saiful.movie.model.MovieCollection
-import kotlinx.coroutines.runBlocking
+import com.saiful.movie.rules.MainCoroutineRule
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class CollectionVMTest : BaseViewModelTest() {
+    @get:Rule
+    internal var mainCoroutineRule = MainCoroutineRule()
+
     private val collectionRepo: CollectionRepo = mock()
     private lateinit var collectionVM: CollectionVM
     private lateinit var movieCollection: MovieCollection
@@ -40,22 +47,22 @@ class CollectionVMTest : BaseViewModelTest() {
         )
     }
 
-//    @Test
-//    fun `verify fetch collections returns success result`() {
-//        runBlocking {
-//            whenever(collectionRepo.movieCollection(any())).thenReturn(
-//                BaseResponse.Success(
-//                    movieCollection
-//                )
-//            )
-//
-//            initViewModel()
-//            collectionVM.fetchCollections(1)
-//
-//            verify(collectionRepo, only()).movieCollection(any())
-//            assert(collectionVM.collections.toString().isNotEmpty())
-//        }
-//    }
+    @Test
+    fun `verify fetch collections returns success result`() {
+        runTest(mainCoroutineRule.testDispatcher) {
+            whenever(collectionRepo.movieCollection(any())).thenReturn(
+                BaseResponse.Success(
+                    movieCollection
+                )
+            )
+
+            initViewModel()
+            collectionVM.fetchCollections(1)
+
+            verify(collectionRepo, only()).movieCollection(any())
+            assert(collectionVM.collections.toString().isNotEmpty())
+        }
+    }
 
 
 }
