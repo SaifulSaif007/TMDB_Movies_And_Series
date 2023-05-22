@@ -33,7 +33,8 @@ android {
 dependencies {
     implementation project(path: ':base')
 
-    implementation libs.junit
-    implementation libs.bundles.mockito
-    implementation libs.espresso
+    api libs.junit
+    api libs.bundles.mockito
+    api libs.espresso
+    api libs.coroutine.test
 }

@@ -55,9 +55,4 @@ dependencies {
     implementation libs.bundles.androidxNavigation
     kapt libs.hilt.compiler
 
-    testImplementation libs.junit
-    testImplementation libs.bundles.mockito
-    androidTestImplementation libs.espresso
-
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1"
 }
