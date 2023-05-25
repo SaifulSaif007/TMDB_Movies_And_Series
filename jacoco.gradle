@@ -42,6 +42,7 @@ ext{
             '**/di/**',
             '**/ui/**',
             '**/*DispatcherProvider*/',
+            "**/model/*"
     ]
     app_includes = []
 
@@ -49,13 +50,14 @@ ext{
             '**/*Fragment*',
             '**/view/adapter/*',
             '**/navigation/*',
-            '**/data/repository/paging/*'
+            '**/data/repository/paging/*',
+            '**/view/list/*'
 
     ]
     movie_include = []
 
-    excludes = app_excludes.plus(movie_exclude)
-    includes = app_includes.plus(movie_include)
+    excludes = app_excludes + movie_exclude
+    includes = app_includes + movie_include
 
 }
 

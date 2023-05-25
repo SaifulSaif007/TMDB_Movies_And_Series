@@ -8,9 +8,9 @@ import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base_unit_test.BaseViewModelTest
+import com.saiful.base_unit_test.rules.MainCoroutineRule
 import com.saiful.movie.data.repository.CollectionRepo
 import com.saiful.movie.model.MovieCollection
-import com.saiful.movie.rules.MainCoroutineRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule

@@ -19,33 +19,26 @@ class ListVM @Inject constructor(
 ) : BaseViewModel() {
 
     lateinit var movieList: Flow<PagingData<Movies>>
-    private var service = apiService::popularMovies
-    lateinit var selectedCat : String
+    var service = apiService::popularMovies
+    private lateinit var selectedCat: String
 
     fun selectedCategory(category: MovieCategory) {
-        if (this::selectedCat.isInitialized){
+        if (this::selectedCat.isInitialized) {
             return
         }
         selectedCat = category.value
         service = when (category) {
-            MovieCategory.POPULAR -> {
-                apiService::popularMovies
-            }
-            MovieCategory.NOW_PLAYING -> {
-                apiService::nowPlayingMovies
-            }
-            MovieCategory.TOP_RATED -> {
-                apiService::topRatedMovies
-            }
-            else -> {
-                apiService::upcomingMovies
-            }
+
+            MovieCategory.POPULAR -> apiService::popularMovies
+
+            MovieCategory.NOW_PLAYING -> apiService::nowPlayingMovies
+
+            MovieCategory.TOP_RATED -> apiService::topRatedMovies
+            
+            else -> apiService::upcomingMovies
+
         }
-        movies()
+        movieList = repo.getMoviePager(service).cachedIn(viewModelScope)
     }
-
-    fun movies() {
-        movieList = repo.getMoviePager(apiCall = service).cachedIn(viewModelScope)
-    }
-
+    
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.saiful.movie.rules
+package com.saiful.base_unit_test.rules
 
 import com.saiful.base.util.DispatcherProvider
 import kotlinx.coroutines.CoroutineDispatcher
