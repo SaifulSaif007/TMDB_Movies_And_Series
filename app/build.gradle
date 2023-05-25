@@ -6,7 +6,10 @@ plugins {
     id 'androidx.navigation.safeargs'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'jacoco'
 }
+
+apply from: "$project.rootDir/jacoco.gradle"
 
 android {
     compileSdk 33
@@ -22,6 +25,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -49,6 +55,7 @@ dependencies {
     implementation project(path: ':movie')
     implementation project(path: ':tvshows')
     implementation project(path: ':person')
+    testImplementation project(path: ':base-unit-test')
 
     implementation libs.androidx.ktx
     implementation libs.google.material
@@ -59,5 +66,6 @@ dependencies {
     kapt libs.hilt.compiler
 
     testImplementation libs.junit
+    testImplementation libs.bundles.mockito
     androidTestImplementation libs.espresso
 }

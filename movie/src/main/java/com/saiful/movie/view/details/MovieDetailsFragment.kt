@@ -89,7 +89,7 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
             }
 
             movieCollectionLayout.root.setOnClickListener {
-                val collectionId = viewModel.movieDetails.value?.belongsToCollection?.id ?: 0
+                val collectionId = viewModel.movieDetailsResponse.value?.belongsToCollection?.id ?: 0
                 findNavController().navigate(
                     R.id.movie_collection_nav_graph,
                     bundleOf("collection_id" to collectionId)
@@ -98,7 +98,7 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
         }
 
         lifecycleScope.launchWhenStarted {
-            viewModel.movieDetails.collect { movie ->
+            viewModel.movieDetailsResponse.collect { movie ->
                 bindingView.apply {
                     backdropImage.loadBackDropSizeImage(movie?.backdropPath)
                     posterImage.loadPosterSizeImage(movie?.posterPath)

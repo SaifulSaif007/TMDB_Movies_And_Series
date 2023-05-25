@@ -1,15 +1,10 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
-    id 'androidx.navigation.safeargs'
-    id 'com.google.firebase.crashlytics'
 }
 
-apply from: "$project.rootDir/jacoco.gradle"
-
 android {
+    namespace 'com.saiful.base_unit_test'
     compileSdk 33
 
     defaultConfig {
@@ -25,9 +20,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        debug {
-            testCoverageEnabled true
-        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -36,23 +28,13 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    buildFeatures {
-        viewBinding true
-    }
-    lint {
-        abortOnError false
-    }
-    namespace 'com.saiful.movie'
 }
 
 dependencies {
-
     implementation project(path: ':base')
-    implementation project(path: ':shared')
-    testImplementation project(path: ':base-unit-test')
 
-    implementation libs.dagger.hilt
-    implementation libs.bundles.androidxNavigation
-    kapt libs.hilt.compiler
-
+    api libs.junit
+    api libs.bundles.mockito
+    api libs.espresso
+    api libs.coroutine.test
 }
