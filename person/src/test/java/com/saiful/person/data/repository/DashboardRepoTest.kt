@@ -1,0 +1,81 @@
+package com.saiful.person.data.repository
+
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.only
+import com.nhaarman.mockito_kotlin.reset
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
+import com.saiful.base.network.model.BaseResponse
+import com.saiful.base_unit_test.BaseRepositoryTest
+import com.saiful.person.data.api.PersonApiService
+import com.saiful.person.model.Person
+import com.saiful.person.model.PersonResponse
+import kotlinx.coroutines.runBlocking
+import org.junit.Test
+
+internal class DashboardRepoTest : BaseRepositoryTest() {
+
+    private val apiService: PersonApiService = mock()
+    private lateinit var dashboardRepo: DashboardRepo
+    private lateinit var personResponse: PersonResponse
+    private val page: Int = 1
+
+    override fun setup() {
+        personResponse = PersonResponse(
+            page = 1,
+            results = listOf(
+                Person(
+                    id = 1,
+                    name = "Tom Cruise",
+                    popularity = 8.9,
+                    profilePath = "url"
+                ),
+                Person(
+                    id = 2,
+                    name = "Dwayne Johnson",
+                    popularity = 8.8,
+                    profilePath = "url"
+                )
+            ),
+            totalPages = 1,
+            totalResults = 2
+        )
+
+        dashboardRepo = DashboardRepo(apiService)
+    }
+
+    override fun tearDown() {
+        reset(apiService)
+    }
+
+
+    @Test
+    fun `verify popular person returns success result`() {
+        runBlocking {
+            whenever(
+                apiService.popularPersons(page)
+            ).thenReturn(
+                BaseResponse.Success(personResponse)
+            )
+
+            assert(dashboardRepo.popularPersons() is BaseResponse.Success)
+            verify(apiService, only()).popularPersons(any())
+        }
+    }
+
+    @Test
+    fun `verify trending person returns success result`() {
+        runBlocking {
+            whenever(
+                apiService.trendingPersons(page)
+            ).thenReturn(
+                BaseResponse.Success(personResponse)
+            )
+
+            assert(dashboardRepo.trendingPersons() is BaseResponse.Success)
+            verify(apiService, only()).trendingPersons(any())
+        }
+    }
+
+}

@@ -8,8 +8,6 @@ import com.saiful.base_unit_test.BaseRepositoryTest
 import com.saiful.movie.data.api.MovieApiService
 import com.saiful.movie.model.MovieCollection
 import kotlinx.coroutines.runBlocking
-import org.junit.After
-import org.junit.Before
 import org.junit.Test
 
 class CollectionRepoRepositoryTest: BaseRepositoryTest() {
@@ -18,7 +16,6 @@ class CollectionRepoRepositoryTest: BaseRepositoryTest() {
     private lateinit var movieCollection: MovieCollection
     private val id: Int = 1
 
-    @Before
     override fun setup() {
         collectionRepo = CollectionRepo(apiService)
 
@@ -32,7 +29,6 @@ class CollectionRepoRepositoryTest: BaseRepositoryTest() {
         )
     }
 
-    @After
     override fun tearDown() {
         reset(apiService)
     }
