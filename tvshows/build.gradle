@@ -6,6 +6,9 @@ plugins {
     id 'androidx.navigation.safeargs'
 }
 
+
+apply from: "$project.rootDir/jacoco.gradle"
+
 android {
     compileSdk 33
 
@@ -22,17 +25,24 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            testCoverageEnabled true
+        }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
     buildFeatures {
         viewBinding true
     }
+    
     namespace 'com.saiful.tvshows'
 }
 
@@ -40,6 +50,7 @@ dependencies {
 
     implementation project(path: ':base')
     implementation project(path: ':shared')
+    testImplementation project(path: ':base-unit-test')
 
     implementation libs.dagger.hilt
     implementation libs.bundles.androidxNavigation
