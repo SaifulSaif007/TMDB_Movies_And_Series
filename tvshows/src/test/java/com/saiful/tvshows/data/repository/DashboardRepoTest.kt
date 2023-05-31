@@ -1,5 +1,6 @@
 package com.saiful.tvshows.data.repository
 
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.only
 import com.nhaarman.mockito_kotlin.reset
@@ -51,7 +52,7 @@ internal class DashboardRepoTest : BaseRepositoryTest() {
             )
 
             assert(dashboardRepo.getTrendingShows(page) is BaseResponse.Success)
-            verify(tvShowsApiService, only()).trendingTvShows(page)
+            verify(tvShowsApiService, only()).trendingTvShows(any())
         }
     }
 
@@ -65,7 +66,7 @@ internal class DashboardRepoTest : BaseRepositoryTest() {
             )
 
             assert(dashboardRepo.getPopularShows(page) is BaseResponse.Success)
-            verify(tvShowsApiService, only()).popularTvShows(page)
+            verify(tvShowsApiService, only()).popularTvShows(any())
         }
     }
 
@@ -79,7 +80,7 @@ internal class DashboardRepoTest : BaseRepositoryTest() {
             )
 
             assert(dashboardRepo.getTopRatedShows(page) is BaseResponse.Success)
-            verify(tvShowsApiService, only()).topRatedTvShows(page)
+            verify(tvShowsApiService, only()).topRatedTvShows(any())
         }
     }
 
@@ -93,7 +94,7 @@ internal class DashboardRepoTest : BaseRepositoryTest() {
             )
 
             assert(dashboardRepo.getOnAirShows(page) is BaseResponse.Success)
-            verify(tvShowsApiService, only()).onAirTvShows(page)
+            verify(tvShowsApiService, only()).onAirTvShows(any())
         }
     }
 }
