@@ -26,7 +26,6 @@ internal class PersonDetailsRepoTest : BaseRepositoryTest() {
     private lateinit var personImage: PersonImage
     private lateinit var movieCredits: MovieCredits
     private lateinit var tvShowsCredits: TvShowsCredits
-    private val personId: Int = 1
 
     override fun setup() {
         repository = PersonDetailsRepo(
@@ -65,12 +64,12 @@ internal class PersonDetailsRepoTest : BaseRepositoryTest() {
     fun `verify person details fetch is successful`() {
         runBlocking {
             whenever(
-                apiService.personDetails(personId)
+                apiService.personDetails(any())
             ).thenReturn(
                 BaseResponse.Success(personDetails)
             )
 
-            assert(repository.personDetails(personId) is BaseResponse.Success)
+            assert(repository.personDetails(any()) is BaseResponse.Success)
             verify(apiService, only()).personDetails(any())
 
         }
@@ -81,12 +80,12 @@ internal class PersonDetailsRepoTest : BaseRepositoryTest() {
     fun `verify person image fetch is successful`() {
         runBlocking {
             whenever(
-                apiService.personImage(personId)
+                apiService.personImage(any())
             ).thenReturn(
                 BaseResponse.Success(personImage)
             )
 
-            assert(repository.personImages(personId) is BaseResponse.Success)
+            assert(repository.personImages(any()) is BaseResponse.Success)
             verify(apiService, only()).personImage(any())
 
         }
@@ -96,12 +95,12 @@ internal class PersonDetailsRepoTest : BaseRepositoryTest() {
     fun `verify person movie credits fetch is successful`() {
         runBlocking {
             whenever(
-                apiService.movieCredits(personId)
+                apiService.movieCredits(any())
             ).thenReturn(
                 BaseResponse.Success(movieCredits)
             )
 
-            assert(repository.personMovieCredits(personId) is BaseResponse.Success)
+            assert(repository.personMovieCredits(any()) is BaseResponse.Success)
             verify(apiService, only()).movieCredits(any())
 
         }
@@ -111,12 +110,12 @@ internal class PersonDetailsRepoTest : BaseRepositoryTest() {
     fun `verify person shows credits fetch is successful`(){
         runBlocking {
             whenever(
-                apiService.tvShowsCredits(personId)
+                apiService.tvShowsCredits(any())
             ).thenReturn(
                 BaseResponse.Success(tvShowsCredits)
             )
 
-            assert(repository.personTvShowsCredits(personId) is BaseResponse.Success)
+            assert(repository.personTvShowsCredits(1) is BaseResponse.Success)
             verify(apiService, only()).tvShowsCredits(any())
 
         }

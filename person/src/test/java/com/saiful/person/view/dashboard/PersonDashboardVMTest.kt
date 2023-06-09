@@ -70,7 +70,7 @@ internal class PersonDashboardVMTest : BaseViewModelTest() {
             initViewModel()
 
             verify(repository, times(1)).trendingPersons()
-            assert(viewModel.trendingPersonList.value != null)
+            assert(viewModel.trendingPersonList.value!!.page == personResponse.page)
         }
     }
 

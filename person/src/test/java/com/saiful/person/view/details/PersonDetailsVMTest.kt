@@ -81,7 +81,7 @@ internal class PersonDetailsVMTest : BaseViewModelTest() {
             viewModel.fetchPersonDetails(personId)
 
             verify(repository, times(1)).personDetails(any())
-            assert(viewModel.personDetails.value != null)
+            assert(viewModel.personDetails.value!!.id == personDetails.id)
         }
     }
 
@@ -99,7 +99,7 @@ internal class PersonDetailsVMTest : BaseViewModelTest() {
             viewModel.fetchPersonDetails(personId)
 
             verify(repository, times(1)).personImages(any())
-            assert(viewModel.personImageList.value != null)
+            assert(viewModel.personImageList.value!!.id == personImage.id)
         }
     }
 
@@ -117,16 +117,15 @@ internal class PersonDetailsVMTest : BaseViewModelTest() {
             viewModel.fetchPersonDetails(personId)
 
             verify(repository, times(1)).personMovieCredits(any())
-            assert(viewModel.personMovieList.value != null)
+            assert(viewModel.personMovieList.value!!.id == movieCredits.id)
         }
     }
-
 
     @Test
     fun `verify person shows fetch is successful`() {
         runTest(mainCoroutineRule.testDispatcher) {
             whenever(
-                repository.personTvShowsCredits(any())
+                repository.personTvShowsCredits(personId)
             ).thenReturn(
                 BaseResponse.Success(tvShowsCredits)
             )
@@ -135,7 +134,7 @@ internal class PersonDetailsVMTest : BaseViewModelTest() {
             viewModel.fetchPersonDetails(personId)
 
             verify(repository, times(1)).personTvShowsCredits(any())
-            assert(viewModel.personShowsList.value != null)
+            assert(viewModel.personShowsList.value!!.id == tvShowsCredits.id)
         }
     }
 }
