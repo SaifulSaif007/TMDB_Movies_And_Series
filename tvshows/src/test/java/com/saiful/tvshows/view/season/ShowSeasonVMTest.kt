@@ -1,5 +1,6 @@
 package com.saiful.tvshows.view.season
 
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.reset
 import com.nhaarman.mockito_kotlin.times
@@ -24,9 +25,6 @@ internal class ShowSeasonVMTest : BaseViewModelTest() {
     private lateinit var viewModel: ShowSeasonVM
     private lateinit var seasonDetails: SeasonDetails
 
-    private val showId = 1
-    private val seasonNo = 1
-
     override fun setup() {
         seasonDetails = SeasonDetails(
             airDate = "2/2/2022",
@@ -50,18 +48,16 @@ internal class ShowSeasonVMTest : BaseViewModelTest() {
     fun `verify season fetch is successful`() {
         runTest(mainCoroutineRule.testDispatcher) {
             whenever(
-                repository.seasonDetails(
-                    showId, seasonNo
-                )
+                repository.seasonDetails(any(), any())
             ).thenReturn(
                 BaseResponse.Success(seasonDetails)
             )
 
             initViewModel()
 
-            viewModel.fetchSeason(showId, seasonNo)
+            viewModel.fetchSeason(1, 1)
 
-            verify(repository, times(1)).seasonDetails(showId, seasonNo)
+            verify(repository, times(1)).seasonDetails(any(), any())
 
             assert(viewModel.seasonDetails.value!!.id == seasonDetails.id)
             assert(viewModel.seasonDetails.value!!.name == seasonDetails.name)
