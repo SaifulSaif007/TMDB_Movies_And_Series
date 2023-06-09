@@ -1,6 +1,5 @@
 package com.saiful.tvshows.view.season
 
-import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.reset
 import com.nhaarman.mockito_kotlin.times
@@ -62,10 +61,9 @@ internal class ShowSeasonVMTest : BaseViewModelTest() {
 
             viewModel.fetchSeason(showId, seasonNo)
 
-            verify(repository, times(1)).seasonDetails(any(), any())
+            verify(repository, times(1)).seasonDetails(showId, seasonNo)
 
-            assert(viewModel.seasonDetails.value != null)
-            assert(viewModel.seasonDetails.value!!.id == 1)
+            assert(viewModel.seasonDetails.value!!.id == seasonDetails.id)
             assert(viewModel.seasonDetails.value!!.name == seasonDetails.name)
         }
     }

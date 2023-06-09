@@ -1,6 +1,5 @@
 package com.saiful.person.data.repository
 
-import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.only
 import com.nhaarman.mockito_kotlin.reset
@@ -60,7 +59,7 @@ internal class DashboardRepoTest : BaseRepositoryTest() {
             )
 
             assert(dashboardRepo.popularPersons() is BaseResponse.Success)
-            verify(apiService, only()).popularPersons(any())
+            verify(apiService, only()).popularPersons(page)
         }
     }
 
@@ -74,7 +73,7 @@ internal class DashboardRepoTest : BaseRepositoryTest() {
             )
 
             assert(dashboardRepo.trendingPersons() is BaseResponse.Success)
-            verify(apiService, only()).trendingPersons(any())
+            verify(apiService, only()).trendingPersons(page)
         }
     }
 

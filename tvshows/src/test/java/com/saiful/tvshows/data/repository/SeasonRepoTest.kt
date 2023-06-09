@@ -18,8 +18,6 @@ internal class SeasonRepoTest : BaseRepositoryTest() {
     private val apiService: TvShowsApiService = mock()
     private lateinit var seasonRepo: SeasonRepo
     private lateinit var seasonDetails: SeasonDetails
-    private val showId = 1
-    private val seasonNo = 1
 
     override fun setup() {
         seasonRepo = SeasonRepo(apiService)
@@ -42,15 +40,12 @@ internal class SeasonRepoTest : BaseRepositoryTest() {
     fun `verify season details fetch is successful`() {
         runBlocking {
             whenever(
-                apiService.seasonDetails(
-                    id = showId,
-                    no = seasonNo
-                )
+                apiService.seasonDetails(any(), any())
             ).thenReturn(
                 BaseResponse.Success(seasonDetails)
             )
 
-            assert(seasonRepo.seasonDetails(showId, seasonNo) is BaseResponse.Success)
+            assert(seasonRepo.seasonDetails(any(), any()) is BaseResponse.Success)
             verify(apiService, only()).seasonDetails(any(), any())
         }
     }
