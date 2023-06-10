@@ -23,13 +23,13 @@ class PersonDashboardVM
 
     private fun popularPerson() {
         executeRestCodeBlock(popularPersons) {
-            repo.popularPersons()
+            repo.popularPersons(1)
         }
     }
 
     private fun trendingPerson() {
         executeRestCodeBlock(trendingPersons) {
-            repo.trendingPersons()
+            repo.trendingPersons(1)
         }
     }
 

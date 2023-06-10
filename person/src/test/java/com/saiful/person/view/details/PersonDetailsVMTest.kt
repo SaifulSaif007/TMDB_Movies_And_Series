@@ -86,7 +86,7 @@ internal class PersonDetailsVMTest : BaseViewModelTest() {
                 BaseResponse.Success(personImage)
             )
             whenever(
-                repository.personDetails(any())
+                repository.personDetails(personId)
             ).thenReturn(
                 BaseResponse.Success(personDetails)
             )

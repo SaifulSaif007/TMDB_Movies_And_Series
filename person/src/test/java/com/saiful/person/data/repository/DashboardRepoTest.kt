@@ -58,7 +58,7 @@ internal class DashboardRepoTest : BaseRepositoryTest() {
                 BaseResponse.Success(personResponse)
             )
 
-            assert(dashboardRepo.popularPersons() is BaseResponse.Success)
+            assert(dashboardRepo.popularPersons(page) is BaseResponse.Success)
             verify(apiService, only()).popularPersons(page)
         }
     }
@@ -72,7 +72,7 @@ internal class DashboardRepoTest : BaseRepositoryTest() {
                 BaseResponse.Success(personResponse)
             )
 
-            assert(dashboardRepo.trendingPersons() is BaseResponse.Success)
+            assert(dashboardRepo.trendingPersons(page) is BaseResponse.Success)
             verify(apiService, only()).trendingPersons(page)
         }
     }
