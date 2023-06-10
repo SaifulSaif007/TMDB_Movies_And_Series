@@ -6,7 +6,7 @@ import javax.inject.Inject
 class DashboardRepo
 @Inject constructor(private val apiService: PersonApiService) {
 
-    suspend fun popularPersons() = apiService.popularPersons(1)
+    suspend fun popularPersons() = apiService.popularPersons()
 
-    suspend fun trendingPersons() = apiService.trendingPersons(1)
+    suspend fun trendingPersons() = apiService.trendingPersons()
 }

@@ -1,14 +1,11 @@
 package com.saiful.movie.data.repository
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import com.saiful.movie.data.api.MovieApiService
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DashboardRepo
-@Inject constructor(private val apiService: MovieApiService) {
+class DashboardRepo @Inject constructor(private val apiService: MovieApiService) {
 
     suspend fun getPopularMovies(pageNo: Int) = apiService.popularMovies(pageNo)
 

@@ -2,7 +2,7 @@ package com.saiful.movie.model
 
 import com.squareup.moshi.Json
 
-data class MovieDetails(
+data class MovieDetailsResponse(
 
 	val id: Int? = null,
 	@field:Json(name="original_language")

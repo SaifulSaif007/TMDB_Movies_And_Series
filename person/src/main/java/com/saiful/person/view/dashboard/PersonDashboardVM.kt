@@ -40,14 +40,17 @@ class PersonDashboardVM
                     is BaseResponse.Success -> {
                         popularPersonList.value = response.body as PersonResponse
                     }
+
                     else -> {}
                 }
             }
+
             trendingPersons -> {
                 when (val response = data as GenericResponse<*>) {
                     is BaseResponse.Success -> {
                         trendingPersonList.value = response.body as PersonResponse
                     }
+
                     else -> {}
                 }
             }
