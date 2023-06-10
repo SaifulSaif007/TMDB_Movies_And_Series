@@ -18,7 +18,6 @@ internal class DashboardRepoTest : BaseRepositoryTest() {
     private val apiService: PersonApiService = mock()
     private lateinit var dashboardRepo: DashboardRepo
     private lateinit var personResponse: PersonResponse
-    private val page: Int = 1
 
     override fun setup() {
         personResponse = PersonResponse(
@@ -53,13 +52,13 @@ internal class DashboardRepoTest : BaseRepositoryTest() {
     fun `verify popular person returns success result`() {
         runBlocking {
             whenever(
-                apiService.popularPersons(page)
+                apiService.popularPersons()
             ).thenReturn(
                 BaseResponse.Success(personResponse)
             )
 
-            assert(dashboardRepo.popularPersons(page) is BaseResponse.Success)
-            verify(apiService, only()).popularPersons(page)
+            assert(dashboardRepo.popularPersons() is BaseResponse.Success)
+            verify(apiService, only()).popularPersons()
         }
     }
 
@@ -67,13 +66,13 @@ internal class DashboardRepoTest : BaseRepositoryTest() {
     fun `verify trending person returns success result`() {
         runBlocking {
             whenever(
-                apiService.trendingPersons(page)
+                apiService.trendingPersons()
             ).thenReturn(
                 BaseResponse.Success(personResponse)
             )
 
-            assert(dashboardRepo.trendingPersons(page) is BaseResponse.Success)
-            verify(apiService, only()).trendingPersons(page)
+            assert(dashboardRepo.trendingPersons() is BaseResponse.Success)
+            verify(apiService, only()).trendingPersons()
         }
     }
 

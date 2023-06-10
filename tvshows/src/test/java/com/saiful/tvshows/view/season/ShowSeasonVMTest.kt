@@ -24,6 +24,8 @@ internal class ShowSeasonVMTest : BaseViewModelTest() {
     private val repository: SeasonRepo = mock()
     private lateinit var viewModel: ShowSeasonVM
     private lateinit var seasonDetails: SeasonDetails
+    private val showId = 1
+    private val seasonNo = 1
 
     override fun setup() {
         seasonDetails = SeasonDetails(
@@ -48,14 +50,14 @@ internal class ShowSeasonVMTest : BaseViewModelTest() {
     fun `verify season fetch is successful`() {
         runTest(mainCoroutineRule.testDispatcher) {
             whenever(
-                repository.seasonDetails(any(), any())
+                repository.seasonDetails(showId, seasonNo)
             ).thenReturn(
                 BaseResponse.Success(seasonDetails)
             )
 
             initViewModel()
 
-            viewModel.fetchSeason(1, 1)
+            viewModel.fetchSeason(showId, seasonNo)
 
             verify(repository, times(1)).seasonDetails(any(), any())
 

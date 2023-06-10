@@ -10,12 +10,12 @@ interface PersonApiService {
 
     @GET("person/popular")
     suspend fun popularPersons(
-        @Query("page") page: Int
+        @Query("page") page: Int = 1
     ): GenericResponse<PersonResponse>
 
     @GET("trending/person/week")
     suspend fun trendingPersons(
-        @Query("page") page: Int
+        @Query("page") page: Int = 1
     ): GenericResponse<PersonResponse>
 
     @GET("person/{person_id}")

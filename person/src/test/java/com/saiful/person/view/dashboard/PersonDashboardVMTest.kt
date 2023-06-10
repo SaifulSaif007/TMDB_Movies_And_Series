@@ -1,6 +1,5 @@
 package com.saiful.person.view.dashboard
 
-import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.reset
 import com.nhaarman.mockito_kotlin.times
@@ -25,7 +24,6 @@ internal class PersonDashboardVMTest : BaseViewModelTest() {
     private val repository: DashboardRepo = mock()
     private lateinit var viewModel: PersonDashboardVM
     private lateinit var personResponse: PersonResponse
-    private val page = 1
     override fun setup() {
         personResponse = PersonResponse(
             page = 1,
@@ -47,20 +45,20 @@ internal class PersonDashboardVMTest : BaseViewModelTest() {
     fun `verify trending person & popular person fetch is successful`() {
         runTest(mainCoroutineRule.testDispatcher) {
             whenever(
-                repository.popularPersons(page)
+                repository.popularPersons()
             ).thenReturn(
                 BaseResponse.Success(personResponse)
             )
             whenever(
-                repository.trendingPersons(page)
+                repository.trendingPersons()
             ).thenReturn(
                 BaseResponse.Success(personResponse)
             )
 
             initViewModel()
 
-            verify(repository, times(1)).trendingPersons(any())
-            verify(repository, times(1)).popularPersons(any())
+            verify(repository, times(1)).trendingPersons()
+            verify(repository, times(1)).popularPersons()
 
             assert(viewModel.popularPersonList.value!!.totalPages == personResponse.totalPages)
             assert(viewModel.trendingPersonList.value!!.page == personResponse.page)

@@ -23,13 +23,13 @@ class PersonDashboardVM
 
     private fun popularPerson() {
         executeRestCodeBlock(popularPersons) {
-            repo.popularPersons(1)
+            repo.popularPersons()
         }
     }
 
     private fun trendingPerson() {
         executeRestCodeBlock(trendingPersons) {
-            repo.trendingPersons(1)
+            repo.trendingPersons()
         }
     }
 
@@ -40,14 +40,17 @@ class PersonDashboardVM
                     is BaseResponse.Success -> {
                         popularPersonList.value = response.body as PersonResponse
                     }
+
                     else -> {}
                 }
             }
+
             trendingPersons -> {
                 when (val response = data as GenericResponse<*>) {
                     is BaseResponse.Success -> {
                         trendingPersonList.value = response.body as PersonResponse
                     }
+
                     else -> {}
                 }
             }
