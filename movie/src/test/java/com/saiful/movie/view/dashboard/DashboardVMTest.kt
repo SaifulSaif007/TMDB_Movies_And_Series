@@ -28,6 +28,7 @@ internal class DashboardVMTest : BaseViewModelTest() {
     private lateinit var moviesResponse: MoviesResponse
 
     private lateinit var viewModel: DashboardVM
+    private val pageNo = 1
 
     override fun setup() {
         moviesResponse = MoviesResponse(
@@ -55,16 +56,16 @@ internal class DashboardVMTest : BaseViewModelTest() {
     @Test
     fun `verify all dashboard movie fetch successful`() {
         runTest(coroutineRule.testDispatcher) {
-            whenever(repository.getPopularMovies(any())).thenReturn(
+            whenever(repository.getPopularMovies(pageNo)).thenReturn(
                 BaseResponse.Success(moviesResponse)
             )
-            whenever(repository.getNowPlayingMovies(any())).thenReturn(
+            whenever(repository.getNowPlayingMovies(pageNo)).thenReturn(
                 BaseResponse.Success(moviesResponse)
             )
-            whenever(repository.getTopRatedMovies(any())).thenReturn(
+            whenever(repository.getTopRatedMovies(pageNo)).thenReturn(
                 BaseResponse.Success(moviesResponse)
             )
-            whenever(repository.getUpcomingMovies(any())).thenReturn(
+            whenever(repository.getUpcomingMovies(pageNo)).thenReturn(
                 BaseResponse.Success(moviesResponse)
             )
 

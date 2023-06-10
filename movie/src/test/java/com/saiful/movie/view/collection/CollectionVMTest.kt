@@ -24,6 +24,7 @@ class CollectionVMTest : BaseViewModelTest() {
     private val collectionRepo: CollectionRepo = mock()
     private lateinit var collectionVM: CollectionVM
     private lateinit var movieCollection: MovieCollection
+    private val id = 1
 
 
     override fun setup() {
@@ -57,7 +58,7 @@ class CollectionVMTest : BaseViewModelTest() {
             )
 
             initViewModel()
-            collectionVM.fetchCollections(1)
+            collectionVM.fetchCollections(id)
 
             verify(collectionRepo, only()).movieCollection(any())
             assert(collectionVM.collections.toString().isNotEmpty())
