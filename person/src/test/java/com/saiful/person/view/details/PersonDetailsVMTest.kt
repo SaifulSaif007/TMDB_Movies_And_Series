@@ -67,10 +67,24 @@ internal class PersonDetailsVMTest : BaseViewModelTest() {
             repository
         )
     }
-
     @Test
-    fun `verify person details fetch is successful`() {
+    fun `verify person details api calls fetch is successful`() {
         runTest(mainCoroutineRule.testDispatcher) {
+            whenever(
+                repository.personTvShowsCredits(personId)
+            ).thenReturn(
+                BaseResponse.Success(tvShowsCredits)
+            )
+            whenever(
+                repository.personMovieCredits(personId)
+            ).thenReturn(
+                BaseResponse.Success(movieCredits)
+            )
+            whenever(
+                repository.personImages(personId)
+            ).thenReturn(
+                BaseResponse.Success(personImage)
+            )
             whenever(
                 repository.personDetails(any())
             ).thenReturn(
@@ -80,60 +94,14 @@ internal class PersonDetailsVMTest : BaseViewModelTest() {
             initViewModel()
             viewModel.fetchPersonDetails(personId)
 
-            verify(repository, times(1)).personDetails(any())
-            assert(viewModel.personDetails.value!!.id == personDetails.id)
-        }
-    }
-
-
-    @Test
-    fun `verify person image fetch is successful`() {
-        runTest(mainCoroutineRule.testDispatcher) {
-            whenever(
-                repository.personImages(any())
-            ).thenReturn(
-                BaseResponse.Success(personImage)
-            )
-
-            initViewModel()
-            viewModel.fetchPersonDetails(personId)
-
-            verify(repository, times(1)).personImages(any())
-            assert(viewModel.personImageList.value!!.id == personImage.id)
-        }
-    }
-
-
-    @Test
-    fun `verify person movie fetch is successful`() {
-        runTest(mainCoroutineRule.testDispatcher) {
-            whenever(
-                repository.personMovieCredits(any())
-            ).thenReturn(
-                BaseResponse.Success(movieCredits)
-            )
-
-            initViewModel()
-            viewModel.fetchPersonDetails(personId)
-
-            verify(repository, times(1)).personMovieCredits(any())
-            assert(viewModel.personMovieList.value!!.id == movieCredits.id)
-        }
-    }
-
-    @Test
-    fun `verify person shows fetch is successful`() {
-        runTest(mainCoroutineRule.testDispatcher) {
-            whenever(
-                repository.personTvShowsCredits(personId)
-            ).thenReturn(
-                BaseResponse.Success(tvShowsCredits)
-            )
-
-            initViewModel()
-            viewModel.fetchPersonDetails(personId)
-
             verify(repository, times(1)).personTvShowsCredits(any())
+            verify(repository, times(1)).personMovieCredits(any())
+            verify(repository, times(1)).personImages(any())
+            verify(repository, times(1)).personDetails(any())
+
+            assert(viewModel.personDetails.value!!.id == personDetails.id)
+            assert(viewModel.personImageList.value!!.id == personImage.id)
+            assert(viewModel.personMovieList.value!!.id == movieCredits.id)
             assert(viewModel.personShowsList.value!!.id == tvShowsCredits.id)
         }
     }

@@ -43,7 +43,7 @@ internal class PersonDashboardVMTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `verify popular person fetch is successful`() {
+    fun `verify trending person & popular person fetch is successful`() {
         runTest(mainCoroutineRule.testDispatcher) {
             whenever(
                 repository.popularPersons()
@@ -51,16 +51,6 @@ internal class PersonDashboardVMTest : BaseViewModelTest() {
                 BaseResponse.Success(personResponse)
             )
 
-            initViewModel()
-
-            verify(repository, times(1)).popularPersons()
-            assert(viewModel.popularPersonList.value != null)
-        }
-    }
-
-    @Test
-    fun `verify trending person fetch is successful`() {
-        runTest(mainCoroutineRule.testDispatcher) {
             whenever(
                 repository.trendingPersons()
             ).thenReturn(
@@ -70,6 +60,9 @@ internal class PersonDashboardVMTest : BaseViewModelTest() {
             initViewModel()
 
             verify(repository, times(1)).trendingPersons()
+            verify(repository, times(1)).popularPersons()
+
+            assert(viewModel.popularPersonList.value!!.totalPages == personResponse.totalPages)
             assert(viewModel.trendingPersonList.value!!.page == personResponse.page)
         }
     }
