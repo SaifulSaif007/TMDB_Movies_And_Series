@@ -27,6 +27,7 @@ internal class ShowsDashboardVMTest : BaseViewModelTest() {
 
     private lateinit var tvShowsResponse: TvShowsResponse
     private lateinit var viewModel: ShowsDashboardVM
+    private val pageNo = 1
 
     override fun setup() {
         tvShowsResponse = TvShowsResponse(
@@ -51,16 +52,16 @@ internal class ShowsDashboardVMTest : BaseViewModelTest() {
     @Test
     fun `verify all dashboard tv shows fetch successful`() {
         runTest(coroutineRule.testDispatcher) {
-            whenever(dashboardRepo.getTrendingShows(any())).thenReturn(
+            whenever(dashboardRepo.getTrendingShows(pageNo)).thenReturn(
                 BaseResponse.Success(tvShowsResponse)
             )
-            whenever(dashboardRepo.getPopularShows(any())).thenReturn(
+            whenever(dashboardRepo.getPopularShows(pageNo)).thenReturn(
                 BaseResponse.Success(tvShowsResponse)
             )
-            whenever(dashboardRepo.getTopRatedShows(any())).thenReturn(
+            whenever(dashboardRepo.getTopRatedShows(pageNo)).thenReturn(
                 BaseResponse.Success(tvShowsResponse)
             )
-            whenever(dashboardRepo.getOnAirShows(any())).thenReturn(
+            whenever(dashboardRepo.getOnAirShows(pageNo)).thenReturn(
                 BaseResponse.Success(tvShowsResponse)
             )
 

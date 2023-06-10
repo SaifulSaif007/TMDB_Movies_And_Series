@@ -51,7 +51,7 @@ class CollectionVMTest : BaseViewModelTest() {
     @Test
     fun `verify fetch collections returns success result`() {
         runTest(mainCoroutineRule.testDispatcher) {
-            whenever(collectionRepo.movieCollection(any())).thenReturn(
+            whenever(collectionRepo.movieCollection(id)).thenReturn(
                 BaseResponse.Success(
                     movieCollection
                 )
