@@ -27,7 +27,7 @@
             android:id="@+id/trending_shows_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image_slider">
 
@@ -50,26 +50,24 @@
                 android:id="@+id/trending_see_all_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="16dp"
                 android:drawableRight="@drawable/ic_arrow_right_icon"
                 android:drawablePadding="4dp"
                 android:text="@string/see_all"
                 android:textColor="@color/text_color_black"
                 android:textSize="@dimen/font_normal"
+                app:layout_constraintBaseline_toBaselineOf="@+id/trending_label"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/trending_label"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toEndOf="@+id/trending_label" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/trending_show_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/trending_label"
@@ -82,7 +80,7 @@
             android:id="@+id/onAir_shows_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/trending_shows_layout">
 
@@ -105,26 +103,24 @@
                 android:id="@+id/onAir_see_all_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="16dp"
                 android:drawableRight="@drawable/ic_arrow_right_icon"
                 android:drawablePadding="4dp"
                 android:text="@string/see_all"
                 android:textColor="@color/text_color_black"
                 android:textSize="@dimen/font_normal"
+                app:layout_constraintBaseline_toBaselineOf="@+id/onAir_label"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/onAir_label"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toEndOf="@+id/onAir_label" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/onAir_show_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/onAir_label"
@@ -137,7 +133,7 @@
             android:id="@+id/topRated_shows_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/onAir_shows_layout">
 
@@ -160,26 +156,24 @@
                 android:id="@+id/topRated_see_all_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="16dp"
                 android:drawableRight="@drawable/ic_arrow_right_icon"
                 android:drawablePadding="4dp"
                 android:text="@string/see_all"
                 android:textColor="@color/text_color_black"
                 android:textSize="@dimen/font_normal"
+                app:layout_constraintBaseline_toBaselineOf="@+id/topRated_label"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/topRated_label"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toEndOf="@+id/topRated_label" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/topRated_show_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/topRated_label"
@@ -192,7 +186,7 @@
             android:id="@+id/popular_shows_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/topRated_shows_layout">
 
@@ -215,23 +209,23 @@
                 android:id="@+id/popular_see_all_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="16dp"
                 android:drawableRight="@drawable/ic_arrow_right_icon"
                 android:drawablePadding="4dp"
                 android:text="@string/see_all"
                 android:textColor="@color/text_color_black"
                 android:textSize="@dimen/font_normal"
+                app:layout_constraintBaseline_toBaselineOf="@+id/popular_label"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/popular_label"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toEndOf="@+id/popular_label" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/popular_show_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
