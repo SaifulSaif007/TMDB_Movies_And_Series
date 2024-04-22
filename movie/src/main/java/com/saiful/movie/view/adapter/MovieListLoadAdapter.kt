@@ -46,7 +46,7 @@ class MovieListLoadAdapter(private val listener: (Int) -> Unit) :
                 movieTitle.text = movies.title
                 movieSubtitle.text = movies.overview
                 ratingBar.rating = movies.voteAverage?.toFloat() ?: 0f
-                movieRating.text = "(" + movies.voteAverage.toString() + ")"
+                movieRating.text = "( ${"%.2f".format(movies.voteAverage)} )"
             }
 
         }

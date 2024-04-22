@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="115dp"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="8dp">
+    android:layout_margin="2dp"
+    app:cardCornerRadius="12dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -18,16 +19,17 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/image1" />
+            tools:src="@drawable/gradient" />
 
         <TextView
             android:id="@+id/cast_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginEnd="2dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:fontFamily="sans-serif-medium"
             android:textAlignment="center"
             android:textColor="@color/text_color_black"
             android:textSize="@dimen/font_normal"
@@ -38,12 +40,13 @@
 
         <TextView
             android:id="@+id/cast_character_name"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginEnd="2dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:fontFamily="sans-serif-medium"
             android:textAlignment="center"
             android:textColor="@color/text_color_grey"
             android:textSize="@dimen/font_small"

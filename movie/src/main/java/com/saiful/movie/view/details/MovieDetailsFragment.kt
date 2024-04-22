@@ -1,14 +1,10 @@
 package com.saiful.movie.view.details
 
-import android.content.ActivityNotFoundException
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -24,9 +20,7 @@ import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
 import com.saiful.movie.databinding.FragmentMovieDetailsBinding
 import com.saiful.movie.model.GenresItem
-import com.saiful.movie.view.adapter.MovieCastAdapter
-import com.saiful.movie.view.adapter.MovieDashboardAdapter
-import com.saiful.movie.view.adapter.MovieTrailerAdapter
+import com.saiful.movie.view.adapter.*
 import com.saiful.shared.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -89,7 +83,8 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
             }
 
             movieCollectionLayout.root.setOnClickListener {
-                val collectionId = viewModel.movieDetailsResponse.value?.belongsToCollection?.id ?: 0
+                val collectionId =
+                    viewModel.movieDetailsResponse.value?.belongsToCollection?.id ?: 0
                 findNavController().navigate(
                     R.id.movie_collection_nav_graph,
                     bundleOf("collection_id" to collectionId)
@@ -123,7 +118,10 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
                             movie?.productionCompanies?.map { it?.name }?.joinToString(", ")
                     }
 
-                    movie?.videos?.results?.let {
+                    val movieTrailers =
+                        movie?.videos?.results?.filter { it.type == "Trailer" || it.type == "Teaser" }
+
+                    movieTrailers?.let {
                         trailerAdapter.submitList(it)
                     }
 
