@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.saiful.movie.databinding.LayoutMovieListItemBinding
 import com.saiful.shared.model.Movies
-import com.saiful.shared.utils.loadBackDropSizeImage
+import com.saiful.shared.utils.*
 
 class MovieListLoadAdapter(private val listener: (Int) -> Unit) :
     PagingDataAdapter<Movies, MovieListLoadAdapter.MovieViewHolder>(DIFF_UTIL) {
@@ -40,13 +40,19 @@ class MovieListLoadAdapter(private val listener: (Int) -> Unit) :
             }
         }
 
+        @SuppressLint("SetTextI18n")
         fun bind(movies: Movies) {
             binding.apply {
                 binding.posterImage.loadBackDropSizeImage(movies.posterPath)
                 movieTitle.text = movies.title
                 movieSubtitle.text = movies.overview
                 ratingBar.rating = movies.voteAverage?.toFloat() ?: 0f
-                movieRating.text = "( ${"%.2f".format(movies.voteAverage)} )"
+                movieRating.text = "( ${
+                    floatNumberFormatter(
+                        movies.voteAverage?.toFloat(),
+                        formatPattern = TWO_DECIMAL_FORMAT_PATTERN
+                    )
+                } )"
             }
 
         }

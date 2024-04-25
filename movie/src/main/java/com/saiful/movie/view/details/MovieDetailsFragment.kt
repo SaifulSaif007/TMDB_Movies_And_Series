@@ -1,5 +1,6 @@
 package com.saiful.movie.view.details
 
+import android.annotation.SuppressLint
 import android.content.*
 import android.graphics.Color
 import android.net.Uri
@@ -53,6 +54,7 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
 
     override fun getViewModel(): BaseViewModel = viewModel
 
+    @SuppressLint("SetTextI18n")
     override fun initOnCreateView() {
         viewModel.fetchMovieDetails(args.movieId)
 
@@ -101,7 +103,7 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
                     movieName.text = movie?.title
                     ratingBar2.rating = movie?.voteAverage?.toFloat() ?: 0f
                     movieRating.text =
-                        "(" + floatNumberFormatter(movie?.voteAverage?.toFloat() ?: 0f) + ")"
+                        "(" + floatNumberFormatter(movie?.voteAverage?.toFloat()) + ")"
 
                     addChips(movie?.genres)
 

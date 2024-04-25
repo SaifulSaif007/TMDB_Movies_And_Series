@@ -25,7 +25,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:orientation="horizontal"
         android:nestedScrollingEnabled="false"
-        tools:listitem="@layout/layout_cast_item"
+        tools:listitem="@layout/layout_shows_cast_item"
         app:layout_constraintTop_toBottomOf="@+id/cast_label"
         android:layout_marginTop="8dp" />
 

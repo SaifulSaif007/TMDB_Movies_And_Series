@@ -7,7 +7,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.saiful.shared.model.TvShows
-import com.saiful.shared.utils.loadBackDropSizeImage
+import com.saiful.shared.utils.*
 import com.saiful.tvshows.databinding.LayoutShowsListItemBinding
 
 class ShowsListLoadAdapter(private val listener: (Int) -> Unit) :
@@ -40,13 +40,19 @@ class ShowsListLoadAdapter(private val listener: (Int) -> Unit) :
             }
         }
 
+        @SuppressLint("SetTextI18n")
         fun bind(shows: TvShows) {
             binding.apply {
                 binding.posterImage.loadBackDropSizeImage(shows.posterPath)
                 showsTitle.text = shows.name
                 showsOverview.text = shows.overview
                 ratingBar.rating = shows.voteAverage?.toFloat() ?: 0f
-                showsRating.text = "(" + shows.voteAverage.toString() + ")"
+                showsRating.text = "( ${
+                    floatNumberFormatter(
+                        shows.voteAverage?.toFloat(),
+                        TWO_DECIMAL_FORMAT_PATTERN
+                    )
+                } )"
             }
 
         }

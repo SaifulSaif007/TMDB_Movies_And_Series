@@ -2,12 +2,10 @@ package com.saiful.tvshows.view.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.bumptech.glide.Glide
 import com.saiful.shared.utils.loadPosterSizeImage
-import com.saiful.tvshows.databinding.LayoutCastItemBinding
+import com.saiful.tvshows.databinding.LayoutShowsCastItemBinding
 import com.saiful.tvshows.model.Cast
 
 class ShowCastAdapter(private val listener: (Int) -> Unit) :
@@ -17,7 +15,7 @@ class ShowCastAdapter(private val listener: (Int) -> Unit) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CastViewHolder {
         return CastViewHolder(
-            LayoutCastItemBinding.inflate(
+            LayoutShowsCastItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -36,7 +34,7 @@ class ShowCastAdapter(private val listener: (Int) -> Unit) :
         notifyDataSetChanged()
     }
 
-    inner class CastViewHolder(private val binding: LayoutCastItemBinding) :
+    inner class CastViewHolder(private val binding: LayoutShowsCastItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {

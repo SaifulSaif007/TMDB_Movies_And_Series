@@ -1,14 +1,11 @@
 package com.saiful.tvshows.view.details
 
-import android.content.ActivityNotFoundException
-import android.content.Context
-import android.content.Intent
+import android.annotation.SuppressLint
+import android.content.*
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -25,10 +22,7 @@ import com.saiful.shared.utils.*
 import com.saiful.tvshows.R
 import com.saiful.tvshows.databinding.FragmentTvshowDetailsBinding
 import com.saiful.tvshows.model.Genre
-import com.saiful.tvshows.view.adapter.ShowCastAdapter
-import com.saiful.tvshows.view.adapter.ShowSeasonAdapter
-import com.saiful.tvshows.view.adapter.ShowsDashboardAdapter
-import com.saiful.tvshows.view.adapter.ShowsTrailerAdapter
+import com.saiful.tvshows.view.adapter.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
@@ -61,6 +55,7 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
 
     override fun getViewModel(): BaseViewModel = viewModel
 
+    @SuppressLint("SetTextI18n")
     override fun initOnCreateView() {
         viewModel.fetchShowDetails(args.showId)
 
@@ -106,7 +101,7 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
                     showsName.text = shows?.name
                     ratingBar2.rating = shows?.voteAverage?.toFloat() ?: 0f
                     showsRating.text =
-                        "(" + floatNumberFormatter(shows?.voteAverage?.toFloat() ?: 0f) + ")"
+                        "(" + floatNumberFormatter(shows?.voteAverage?.toFloat()) + ")"
 
                     addChips(shows?.genres)
 
@@ -126,7 +121,10 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
 
                     }
 
-                    shows?.videos?.results?.let {
+                    val showsTrailer =
+                        shows?.videos?.results?.filter { it.type == "Trailer" || it.type == "Teaser" }
+
+                    showsTrailer?.let {
                         trailerAdapter.submitList(it)
                     }
 

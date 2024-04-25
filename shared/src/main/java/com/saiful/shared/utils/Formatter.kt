@@ -1,14 +1,24 @@
 package com.saiful.shared.utils
 
 import java.math.RoundingMode
-import java.text.DecimalFormat
-import java.text.ParseException
-import java.text.SimpleDateFormat
+import java.text.*
 
-fun floatNumberFormatter(value: Float): String {
-    val df = DecimalFormat("#.#")
-    df.roundingMode = RoundingMode.HALF_EVEN
-    return df.format(value)
+
+const val ONE_DECIMAL_FORMAT_PATTERN = "#.#"
+const val TWO_DECIMAL_FORMAT_PATTERN = "#.##"
+
+
+fun floatNumberFormatter(
+    value: Float?,
+    formatPattern: String = ONE_DECIMAL_FORMAT_PATTERN
+): String {
+    return try {
+        val df = DecimalFormat(formatPattern)
+        df.roundingMode = RoundingMode.HALF_EVEN
+        df.format(value)
+    } catch (e: Exception) {
+        ""
+    }
 }
 
 fun Long.formatToShortNumber(): String {

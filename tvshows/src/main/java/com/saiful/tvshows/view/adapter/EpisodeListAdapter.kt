@@ -1,16 +1,15 @@
 package com.saiful.tvshows.view.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.saiful.shared.utils.floatNumberFormatter
 import com.saiful.shared.utils.loadBackDropSizeImage
 import com.saiful.tvshows.databinding.LayoutEpisodeItemBinding
 import com.saiful.tvshows.model.Episode
 
-class EpisodeListAdapter() : RecyclerView.Adapter<EpisodeListAdapter.EpisodeVH>() {
+class EpisodeListAdapter : RecyclerView.Adapter<EpisodeListAdapter.EpisodeVH>() {
 
     private val differ = AsyncListDiffer(this, DIFF_UTIL)
 
@@ -36,6 +35,7 @@ class EpisodeListAdapter() : RecyclerView.Adapter<EpisodeListAdapter.EpisodeVH>(
     inner class EpisodeVH(private val binding: LayoutEpisodeItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        @SuppressLint("SetTextI18n")
         fun bind(episode: Episode) {
             binding.apply {
                 binding.posterImage.loadBackDropSizeImage(url = episode.stillPath)
