@@ -6,6 +6,7 @@ import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
 import com.saiful.movie.databinding.FragmentMovieSearchBinding
+import com.saiful.shared.utils.AppConstants.SEARCHED_QUERY
 
 class MovieSearchFragment : BaseFragment<FragmentMovieSearchBinding>() {
     override fun layoutInflater(
@@ -20,9 +21,8 @@ class MovieSearchFragment : BaseFragment<FragmentMovieSearchBinding>() {
     override fun getViewModel(): BaseViewModel? = null
 
     override fun initOnCreateView() {
-        val data = arguments?.getString("data")
+        val data = arguments?.getString(SEARCHED_QUERY)
         bindingView.textView7.text = data
-        println(data)
     }
 
 }

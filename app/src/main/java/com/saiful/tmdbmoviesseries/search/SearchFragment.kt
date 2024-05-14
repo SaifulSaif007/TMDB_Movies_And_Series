@@ -2,7 +2,6 @@ package com.saiful.tmdbmoviesseries.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import com.google.android.material.tabs.TabLayoutMediator
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
@@ -13,6 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SearchFragment : BaseFragment<FragmentSearchBinding>() {
+
     override fun layoutInflater(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -40,6 +40,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
             }
         }.attach()
 
+        //first time
         bindingView.searchView.show()
 
         bindingView.apply {
@@ -51,10 +52,19 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
                 val newAdapter =
                     ViewPagerAdapter(childFragmentManager, lifecycle, searchBar.text.toString())
                 viewPager.adapter = newAdapter
-                (activity as MainActivity).toggleBottomBarVisibility(bindingView.searchView.isVisible)
+
                 true
+            }
+
+            searchView.editText.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) {
+                    (activity as MainActivity).toggleBottomBarVisibility(false)
+                } else {
+                    (activity as MainActivity).toggleBottomBarVisibility(true)
+                }
             }
         }
     }
+
 
 }
