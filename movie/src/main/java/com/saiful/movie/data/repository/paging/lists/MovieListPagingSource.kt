@@ -1,13 +1,13 @@
-package com.saiful.movie.data.repository.paging
+package com.saiful.movie.data.repository.paging.lists
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base.network.model.GenericResponse
-import com.saiful.shared.model.Movies
 import com.saiful.movie.model.MoviesResponse
+import com.saiful.shared.model.Movies
 
-class MoviePagingSource(private val apiCall: suspend (page:Int)-> GenericResponse<MoviesResponse>) : PagingSource<Int, Movies>() {
+class MovieListPagingSource(private val apiCall: suspend (page:Int)-> GenericResponse<MoviesResponse>) : PagingSource<Int, Movies>() {
 
     override fun getRefreshKey(state: PagingState<Int, Movies>): Int? {
         return state.anchorPosition
@@ -22,7 +22,7 @@ class MoviePagingSource(private val apiCall: suspend (page:Int)-> GenericRespons
                 createPage(response, pageCount)
             }
             else -> {
-                LoadResult.Error(Exception("No Movie found"))
+                LoadResult.Error(Exception("No movie found"))
             }
         }
     }

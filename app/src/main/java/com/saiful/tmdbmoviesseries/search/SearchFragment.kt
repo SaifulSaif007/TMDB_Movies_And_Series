@@ -9,6 +9,7 @@ import com.saiful.tmdbmoviesseries.MainActivity
 import com.saiful.tmdbmoviesseries.R
 import com.saiful.tmdbmoviesseries.databinding.FragmentSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @AndroidEntryPoint
 class SearchFragment : BaseFragment<FragmentSearchBinding>() {
@@ -24,6 +25,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
     override fun getViewModel(): BaseViewModel? = null
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun initOnCreateView() {
 
         val viewPager = bindingView.pager
@@ -32,6 +34,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
         val adapter = ViewPagerAdapter(childFragmentManager, lifecycle, searchedText)
         viewPager.adapter = adapter
+
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             when (position) {
                 0 -> tab.text = "Movie"

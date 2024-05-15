@@ -1,4 +1,4 @@
-package com.saiful.movie.data.repository.paging
+package com.saiful.movie.data.repository.paging.lists
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -17,7 +17,7 @@ class MovieListRepo
             maxSize = 100,
             enablePlaceholders = false
         ),
-        pagingSourceFactory = { MoviePagingSource(apiCall) }
+        pagingSourceFactory = { MovieListPagingSource(apiCall) }
     ).flow
 
 }

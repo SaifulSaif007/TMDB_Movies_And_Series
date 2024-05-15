@@ -27,6 +27,13 @@ class ViewPagerAdapter(
                 fragment
             }
 
+            1 -> {
+                val fragment = MovieSearchFragment()
+                fragment.arguments = bundle
+                fragment
+
+            }
+
             else -> {
                 val fragment = MovieSearchFragment()
                 fragment.arguments = bundle
