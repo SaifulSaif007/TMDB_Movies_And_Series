@@ -1,19 +1,18 @@
 package com.saiful.movie.view.search
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.saiful.base.util.ItemDecorator
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
 import com.saiful.movie.databinding.FragmentMovieSearchBinding
 import com.saiful.movie.view.adapter.MovieListLoadAdapter
-import com.saiful.movie.view.list.MovieListFragmentDirections
 import com.saiful.shared.utils.AppConstants.SEARCHED_QUERY
-import com.saiful.shared.utils.navigateSafe
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
@@ -58,6 +57,9 @@ class MovieSearchFragment : BaseFragment<FragmentMovieSearchBinding>() {
     }
 
     private fun movieItemClick(movieId: Int) {
-        findNavController().navigateSafe(MovieListFragmentDirections.actionListToDetails(movieId))
+        val bundle = Bundle()
+        bundle.putInt("movieId", movieId)
+        setFragmentResult("movieId", bundle)
+        // findNavController().navigateSafe(MovieSearchFragmentDirections.navigateToDetails(movieId))
     }
 }

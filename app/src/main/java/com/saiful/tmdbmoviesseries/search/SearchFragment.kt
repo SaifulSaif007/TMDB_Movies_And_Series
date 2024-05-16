@@ -1,7 +1,8 @@
 package com.saiful.tmdbmoviesseries.search
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
+import android.os.Bundle
+import android.util.Log
+import android.view.*
 import com.google.android.material.tabs.TabLayoutMediator
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
@@ -67,7 +68,16 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
                 }
             }
         }
+
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        childFragmentManager.setFragmentResultListener("movieId", this) { _, bundle ->
+            val movieId = bundle.getInt("movieId")
+            Log.d("SearchFragment", "movieId: $movieId")
+        }
+    }
 
 }
