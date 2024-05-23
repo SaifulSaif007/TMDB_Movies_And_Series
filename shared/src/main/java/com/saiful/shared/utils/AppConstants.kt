@@ -11,3 +11,13 @@ object AppConstants {
 
     const val SEARCHED_QUERY = "searched_query"
 }
+
+object RequestKeys {
+    const val MOVIE_REQUEST_KEY = "movie_request_key"
+    const val SERIES_REQUEST_KEY = "series_request_key"
+    const val PERSON_REQUEST_KEY = "person_request_key"
+}
+
+object BundleKeyS {
+    const val MOVIE_ID = "movie_id"
+}

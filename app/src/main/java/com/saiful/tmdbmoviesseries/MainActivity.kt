@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.searchFragment -> {
                     toggleAppBarLayoutVisibility(false)
                 }
+
                 else -> {
                     toggleAppBarLayoutVisibility(true)
                 }
@@ -65,9 +66,11 @@ class MainActivity : AppCompatActivity() {
             when (currentDestination) {
                 com.saiful.movie.R.id.movieDashboardFragment,
                 com.saiful.tvshows.R.id.tvShowsFragment,
-                com.saiful.person.R.id.personDashboardFragment -> {
+                com.saiful.person.R.id.personDashboardFragment,
+                R.id.searchFragment -> {
                     toggleBottomBarVisibility(true)
                 }
+
                 else -> {
                     toggleBottomBarVisibility(false)
                 }

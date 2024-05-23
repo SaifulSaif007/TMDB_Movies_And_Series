@@ -2,10 +2,13 @@ package com.saiful.movie.view.search
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import com.saiful.base.util.ItemDecorator
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
@@ -13,6 +16,8 @@ import com.saiful.movie.R
 import com.saiful.movie.databinding.FragmentMovieSearchBinding
 import com.saiful.movie.view.adapter.MovieListLoadAdapter
 import com.saiful.shared.utils.AppConstants.SEARCHED_QUERY
+import com.saiful.shared.utils.BundleKeyS.MOVIE_ID
+import com.saiful.shared.utils.RequestKeys.MOVIE_REQUEST_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
@@ -54,12 +59,18 @@ class MovieSearchFragment : BaseFragment<FragmentMovieSearchBinding>() {
             }
         }
 
+        movieAdapter.addLoadStateListener { loaderState ->
+            val isListEmpty =
+                loaderState.source.refresh is LoadState.NotLoading && movieAdapter.itemCount == 0
+
+            bindingView.emptyMovie.root.visibility = if (isListEmpty) VISIBLE else GONE
+        }
+
     }
 
     private fun movieItemClick(movieId: Int) {
         val bundle = Bundle()
-        bundle.putInt("movieId", movieId)
-        setFragmentResult("movieId", bundle)
-        // findNavController().navigateSafe(MovieSearchFragmentDirections.navigateToDetails(movieId))
+        bundle.putInt(MOVIE_ID, movieId)
+        setFragmentResult(MOVIE_REQUEST_KEY, bundle)
     }
 }

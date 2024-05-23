@@ -1,19 +1,26 @@
 package com.saiful.tmdbmoviesseries.search
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
+import com.saiful.base.util.navigation.MovieModuleNavigation
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
+import com.saiful.shared.utils.BundleKeyS.MOVIE_ID
+import com.saiful.shared.utils.RequestKeys.MOVIE_REQUEST_KEY
 import com.saiful.tmdbmoviesseries.MainActivity
 import com.saiful.tmdbmoviesseries.R
 import com.saiful.tmdbmoviesseries.databinding.FragmentSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SearchFragment : BaseFragment<FragmentSearchBinding>() {
+
+    @Inject
+    lateinit var movieModuleNavigation: MovieModuleNavigation
 
     override fun layoutInflater(
         inflater: LayoutInflater,
@@ -44,9 +51,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
             }
         }.attach()
 
-        //first time
-        bindingView.searchView.show()
-
         bindingView.apply {
             searchView.editText.setOnEditorActionListener { p0, _, _ ->
                 val textView = p0?.text.toString()
@@ -54,7 +58,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
                 searchBar.text = textView
                 searchedText = searchBar.text.toString()
                 val newAdapter =
-                    ViewPagerAdapter(childFragmentManager, lifecycle, searchBar.text.toString())
+                    ViewPagerAdapter(childFragmentManager, lifecycle, searchedText)
                 viewPager.adapter = newAdapter
 
                 true
@@ -74,9 +78,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        childFragmentManager.setFragmentResultListener("movieId", this) { _, bundle ->
-            val movieId = bundle.getInt("movieId")
-            Log.d("SearchFragment", "movieId: $movieId")
+        childFragmentManager.setFragmentResultListener(MOVIE_REQUEST_KEY, this) { _, bundle ->
+            val movieId = bundle.getInt(MOVIE_ID)
+            movieModuleNavigation.navigateMovieDetails(movieId, findNavController())
         }
     }
 
