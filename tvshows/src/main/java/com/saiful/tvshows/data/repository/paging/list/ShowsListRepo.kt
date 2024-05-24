@@ -1,9 +1,8 @@
-package com.saiful.tvshows.data.repository.paging
+package com.saiful.tvshows.data.repository.paging.list
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.saiful.base.network.model.GenericResponse
-import com.saiful.tvshows.data.api.TvShowsApiService
 import com.saiful.tvshows.model.TvShowsResponse
 import javax.inject.Inject
 import javax.inject.Singleton

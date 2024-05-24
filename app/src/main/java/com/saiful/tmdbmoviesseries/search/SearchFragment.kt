@@ -5,10 +5,13 @@ import android.view.*
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.saiful.base.util.navigation.MovieModuleNavigation
+import com.saiful.base.util.navigation.TvShowModuleNavigation
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.shared.utils.BundleKeyS.MOVIE_ID
+import com.saiful.shared.utils.BundleKeyS.SHOW_ID
 import com.saiful.shared.utils.RequestKeys.MOVIE_REQUEST_KEY
+import com.saiful.shared.utils.RequestKeys.SERIES_REQUEST_KEY
 import com.saiful.tmdbmoviesseries.MainActivity
 import com.saiful.tmdbmoviesseries.R
 import com.saiful.tmdbmoviesseries.databinding.FragmentSearchBinding
@@ -21,6 +24,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
     @Inject
     lateinit var movieModuleNavigation: MovieModuleNavigation
+
+    @Inject
+    lateinit var showModuleNavigation: TvShowModuleNavigation
 
     override fun layoutInflater(
         inflater: LayoutInflater,
@@ -82,6 +88,10 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
             val movieId = bundle.getInt(MOVIE_ID)
             movieModuleNavigation.navigateMovieDetails(movieId, findNavController())
         }
-    }
 
+        childFragmentManager.setFragmentResultListener(SERIES_REQUEST_KEY, this) { _, bundle ->
+            val showId = bundle.getInt(SHOW_ID)
+            showModuleNavigation.navigateToShowDetails(showId, findNavController())
+        }
+    }
 }

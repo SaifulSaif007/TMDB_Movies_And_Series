@@ -71,9 +71,8 @@ class MainActivity : AppCompatActivity() {
                     toggleBottomBarVisibility(true)
                 }
 
-                else -> {
-                    toggleBottomBarVisibility(false)
-                }
+                else -> toggleBottomBarVisibility(false)
+
             }
         }
 

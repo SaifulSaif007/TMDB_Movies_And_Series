@@ -1,4 +1,4 @@
-package com.saiful.tvshows.data.repository.paging
+package com.saiful.tvshows.data.repository.paging.list
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState

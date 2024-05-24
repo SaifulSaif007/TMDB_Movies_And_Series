@@ -7,6 +7,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.saiful.movie.view.search.MovieSearchFragment
 import com.saiful.shared.utils.AppConstants.SEARCHED_QUERY
+import com.saiful.tvshows.view.search.ShowsSearchFragment
 
 class ViewPagerAdapter(
     fragmentManager: FragmentManager,
@@ -28,7 +29,7 @@ class ViewPagerAdapter(
             }
 
             1 -> {
-                val fragment = MovieSearchFragment()
+                val fragment = ShowsSearchFragment()
                 fragment.arguments = bundle
                 fragment
 

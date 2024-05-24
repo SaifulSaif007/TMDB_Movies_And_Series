@@ -1,13 +1,8 @@
 package com.saiful.tvshows.data.api
 
 import com.saiful.base.network.model.GenericResponse
-import com.saiful.tvshows.model.SeasonDetails
-import com.saiful.tvshows.model.TvShowCastResponse
-import com.saiful.tvshows.model.TvShowDetails
-import com.saiful.tvshows.model.TvShowsResponse
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import com.saiful.tvshows.model.*
+import retrofit2.http.*
 
 interface TvShowsApiService {
 
@@ -57,5 +52,11 @@ interface TvShowsApiService {
         @Path("show_id") id: Int,
         @Path("season_no") no: Int
     ): GenericResponse<SeasonDetails>
+
+    @GET("search/tv")
+    suspend fun searchShow(
+        @Query("query") query: String,
+        @Query("page") page: Int = 1
+    ): GenericResponse<TvShowsResponse>
 
 }
