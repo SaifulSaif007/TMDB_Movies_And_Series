@@ -6,7 +6,7 @@ import com.saiful.base.network.model.BaseResponse
 import com.saiful.shared.model.TvShows
 import com.saiful.tvshows.data.api.TvShowsApiService
 
-class ShowSearchPagingSource(private val apiService: TvShowsApiService, private val query: String) :
+class SearchPagingSource(private val apiService: TvShowsApiService, private val query: String) :
     PagingSource<Int, TvShows>() {
     override fun getRefreshKey(state: PagingState<Int, TvShows>): Int? {
         return state.anchorPosition

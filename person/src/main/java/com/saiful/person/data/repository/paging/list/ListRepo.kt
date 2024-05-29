@@ -1,22 +1,22 @@
-package com.saiful.tvshows.data.repository.paging.list
+package com.saiful.person.data.repository.paging.list
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.saiful.base.network.model.GenericResponse
-import com.saiful.tvshows.model.TvShowsResponse
+import com.saiful.person.model.PersonResponse
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ShowsListRepo
+class ListRepo
 @Inject constructor() {
 
-    fun getShowsPager(apiCall: suspend (page: Int) -> GenericResponse<TvShowsResponse>) = Pager(
+    fun getPersonPager(apiCall: suspend (page: Int) -> GenericResponse<PersonResponse>) = Pager(
         config = PagingConfig(
             pageSize = 20,
             maxSize = 100,
             enablePlaceholders = false
         ),
-        pagingSourceFactory = { ShowsPagingSource(apiCall) }
+        pagingSourceFactory = { ListPagingSource(apiCall) }
     ).flow
 }

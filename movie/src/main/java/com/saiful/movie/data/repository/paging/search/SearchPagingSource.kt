@@ -6,7 +6,7 @@ import com.saiful.base.network.model.BaseResponse
 import com.saiful.movie.data.api.MovieApiService
 import com.saiful.shared.model.Movies
 
-class MovieSearchPagingSource(private val api: MovieApiService, private val query: String) :
+class SearchPagingSource(private val api: MovieApiService, private val query: String) :
     PagingSource<Int, Movies>() {
     override fun getRefreshKey(state: PagingState<Int, Movies>): Int? {
         return state.anchorPosition

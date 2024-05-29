@@ -7,7 +7,7 @@ import com.saiful.base.network.model.GenericResponse
 import com.saiful.movie.model.MoviesResponse
 import com.saiful.shared.model.Movies
 
-class MovieListPagingSource(private val apiCall: suspend (page:Int)-> GenericResponse<MoviesResponse>) : PagingSource<Int, Movies>() {
+class ListPagingSource(private val apiCall: suspend (page:Int)-> GenericResponse<MoviesResponse>) : PagingSource<Int, Movies>() {
 
     override fun getRefreshKey(state: PagingState<Int, Movies>): Int? {
         return state.anchorPosition

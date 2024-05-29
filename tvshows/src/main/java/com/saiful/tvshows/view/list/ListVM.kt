@@ -6,7 +6,7 @@ import androidx.paging.cachedIn
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.shared.model.TvShows
 import com.saiful.tvshows.data.api.TvShowsApiService
-import com.saiful.tvshows.data.repository.paging.list.ShowsListRepo
+import com.saiful.tvshows.data.repository.paging.list.ListRepo
 import com.saiful.tvshows.model.TvShowsCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ListVM @Inject constructor(
-    private val repo: ShowsListRepo,
+    private val repo: ListRepo,
     private val apiService: TvShowsApiService
 ) : BaseViewModel() {
 

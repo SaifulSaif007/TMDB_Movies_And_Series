@@ -7,12 +7,12 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ShowSearchRepo @Inject constructor(private val apiService: TvShowsApiService) {
+class SearchRepo @Inject constructor(private val apiService: TvShowsApiService) {
 
     fun searchShows(query: String) =
         Pager(
             config = PagingConfig(pageSize = 20, maxSize = 100, enablePlaceholders = false),
-            pagingSourceFactory = { ShowSearchPagingSource(apiService, query) }
+            pagingSourceFactory = { SearchPagingSource(apiService, query) }
         ).flow
 
 }

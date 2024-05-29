@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.view.*
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
-import com.saiful.base.util.navigation.MovieModuleNavigation
-import com.saiful.base.util.navigation.TvShowModuleNavigation
+import com.saiful.base.util.navigation.*
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.shared.utils.BundleKeyS.MOVIE_ID
+import com.saiful.shared.utils.BundleKeyS.PERSON_ID
 import com.saiful.shared.utils.BundleKeyS.SHOW_ID
 import com.saiful.shared.utils.RequestKeys.MOVIE_REQUEST_KEY
+import com.saiful.shared.utils.RequestKeys.PERSON_REQUEST_KEY
 import com.saiful.shared.utils.RequestKeys.SERIES_REQUEST_KEY
 import com.saiful.tmdbmoviesseries.MainActivity
 import com.saiful.tmdbmoviesseries.R
@@ -27,6 +28,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
     @Inject
     lateinit var showModuleNavigation: TvShowModuleNavigation
+
+    @Inject
+    lateinit var personModuleNavigation: PersonModuleNavigation
 
     override fun layoutInflater(
         inflater: LayoutInflater,
@@ -59,14 +63,17 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
         bindingView.apply {
             searchView.editText.setOnEditorActionListener { p0, _, _ ->
-                val textView = p0?.text.toString()
+                val inputText = p0?.text.toString()
                 searchView.hide()
-                searchBar.text = textView
-                searchedText = searchBar.text.toString()
-                val newAdapter =
-                    ViewPagerAdapter(childFragmentManager, lifecycle, searchedText)
-                viewPager.adapter = newAdapter
+                searchBar.text = inputText
 
+                if (inputText != searchedText) {
+                    searchedText = searchBar.text.toString()
+
+                    val newAdapter =
+                        ViewPagerAdapter(childFragmentManager, lifecycle, searchedText)
+                    viewPager.adapter = newAdapter
+                }
                 true
             }
 
@@ -84,14 +91,21 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val navController = findNavController()
+
         childFragmentManager.setFragmentResultListener(MOVIE_REQUEST_KEY, this) { _, bundle ->
             val movieId = bundle.getInt(MOVIE_ID)
-            movieModuleNavigation.navigateMovieDetails(movieId, findNavController())
+            movieModuleNavigation.navigateMovieDetails(movieId, navController)
         }
 
         childFragmentManager.setFragmentResultListener(SERIES_REQUEST_KEY, this) { _, bundle ->
             val showId = bundle.getInt(SHOW_ID)
-            showModuleNavigation.navigateToShowDetails(showId, findNavController())
+            showModuleNavigation.navigateToShowDetails(showId, navController)
+        }
+
+        childFragmentManager.setFragmentResultListener(PERSON_REQUEST_KEY, this) { _, bundle ->
+            val personId = bundle.getInt(PERSON_ID)
+            personModuleNavigation.navigateToPersonDetails(personId, navController)
         }
     }
 }

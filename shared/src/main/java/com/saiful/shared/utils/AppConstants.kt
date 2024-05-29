@@ -21,4 +21,5 @@ object RequestKeys {
 object BundleKeyS {
     const val MOVIE_ID = "movie_id"
     const val SHOW_ID = "show_id"
+    const val PERSON_ID = "person_id"
 }

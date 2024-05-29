@@ -8,7 +8,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class MovieListRepo
+class ListRepo
 @Inject constructor() {
 
     fun getMoviePager(apiCall: suspend (page:Int) -> GenericResponse<MoviesResponse>) = Pager(
@@ -17,7 +17,7 @@ class MovieListRepo
             maxSize = 100,
             enablePlaceholders = false
         ),
-        pagingSourceFactory = { MovieListPagingSource(apiCall) }
+        pagingSourceFactory = { ListPagingSource(apiCall) }
     ).flow
 
 }
