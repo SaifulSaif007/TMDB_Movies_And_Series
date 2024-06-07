@@ -2,6 +2,7 @@ package com.saiful.tmdbmoviesseries.search
 
 import android.os.Bundle
 import android.view.*
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.saiful.base.util.navigation.*
@@ -13,6 +14,7 @@ import com.saiful.shared.utils.BundleKeyS.SHOW_ID
 import com.saiful.shared.utils.RequestKeys.MOVIE_REQUEST_KEY
 import com.saiful.shared.utils.RequestKeys.PERSON_REQUEST_KEY
 import com.saiful.shared.utils.RequestKeys.SERIES_REQUEST_KEY
+import com.saiful.shared.view.SharedSearchVM
 import com.saiful.tmdbmoviesseries.MainActivity
 import com.saiful.tmdbmoviesseries.R
 import com.saiful.tmdbmoviesseries.databinding.FragmentSearchBinding
@@ -32,6 +34,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     @Inject
     lateinit var personModuleNavigation: PersonModuleNavigation
 
+    private val viewmodel: SharedSearchVM by activityViewModels()
+
     override fun layoutInflater(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -41,17 +45,17 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
     override fun layoutId(): Int = R.layout.fragment_search
 
-    override fun getViewModel(): BaseViewModel? = null
+    override fun getViewModel(): BaseViewModel = viewmodel
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun initOnCreateView() {
 
         val viewPager = bindingView.pager
         val tabLayout = bindingView.tabLayout
-        var searchedText = ""
 
-        val adapter = ViewPagerAdapter(childFragmentManager, lifecycle, searchedText)
+        val adapter = ViewPagerAdapter(childFragmentManager, lifecycle)
         viewPager.adapter = adapter
+        viewPager.offscreenPageLimit = 3
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             when (position) {
@@ -66,14 +70,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
                 val inputText = p0?.text.toString()
                 searchView.hide()
                 searchBar.text = inputText
-
-                if (inputText != searchedText) {
-                    searchedText = searchBar.text.toString()
-
-                    val newAdapter =
-                        ViewPagerAdapter(childFragmentManager, lifecycle, searchedText)
-                    viewPager.adapter = newAdapter
-                }
+                viewmodel.updateSearchQuery(inputText)
                 true
             }
 

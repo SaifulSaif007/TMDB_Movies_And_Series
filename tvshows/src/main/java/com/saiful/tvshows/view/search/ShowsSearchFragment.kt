@@ -5,21 +5,20 @@ import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.*
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import com.saiful.base.util.ItemDecorator
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
-import com.saiful.shared.utils.AppConstants
 import com.saiful.shared.utils.BundleKeyS.SHOW_ID
 import com.saiful.shared.utils.RequestKeys.SERIES_REQUEST_KEY
+import com.saiful.shared.view.SharedSearchVM
 import com.saiful.tvshows.R
 import com.saiful.tvshows.databinding.FragmentShowsSearchBinding
 import com.saiful.tvshows.view.adapter.ShowsListLoadAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -29,6 +28,7 @@ class ShowsSearchFragment : BaseFragment<FragmentShowsSearchBinding>() {
     lateinit var itemDecorator: ItemDecorator
 
     private val viewModel: SearchVM by viewModels()
+    private val sharedVM: SharedSearchVM by activityViewModels()
     private val showAdapter = ShowsListLoadAdapter(::showsItemClick)
 
     override fun layoutInflater(
@@ -43,9 +43,6 @@ class ShowsSearchFragment : BaseFragment<FragmentShowsSearchBinding>() {
     override fun getViewModel(): BaseViewModel? = null
 
     override fun initOnCreateView() {
-        val data = arguments?.getString(AppConstants.SEARCHED_QUERY) ?: ""
-        viewModel.searchShow(data)
-
         bindingView.apply {
             showsListRecycler.apply {
                 setHasFixedSize(true)
@@ -55,8 +52,14 @@ class ShowsSearchFragment : BaseFragment<FragmentShowsSearchBinding>() {
         }
 
         lifecycleScope.launchWhenStarted {
-            viewModel.showsList.collect {
+            viewModel.showsList.collectLatest {
                 showAdapter.submitData(it)
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            sharedVM.searchedQuery.collectLatest { query ->
+                viewModel.searchShow(query)
             }
         }
 

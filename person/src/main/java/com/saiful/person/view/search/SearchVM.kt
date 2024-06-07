@@ -1,21 +1,38 @@
 package com.saiful.person.view.search
 
-import androidx.paging.PagingData
+import androidx.lifecycle.viewModelScope
+import androidx.paging.*
 import com.saiful.base.viewmodel.BaseViewModel
-import com.saiful.person.data.repository.paging.search.SearchRepo
-import com.saiful.person.model.Person
+import com.saiful.person.data.api.PersonApiService
+import com.saiful.person.data.repository.paging.search.SearchPagingSource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class SearchVM @Inject constructor(
-    private val searchRepo: SearchRepo
+    private val apiService: PersonApiService,
 ) : BaseViewModel() {
 
-    lateinit var personList: Flow<PagingData<Person>>
+    private var searchQuery = MutableStateFlow("")
+
+    var personList = searchQuery.flatMapLatest { query ->
+        Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                maxSize = 100,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { SearchPagingSource(apiService, query) }
+        ).flow
+    }.cachedIn(viewModelScope)
 
     fun searchPersons(query: String) {
-        personList = searchRepo.personSearchPager(query)
+        if (query.isNotBlank() && query != searchQuery.value) {
+            searchQuery.value = query
+        }
     }
 }

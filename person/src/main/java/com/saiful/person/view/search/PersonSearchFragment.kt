@@ -2,8 +2,7 @@ package com.saiful.person.view.search
 
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.*
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import com.saiful.base.util.ItemDecorator
@@ -12,17 +11,18 @@ import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.person.R
 import com.saiful.person.databinding.FragmentPersonSearchBinding
 import com.saiful.person.view.adapter.PersonListAdapter
-import com.saiful.shared.utils.AppConstants
 import com.saiful.shared.utils.BundleKeyS.PERSON_ID
 import com.saiful.shared.utils.RequestKeys.PERSON_REQUEST_KEY
+import com.saiful.shared.view.SharedSearchVM
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class PersonSearchFragment : BaseFragment<FragmentPersonSearchBinding>() {
 
     private val viewModel: SearchVM by viewModels()
+    private val sharedVM: SharedSearchVM by activityViewModels()
     private val personAdapter = PersonListAdapter(::personItemClick)
 
     @Inject
@@ -40,10 +40,6 @@ class PersonSearchFragment : BaseFragment<FragmentPersonSearchBinding>() {
     override fun getViewModel(): BaseViewModel = viewModel
 
     override fun initOnCreateView() {
-
-        val data = arguments?.getString(AppConstants.SEARCHED_QUERY) ?: ""
-        viewModel.searchPersons(data)
-
         bindingView.apply {
             personListRecycler.apply {
                 adapter = personAdapter
@@ -52,8 +48,14 @@ class PersonSearchFragment : BaseFragment<FragmentPersonSearchBinding>() {
         }
 
         lifecycleScope.launchWhenStarted {
-            viewModel.personList.collect {
+            viewModel.personList.collectLatest {
                 personAdapter.submitData(it)
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            sharedVM.searchedQuery.collectLatest { query ->
+                viewModel.searchPersons(query)
             }
         }
 
@@ -70,5 +72,10 @@ class PersonSearchFragment : BaseFragment<FragmentPersonSearchBinding>() {
         val bundle = Bundle()
         bundle.putInt(PERSON_ID, personId)
         setFragmentResult(PERSON_REQUEST_KEY, bundle)
+    }
+
+    override fun onDestroy() {
+        println("search -> person fragment destroyed")
+        super.onDestroy()
     }
 }

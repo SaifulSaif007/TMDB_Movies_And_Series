@@ -5,8 +5,7 @@ import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.*
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import com.saiful.base.util.ItemDecorator
@@ -15,11 +14,11 @@ import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
 import com.saiful.movie.databinding.FragmentMovieSearchBinding
 import com.saiful.movie.view.adapter.MovieListLoadAdapter
-import com.saiful.shared.utils.AppConstants.SEARCHED_QUERY
 import com.saiful.shared.utils.BundleKeyS.MOVIE_ID
 import com.saiful.shared.utils.RequestKeys.MOVIE_REQUEST_KEY
+import com.saiful.shared.view.SharedSearchVM
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -28,6 +27,7 @@ class MovieSearchFragment : BaseFragment<FragmentMovieSearchBinding>() {
     @Inject
     lateinit var itemDecorator: ItemDecorator
     private val viewModel: SearchVM by viewModels()
+    private val sharedVM: SharedSearchVM by activityViewModels()
     private val movieAdapter = MovieListLoadAdapter(::movieItemClick)
 
     override fun layoutInflater(
@@ -42,8 +42,6 @@ class MovieSearchFragment : BaseFragment<FragmentMovieSearchBinding>() {
     override fun getViewModel(): BaseViewModel = viewModel
 
     override fun initOnCreateView() {
-        val data = arguments?.getString(SEARCHED_QUERY) ?: ""
-        viewModel.searchMovie(data)
 
         bindingView.apply {
             movieListRecycler.apply {
@@ -54,8 +52,14 @@ class MovieSearchFragment : BaseFragment<FragmentMovieSearchBinding>() {
         }
 
         lifecycleScope.launchWhenStarted {
-            viewModel.movieList.collect {
+            viewModel.movieList.collectLatest {
                 movieAdapter.submitData(it)
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            sharedVM.searchedQuery.collectLatest { query ->
+                viewModel.searchMovie(query)
             }
         }
 
