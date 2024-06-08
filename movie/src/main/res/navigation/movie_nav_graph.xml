@@ -47,6 +47,15 @@
             app:destination="@id/movie_collection_nav_graph" />
     </fragment>
 
+    <fragment
+        android:id="@+id/movieSearchFragment"
+        android:name="com.saiful.movie.view.search.MovieSearchFragment"
+        android:label="MovieSearchFragment"
+        tools:layout="@layout/fragment_movie_search">
+        <action
+            android:id="@+id/navigate_to_details"
+            app:destination="@id/movieDetailsFragment" />
+    </fragment>
 
     <include app:graph="@navigation/movie_collection_nav_graph" />
 

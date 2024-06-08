@@ -3,7 +3,6 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-    id 'androidx.navigation.safeargs'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
     id 'jacoco'
@@ -55,6 +54,7 @@ dependencies {
     implementation project(path: ':movie')
     implementation project(path: ':tvshows')
     implementation project(path: ':person')
+    implementation project(path: ':shared')
     testImplementation project(path: ':base-unit-test')
 
     implementation libs.androidx.ktx

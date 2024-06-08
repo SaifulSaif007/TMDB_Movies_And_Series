@@ -1,13 +1,12 @@
-package com.saiful.person.data.repository.paging
+package com.saiful.person.data.repository.paging.search
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.saiful.base.network.model.BaseResponse
-import com.saiful.base.network.model.GenericResponse
+import com.saiful.person.data.api.PersonApiService
 import com.saiful.person.model.Person
-import com.saiful.person.model.PersonResponse
 
-class PersonPagingSource(private val apiCall: suspend (page: Int) -> GenericResponse<PersonResponse>) :
+class SearchPagingSource(private val apiService: PersonApiService, private val query: String) :
     PagingSource<Int, Person>() {
 
     override fun getRefreshKey(state: PagingState<Int, Person>): Int? {
@@ -17,14 +16,13 @@ class PersonPagingSource(private val apiCall: suspend (page: Int) -> GenericResp
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Person> {
         val pageCount = params.key ?: START_PAGE_INDEX
 
-        return when (val data = apiCall.invoke(pageCount)) {
+        return when (val data = apiService.searchPerson(query, pageCount)) {
             is BaseResponse.Success -> {
                 val response = data.body.results
                 createPage(response, pageCount)
             }
-            else -> {
-                LoadResult.Error(Exception("No Person found"))
-            }
+
+            else -> LoadResult.Error(Exception("No person found"))
         }
     }
 

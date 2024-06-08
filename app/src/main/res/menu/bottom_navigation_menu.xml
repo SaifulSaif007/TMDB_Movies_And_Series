@@ -14,4 +14,8 @@
         android:icon="@drawable/ic_celeb_icon"
         android:title="celebrity" />
 
+    <item
+        android:id="@+id/searchFragment"
+        android:icon="@drawable/ic_search"
+        android:title="search" />/>
 </menu>

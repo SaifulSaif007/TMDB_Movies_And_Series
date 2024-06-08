@@ -6,9 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.ui.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.saiful.tmdbmoviesseries.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,9 +35,10 @@ class MainActivity : AppCompatActivity() {
 
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                com.saiful.movie.R.id.movieDashboardFragment,
-                com.saiful.tvshows.R.id.tvShowsFragment,
-                com.saiful.person.R.id.personDashboardFragment
+                com.saiful.movie.R.id.movie_nav_graph,
+                com.saiful.tvshows.R.id.tvshows_nav_graph,
+                com.saiful.person.R.id.person_nav_graph,
+                R.id.searchFragment
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -54,9 +53,11 @@ class MainActivity : AppCompatActivity() {
                 com.saiful.movie.R.id.movieDetailsFragment,
                 com.saiful.movie.R.id.collectionFragment,
                 com.saiful.tvshows.R.id.tvShowsDetailsFragment,
-                com.saiful.tvshows.R.id.showSeasonFragment -> {
+                com.saiful.tvshows.R.id.showSeasonFragment,
+                R.id.searchFragment -> {
                     toggleAppBarLayoutVisibility(false)
                 }
+
                 else -> {
                     toggleAppBarLayoutVisibility(true)
                 }
@@ -65,12 +66,13 @@ class MainActivity : AppCompatActivity() {
             when (currentDestination) {
                 com.saiful.movie.R.id.movieDashboardFragment,
                 com.saiful.tvshows.R.id.tvShowsFragment,
-                com.saiful.person.R.id.personDashboardFragment -> {
+                com.saiful.person.R.id.personDashboardFragment,
+                R.id.searchFragment -> {
                     toggleBottomBarVisibility(true)
                 }
-                else -> {
-                    toggleBottomBarVisibility(false)
-                }
+
+                else -> toggleBottomBarVisibility(false)
+
             }
         }
 
@@ -80,7 +82,7 @@ class MainActivity : AppCompatActivity() {
         binding.appBarLayout.visibility = if (visible) View.VISIBLE else View.GONE
     }
 
-    private fun toggleBottomBarVisibility(visible: Boolean) {
+    fun toggleBottomBarVisibility(visible: Boolean) {
         binding.navBarContainer.visibility = if (visible) View.VISIBLE else View.GONE
     }
 

@@ -8,7 +8,7 @@ import com.saiful.shared.R
 
 fun ImageView.loadBackDropSizeImage(url: String?, drawable: Int = R.drawable.no_image_icon) {
     Glide.with(this.context)
-        .load(AppConstants.imageBaseUrl + AppConstants.backdropSize + url)
+        .load(AppConstants.IMAGE_BASE_URL + AppConstants.BACKDROP_SIZE + url)
         .transition(DrawableTransitionOptions.withCrossFade(500))
         .error(drawable)
         .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -18,7 +18,7 @@ fun ImageView.loadBackDropSizeImage(url: String?, drawable: Int = R.drawable.no_
 
 fun ImageView.loadPosterSizeImage(url: String?, drawable: Int = R.drawable.no_image_icon) {
     Glide.with(this.context)
-        .load(AppConstants.imageBaseUrl + AppConstants.posterSize + url)
+        .load(AppConstants.IMAGE_BASE_URL + AppConstants.POSTER_SIZE + url)
         .transition(DrawableTransitionOptions.withCrossFade(500))
         .error(drawable)
         .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -28,7 +28,7 @@ fun ImageView.loadPosterSizeImage(url: String?, drawable: Int = R.drawable.no_im
 
 fun ImageView.loadYoutubeImage(key: String?) {
     Glide.with(this.context)
-        .load(AppConstants.youtubeImageUrlPrefix + key + AppConstants.youtubeImageUrlSuffix)
+        .load(AppConstants.YOUTUBE_IMAGE_URL_PREFIX + key + AppConstants.YOUTUBE_IMAGE_URL_SUFFIX)
         .transition(DrawableTransitionOptions.withCrossFade(500))
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .error(drawable)

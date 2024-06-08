@@ -4,9 +4,7 @@ import com.saiful.base.network.model.BaseResponse
 import com.saiful.base.network.model.GenericResponse
 import com.saiful.base.viewmodel.BaseOpsViewModel
 import com.saiful.movie.data.repository.MovieDetailsRepo
-import com.saiful.movie.model.MovieCastResponse
-import com.saiful.movie.model.MovieDetailsResponse
-import com.saiful.movie.model.MoviesResponse
+import com.saiful.movie.model.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
@@ -38,7 +36,7 @@ class MovieDetailsVM
     override fun onSuccessResponse(operationTag: String, data: BaseResponse.Success<Any>) {
         when (operationTag) {
             movie_details -> {
-                when (data as GenericResponse<*>) {
+                when (data) {
                     is BaseResponse.Success -> {
                         movieDetailsResponse.value = data.body as MovieDetailsResponse
                     }
@@ -46,7 +44,7 @@ class MovieDetailsVM
                 }
             }
             movie_cast -> {
-                when (data as GenericResponse<*>) {
+                when (data) {
                     is BaseResponse.Success -> {
                         movieCast.value = data.body as MovieCastResponse
                     }
@@ -62,7 +60,7 @@ class MovieDetailsVM
                 }
             }
             movie_similar -> {
-                when (data as GenericResponse<*>) {
+                when (data) {
                     is BaseResponse.Success -> {
                         similar.value = data.body as MoviesResponse
                     }

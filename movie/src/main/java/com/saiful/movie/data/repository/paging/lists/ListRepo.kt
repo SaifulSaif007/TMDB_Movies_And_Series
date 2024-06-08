@@ -1,4 +1,4 @@
-package com.saiful.movie.data.repository.paging
+package com.saiful.movie.data.repository.paging.lists
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -8,7 +8,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class MovieListRepo
+class ListRepo
 @Inject constructor() {
 
     fun getMoviePager(apiCall: suspend (page:Int) -> GenericResponse<MoviesResponse>) = Pager(
@@ -17,7 +17,7 @@ class MovieListRepo
             maxSize = 100,
             enablePlaceholders = false
         ),
-        pagingSourceFactory = { MoviePagingSource(apiCall) }
+        pagingSourceFactory = { ListPagingSource(apiCall) }
     ).flow
 
 }

@@ -19,7 +19,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/image1" />
+            tools:src="@drawable/gradient" />
 
         <TextView
             android:id="@+id/person_name"
