@@ -14,4 +14,6 @@
             app:argType="integer" />
     </fragment>
 
+    <include app:graph="@navigation/image_gallery_nav_graph" />
+
 </navigation>

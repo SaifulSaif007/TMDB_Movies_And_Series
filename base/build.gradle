@@ -46,7 +46,7 @@ android {
 dependencies {
 
     implementation libs.retrofit
-    api libs.moshi
+    api libs.moshi.converter
     implementation libs.logging.interceptor
 
     implementation libs.bundles.androidxLifecycle

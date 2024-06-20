@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
                 com.saiful.movie.R.id.movie_nav_graph,
                 com.saiful.tvshows.R.id.tvshows_nav_graph,
                 com.saiful.person.R.id.person_nav_graph,
+                com.saiful.shared.R.id.galleryFragment,
                 R.id.searchFragment
             )
         )
@@ -54,6 +55,7 @@ class MainActivity : AppCompatActivity() {
                 com.saiful.movie.R.id.collectionFragment,
                 com.saiful.tvshows.R.id.tvShowsDetailsFragment,
                 com.saiful.tvshows.R.id.showSeasonFragment,
+                com.saiful.shared.R.id.galleryFragment,
                 R.id.searchFragment -> {
                     toggleAppBarLayoutVisibility(false)
                 }

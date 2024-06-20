@@ -2,6 +2,7 @@ package com.saiful.person.view.dashboard
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -101,10 +102,8 @@ class PersonDashboardFragment : BaseFragment<FragmentPersonDashboardBinding>() {
     }
 
     private fun onClickPerson(personId: Int) {
-        findNavController().navigateSafe(
-            PersonDashboardFragmentDirections.actionPersonDashboardFragmentToDetailsFragment(
-                personId
-            )
+        findNavController().navigate(
+            R.id.person_details_nav_graph, bundleOf("person_id" to personId)
         )
     }
 

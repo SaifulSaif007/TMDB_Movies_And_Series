@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -14,7 +15,6 @@ import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.person.R
 import com.saiful.person.databinding.FragmentPersonListBinding
 import com.saiful.person.view.adapter.PersonListAdapter
-import com.saiful.shared.utils.navigateSafe
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
@@ -63,10 +63,6 @@ class PersonListFragment : BaseFragment<FragmentPersonListBinding>() {
     }
 
     private fun personItemClick(personId: Int) {
-        findNavController().navigateSafe(
-            PersonListFragmentDirections.actionPersonListFragmentToDetailsFragment(
-                personId
-            )
-        )
+        findNavController().navigate(R.id.person_details_nav_graph, bundleOf("person_id" to personId))
     }
 }
