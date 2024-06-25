@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.saiful.shared.databinding.LayoutGalleryItemBinding
 import com.saiful.shared.model.Image
-import com.saiful.shared.utils.loadBackDropSizeImage
+import com.saiful.shared.utils.loadOriginalSizeImage
 
 class GalleryPagerAdapter(private val items: List<Image>) :
     RecyclerView.Adapter<GalleryPagerAdapter.PagerViewHolder>() {
@@ -30,7 +30,7 @@ class GalleryPagerAdapter(private val items: List<Image>) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: String) {
-            binding.personImage.loadBackDropSizeImage(item)
+            binding.personImage.loadOriginalSizeImage(item)
         }
     }
 }

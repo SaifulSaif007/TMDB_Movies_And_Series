@@ -26,6 +26,16 @@ fun ImageView.loadPosterSizeImage(url: String?, drawable: Int = R.drawable.no_im
 
 }
 
+fun ImageView.loadOriginalSizeImage(url: String?, drawable: Int = R.drawable.no_image_icon) {
+    Glide.with(this.context)
+        .load(AppConstants.IMAGE_BASE_URL + AppConstants.ORIGINAL_SIZE + url)
+        .transition(DrawableTransitionOptions.withCrossFade(500))
+        .error(drawable)
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .into(this)
+
+}
+
 fun ImageView.loadYoutubeImage(key: String?) {
     Glide.with(this.context)
         .load(AppConstants.YOUTUBE_IMAGE_URL_PREFIX + key + AppConstants.YOUTUBE_IMAGE_URL_SUFFIX)
