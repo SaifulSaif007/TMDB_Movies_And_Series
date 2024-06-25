@@ -23,6 +23,8 @@ mockito = "5.2.0"
 mockito-kotlin = "1.5.0"
 jacoco = "0.8.8"
 coroutine-test = "1.7.1"
+kotlin-reflect = "1.5.20"
+moshi = "1.12.0"
 
 [libraries]
 
@@ -33,8 +35,12 @@ google-material = { group = "com.google.android.material", name = "material", ve
 androidx-constainlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constainLayout" }
 
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
+moshi-converter = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
+moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "moshi" }
+moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
+moshi-adpter = { group = "com.squareup.moshi", name = "moshi-adapters", version.ref = "moshi" }
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "logging-interceptor" }
+kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin-reflect" }
 
 androidx-viewpager = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager" }
 bumtech-glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }

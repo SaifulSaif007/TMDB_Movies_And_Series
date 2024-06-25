@@ -2,14 +2,13 @@ package com.saiful.person.view.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.saiful.person.databinding.LayoutPersonCommonItemBinding
-import com.saiful.person.model.Image
+import com.saiful.shared.model.Image
 import com.saiful.shared.utils.loadPosterSizeImage
 
-class PersonImageAdapter : RecyclerView.Adapter<PersonImageAdapter.PersonImageViewHolder>() {
+class PersonImageAdapter(private val listener: (Int, List<Image>) -> Unit) :
+    RecyclerView.Adapter<PersonImageAdapter.PersonImageViewHolder>() {
 
     private val differ = AsyncListDiffer(this, DIFF_UTIL)
 
@@ -37,7 +36,13 @@ class PersonImageAdapter : RecyclerView.Adapter<PersonImageAdapter.PersonImageVi
         RecyclerView.ViewHolder(binding.root) {
 
         init {
-            //todo -> onclick
+            binding.root.setOnClickListener {
+                val position = bindingAdapterPosition
+
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.invoke(position, differ.currentList)
+                }
+            }
         }
 
         fun bind(image: Image) {

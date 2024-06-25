@@ -3,6 +3,7 @@ package com.saiful.person.view.details
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -14,11 +15,9 @@ import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.person.R
 import com.saiful.person.databinding.FragmentPersonDetailsBinding
-import com.saiful.person.view.adapter.PersonImageAdapter
-import com.saiful.person.view.adapter.PersonMovieAdapter
-import com.saiful.person.view.adapter.PersonShowsAdapter
-import com.saiful.shared.utils.formatDate
-import com.saiful.shared.utils.loadPosterSizeImage
+import com.saiful.person.view.adapter.*
+import com.saiful.shared.model.Image
+import com.saiful.shared.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
@@ -28,7 +27,7 @@ class DetailsFragment : BaseFragment<FragmentPersonDetailsBinding>() {
 
     private val args: DetailsFragmentArgs by navArgs()
     private val viewModel: PersonDetailsVM by viewModels()
-    private val imageAdapter = PersonImageAdapter()
+    private val imageAdapter = PersonImageAdapter(::imageItemClick)
     private val movieAdapter = PersonMovieAdapter(::movieItemClick)
     private val showsAdapter = PersonShowsAdapter(::showsItemClick)
 
@@ -111,5 +110,15 @@ class DetailsFragment : BaseFragment<FragmentPersonDetailsBinding>() {
 
     private fun showsItemClick(showsId: Int) {
         tvShowModuleNavigation.navigateToShowDetails(showsId, findNavController())
+    }
+
+    private fun imageItemClick(position: Int, images: List<Image>) {
+        findNavController().navigate(
+            com.saiful.shared.R.id.image_gallery_nav_graph,
+            bundleOf(
+                "images" to JsonConverter.toJsonList(images),
+                "start_index" to position
+            )
+        )
     }
 }
