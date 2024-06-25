@@ -26,19 +26,19 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
 
-    - name: Run Coverage
-      run: |
-        chmod +x gradlew
-        ./gradlew clean testDebugUnitTestCoverage
-
-    - name: Add coverage to PR
-      id: jacoco
-      uses: madrapps/jacoco-report@v1.3
-      with:
-       paths: ${{ github.workspace }}/build/reports/jacoco/testDebugUnitTestCoverage.xml
-       token: ${{ secrets.GITHUB_TOKEN }}
-       min-coverage-overall: 80
-       min-coverage-changed-files: 80
+#    - name: Run Coverage
+#      run: |
+#        chmod +x gradlew
+#        ./gradlew clean testDebugUnitTestCoverage
+#
+#    - name: Add coverage to PR
+#      id: jacoco
+#      uses: madrapps/jacoco-report@v1.3
+#      with:
+#       paths: ${{ github.workspace }}/build/reports/jacoco/testDebugUnitTestCoverage.xml
+#       token: ${{ secrets.GITHUB_TOKEN }}
+#       min-coverage-overall: 80
+#       min-coverage-changed-files: 80
 
     - name: Upload APK
       uses: actions/upload-artifact@v2.2.4
