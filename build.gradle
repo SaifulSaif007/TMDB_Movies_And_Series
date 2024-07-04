@@ -5,6 +5,7 @@ buildscript {
         classpath libs.navgiation.safeagrs
         classpath libs.google.service
         classpath libs.firebase.crashlytics
+        classpath libs.kotlin
     }
 }
 plugins {

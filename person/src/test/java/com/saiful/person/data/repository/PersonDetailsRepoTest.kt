@@ -1,19 +1,11 @@
 package com.saiful.person.data.repository
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.only
-import com.nhaarman.mockito_kotlin.reset
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base_unit_test.BaseRepositoryTest
 import com.saiful.person.data.api.PersonApiService
-import com.saiful.person.model.Image
-import com.saiful.person.model.MovieCredits
-import com.saiful.person.model.PersonDetails
-import com.saiful.person.model.PersonImage
-import com.saiful.person.model.TvShowsCredits
+import com.saiful.person.model.*
+import com.saiful.shared.model.Image
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 

@@ -23,7 +23,6 @@ mockito = "5.2.0"
 mockito-kotlin = "1.5.0"
 jacoco = "0.8.8"
 coroutine-test = "1.7.1"
-kotlin-reflect = "1.5.20"
 moshi = "1.12.0"
 
 [libraries]
@@ -40,7 +39,6 @@ moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "moshi" }
 moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
 moshi-adpter = { group = "com.squareup.moshi", name = "moshi-adapters", version.ref = "moshi" }
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "logging-interceptor" }
-kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin-reflect" }
 
 androidx-viewpager = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager" }
 bumtech-glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
@@ -70,6 +68,7 @@ firebase-analytics-bom = { module = "com.google.firebase:firebase-analytics-ktx"
 firebase-crashlytics-bom = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 
 jococo-report = { group = "org.jacoco", name = "org.jacoco.core", version.ref = "jacoco" }
+kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlinJetbrains" }
 
 [bundles]
 
@@ -84,3 +83,4 @@ mockito = ["mockito", "mockito-kotlin"]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 kotlin-jetbrains = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinJetbrains" }
+
