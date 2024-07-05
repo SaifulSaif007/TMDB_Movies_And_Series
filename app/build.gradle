@@ -73,7 +73,10 @@ dependencies {
 configurations.all {
     resolutionStrategy {
         eachDependency {
-            if ((requested.group == "org.jetbrains.kotlin") && (requested.name.startsWith("kotlin-stdlib"))) {
+            if ((requested.group == "org.jetbrains.kotlin") && (requested.name.startsWith("kotlin-stdlib-jdk8"))) {
+                useVersion("1.7.0")
+            }
+            if ((requested.group == "org.jetbrains.kotlin") && (requested.name.startsWith("kotlin-reflect"))) {
                 useVersion("1.7.0")
             }
         }

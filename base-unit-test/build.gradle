@@ -34,7 +34,21 @@ dependencies {
     implementation project(path: ':base')
 
     api libs.junit
-    api libs.bundles.mockito
+    api(libs.mockito.kotlin) {
+        exclude group: "org.jetbrains.kotlin", module: "kotlin-reflect"
+    }
+    api(libs.mockito)
     api libs.espresso
-    api libs.coroutine.test
+    api(libs.coroutine.test)
+
+}
+
+configurations.all {
+    resolutionStrategy {
+        eachDependency {
+            if ((requested.group == "org.jetbrains.kotlin") && (requested.name.startsWith("kotlin-stdlib-jdk8"))) {
+                useVersion("1.7.0")
+            }
+        }
+    }
 }
