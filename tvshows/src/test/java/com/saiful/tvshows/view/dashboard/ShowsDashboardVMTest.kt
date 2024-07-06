@@ -13,7 +13,7 @@ import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-internal class ShowsDashboardVMTest : BaseViewModelTest() {
+class ShowsDashboardVMTest : BaseViewModelTest() {
 
     @get:Rule
     internal var coroutineRule = MainCoroutineRule()

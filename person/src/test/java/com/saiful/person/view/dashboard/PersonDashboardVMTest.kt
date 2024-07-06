@@ -15,7 +15,7 @@ import org.junit.Test
 internal class PersonDashboardVMTest : BaseViewModelTest() {
 
     @get:Rule
-    val mainCoroutineRule = MainCoroutineRule()
+    internal var coroutineRule = MainCoroutineRule()
 
     private val repository: DashboardRepo = mock()
     private lateinit var viewModel: PersonDashboardVM

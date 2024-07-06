@@ -58,6 +58,9 @@ class TvShowsDetailsFragment : BaseFragment<FragmentTvshowDetailsBinding>() {
     @SuppressLint("SetTextI18n")
     override fun initOnCreateView() {
         viewModel.fetchShowDetails(args.showId)
+        viewModel.fetchShowCasts(args.showId)
+        viewModel.fetchShowRecommendation(args.showId)
+        viewModel.fetchSimilarShow(args.showId)
 
         bindingView.apply {
             showsCastLayout.apply {

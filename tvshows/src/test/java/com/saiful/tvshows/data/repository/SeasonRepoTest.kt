@@ -8,7 +8,7 @@ import com.saiful.tvshows.model.SeasonDetails
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-internal class SeasonRepoTest : BaseRepositoryTest() {
+class SeasonRepoTest : BaseRepositoryTest() {
 
     private val apiService: TvShowsApiService = mock()
     private lateinit var seasonRepo: SeasonRepo

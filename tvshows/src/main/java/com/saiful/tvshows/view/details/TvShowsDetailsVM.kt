@@ -1,6 +1,7 @@
 package com.saiful.tvshows.view.details
 
 import com.saiful.base.network.model.BaseResponse
+import com.saiful.base.network.model.GenericResponse
 import com.saiful.base.viewmodel.BaseOpsViewModel
 import com.saiful.tvshows.data.repository.ShowDetailsRepo
 import com.saiful.tvshows.model.*
@@ -18,51 +19,67 @@ class TvShowsDetailsVM
     val similarShow = MutableStateFlow<TvShowsResponse?>(null)
 
     fun fetchShowDetails(showId: Int) {
-        executeRestCodeBlock(show_details) {
+        executeRestCodeBlock(SHOW_DETAILS) {
             repo.showDetails(showId)
         }
-        executeRestCodeBlock(show_cast) {
+    }
+
+    fun fetchShowCasts(showId: Int) {
+        executeRestCodeBlock(SHOW_CAST) {
             repo.showCasts(showId)
         }
-        executeRestCodeBlock(show_recommendation) {
+    }
+
+    fun fetchShowRecommendation(showId: Int) {
+        executeRestCodeBlock(SHOW_RECOMMENDATION) {
             repo.showRecommendation(showId)
         }
-        executeRestCodeBlock(similar_show) {
+    }
+
+    fun fetchSimilarShow(showId: Int) {
+        executeRestCodeBlock(SIMILAR_SHOW) {
             repo.similarShows(showId)
         }
     }
 
     override fun onSuccessResponse(operationTag: String, data: BaseResponse.Success<Any>) {
         when (operationTag) {
-            show_details -> {
-                when (data) {
+            SHOW_DETAILS -> {
+                when (val response = data as GenericResponse<*>) {
                     is BaseResponse.Success -> {
-                        showDetails.value = data.body as TvShowDetails
+                        showDetails.value = response.body as TvShowDetails
                     }
+
                     else -> {}
                 }
             }
-            show_cast -> {
-                when (data) {
+
+            SHOW_CAST -> {
+                when (val response = data as GenericResponse<*>) {
                     is BaseResponse.Success -> {
-                        showCasts.value = data.body as TvShowCastResponse
+                        showCasts.value = response.body as TvShowCastResponse
                     }
+
                     else -> {}
                 }
             }
-            show_recommendation -> {
-                when (data) {
+
+            SHOW_RECOMMENDATION -> {
+                when (val response = data as GenericResponse<*>) {
                     is BaseResponse.Success -> {
-                        recommendation.value = data.body as TvShowsResponse
+                        recommendation.value = response.body as TvShowsResponse
                     }
+
                     else -> {}
                 }
             }
-            similar_show -> {
-                when (data) {
+
+            SIMILAR_SHOW -> {
+                when (val response = data as GenericResponse<*>) {
                     is BaseResponse.Success -> {
-                        similarShow.value = data.body as TvShowsResponse
+                        similarShow.value = response.body as TvShowsResponse
                     }
+
                     else -> {}
                 }
             }
@@ -70,9 +87,9 @@ class TvShowsDetailsVM
     }
 
     private companion object {
-        const val show_details = "SHOW_DETAILS"
-        const val show_cast = "SHOW_CAST"
-        const val show_recommendation = "SHOW_RECOMMENDATION"
-        const val similar_show = "SIMILAR_SHOW"
+        const val SHOW_DETAILS = "show_details"
+        const val SHOW_CAST = "show_cast"
+        const val SHOW_RECOMMENDATION  = "show_recommendation"
+        const val SIMILAR_SHOW  = "similar_show"
     }
 }

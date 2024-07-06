@@ -13,9 +13,10 @@ import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-internal class TvShowsDetailsVMTest : BaseViewModelTest() {
+class TvShowsDetailsVMTest : BaseViewModelTest() {
+
     @get:Rule
-    val mainCoroutineRule = MainCoroutineRule()
+    internal var coroutineRule = MainCoroutineRule()
 
     private val repository: ShowDetailsRepo = mock()
     private lateinit var tvShowDetails: TvShowDetails
@@ -37,6 +38,8 @@ internal class TvShowsDetailsVMTest : BaseViewModelTest() {
                 totalPages = 1,
                 totalResults = 1
             )
+
+        initViewModel()
     }
 
     override fun tearDown() {
@@ -53,28 +56,55 @@ internal class TvShowsDetailsVMTest : BaseViewModelTest() {
             whenever(repository.showDetails(showId)).thenReturn(
                 BaseResponse.Success(tvShowDetails)
             )
+            viewModel.fetchShowDetails(showId)
+
+            verify(repository, atLeastOnce()).showDetails(any())
+            assert(viewModel.showDetails.value != null)
+        }
+    }
+
+    @Test
+    fun `verify fetch show cast is successful`() {
+        runTest {
             whenever(repository.showCasts(showId)).thenReturn(
                 BaseResponse.Success(tvShowCastResponse)
             )
+            viewModel.fetchShowCasts(showId)
+
+            verify(repository, atLeastOnce()).showCasts(any())
+
+            assert(viewModel.showCasts.value != null)
+
+        }
+    }
+
+    @Test
+    fun `verify fetch show recommendation is successful`() {
+        runTest {
             whenever(repository.showRecommendation(showId)).thenReturn(
                 BaseResponse.Success(tvShowsResponse)
             )
+
+            viewModel.fetchShowRecommendation(showId)
+
+            verify(repository, atLeastOnce()).showRecommendation(any())
+
+            assert(viewModel.recommendation.value!!.totalPages == 1)
+
+        }
+    }
+
+    @Test
+    fun `verify fetch similar show is successful`() {
+        runTest {
             whenever(repository.similarShows(showId)).thenReturn(
                 BaseResponse.Success(tvShowsResponse)
             )
 
-            initViewModel()
+            viewModel.fetchSimilarShow(showId)
 
-            viewModel.fetchShowDetails(showId)
+            verify(repository, atLeastOnce()).similarShows(any())
 
-            verify(repository, times(1)).showDetails(any())
-            verify(repository, times(1)).showCasts(any())
-            verify(repository, times(1)).showRecommendation(any())
-            verify(repository, times(1)).similarShows(any())
-
-            assert(viewModel.showDetails.value != null)
-            assert(viewModel.showCasts.value != null)
-            assert(viewModel.recommendation.value!!.totalPages == 1)
             assert(viewModel.similarShow.value!!.page == 1)
         }
     }

@@ -9,7 +9,7 @@ import com.saiful.tvshows.model.TvShowsResponse
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-internal class DashboardRepoTest : BaseRepositoryTest() {
+class DashboardRepoTest : BaseRepositoryTest() {
     private val tvShowsApiService: TvShowsApiService = mock()
 
     private lateinit var dashboardRepo: DashboardRepo
