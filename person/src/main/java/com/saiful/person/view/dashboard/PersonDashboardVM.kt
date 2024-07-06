@@ -17,17 +17,17 @@ class PersonDashboardVM
     val trendingPersonList = MutableStateFlow<PersonResponse?>(null)
 
     init {
-        popularPerson()
-        trendingPerson()
+      //  popularPerson()
+        //trendingPerson()
     }
 
-    private fun popularPerson() {
+     fun popularPerson() {
         executeRestCodeBlock(popularPersons) {
             repo.popularPersons()
         }
     }
 
-    private fun trendingPerson() {
+     fun trendingPerson() {
         executeRestCodeBlock(trendingPersons) {
             repo.trendingPersons()
         }
