@@ -4,14 +4,11 @@ import androidx.lifecycle.viewModelScope
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base.network.model.GenericResponse
 import com.saiful.base.viewmodel.BaseOpsViewModel
-import com.saiful.tvshows.data.repository.DashboardRepo
 import com.saiful.shared.model.TvShows
+import com.saiful.tvshows.data.repository.DashboardRepo
 import com.saiful.tvshows.model.TvShowsResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,7 +30,7 @@ class ShowsDashboardVM
         top?.results != null || pop?.results != null || trend != null || on != null
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-    init {
+    fun initApiCalls(){
         fetchTrendingShows()
         fetchPopularShows()
         fetchTopRatedShows()

@@ -1,10 +1,6 @@
 package com.saiful.person.view.dashboard
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.reset
-import com.nhaarman.mockito_kotlin.times
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base_unit_test.BaseViewModelTest
 import com.saiful.base_unit_test.rules.MainCoroutineRule
@@ -31,6 +27,8 @@ internal class PersonDashboardVMTest : BaseViewModelTest() {
             totalPages = 1,
             totalResults = 1
         )
+
+        initViewModel()
     }
 
     override fun tearDown() {
@@ -55,7 +53,7 @@ internal class PersonDashboardVMTest : BaseViewModelTest() {
                 BaseResponse.Success(personResponse)
             )
 
-            initViewModel()
+            viewModel.initApiCalls()
 
             verify(repository, times(1)).trendingPersons()
             verify(repository, times(1)).popularPersons()

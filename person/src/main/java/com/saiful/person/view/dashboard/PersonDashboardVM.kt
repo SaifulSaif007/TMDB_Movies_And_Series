@@ -16,7 +16,7 @@ class PersonDashboardVM
     val popularPersonList = MutableStateFlow<PersonResponse?>(null)
     val trendingPersonList = MutableStateFlow<PersonResponse?>(null)
 
-    init {
+    fun initApiCalls() {
         popularPerson()
         trendingPerson()
     }

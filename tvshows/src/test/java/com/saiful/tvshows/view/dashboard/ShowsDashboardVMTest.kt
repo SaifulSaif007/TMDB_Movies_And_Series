@@ -1,11 +1,6 @@
 package com.saiful.tvshows.view.dashboard
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.reset
-import com.nhaarman.mockito_kotlin.times
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base_unit_test.BaseViewModelTest
 import com.saiful.base_unit_test.rules.MainCoroutineRule
@@ -39,6 +34,8 @@ internal class ShowsDashboardVMTest : BaseViewModelTest() {
             totalPages = 1,
             totalResults = 2
         )
+
+        initViewModel()
     }
 
     override fun tearDown() {
@@ -65,7 +62,7 @@ internal class ShowsDashboardVMTest : BaseViewModelTest() {
                 BaseResponse.Success(tvShowsResponse)
             )
 
-            initViewModel()
+            viewModel.initApiCalls()
 
             verify(dashboardRepo, times(1)).getOnAirShows(any())
             verify(dashboardRepo, times(1)).getPopularShows(any())

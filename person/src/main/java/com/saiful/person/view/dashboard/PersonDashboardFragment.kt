@@ -42,6 +42,7 @@ class PersonDashboardFragment : BaseFragment<FragmentPersonDashboardBinding>() {
     override fun getViewModel(): BaseViewModel = viewModel
 
     override fun initOnCreateView() {
+        viewModel.initApiCalls()
 
         seeAllClickHandler()
 

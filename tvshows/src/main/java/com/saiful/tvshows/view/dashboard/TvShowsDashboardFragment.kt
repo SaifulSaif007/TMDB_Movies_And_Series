@@ -8,9 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.CompositePageTransformer
-import androidx.viewpager2.widget.MarginPageTransformer
-import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.*
 import com.saiful.base.util.ItemDecorator
 import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
@@ -50,7 +48,7 @@ class TvShowsDashboardFragment : BaseFragment<FragmentTvshowsDashboardBinding>()
     override fun getViewModel(): BaseViewModel = viewModel
 
     override fun initOnCreateView() {
-
+        viewModel.initApiCalls()
         setUpImageSlider()
 
         seeAllClicks()
