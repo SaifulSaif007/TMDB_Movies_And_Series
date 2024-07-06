@@ -43,9 +43,6 @@ class PersonDashboardFragment : BaseFragment<FragmentPersonDashboardBinding>() {
 
     override fun initOnCreateView() {
 
-        viewModel.trendingPerson()
-        viewModel.popularPerson()
-
         seeAllClickHandler()
 
         bindingView.apply {

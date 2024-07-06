@@ -1,6 +1,10 @@
 package com.saiful.person.view.dashboard
 
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.reset
+import com.nhaarman.mockito_kotlin.times
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base_unit_test.BaseViewModelTest
 import com.saiful.base_unit_test.rules.MainCoroutineRule
@@ -52,8 +56,6 @@ internal class PersonDashboardVMTest : BaseViewModelTest() {
             )
 
             initViewModel()
-            viewModel.popularPerson()
-            viewModel.trendingPerson()
 
             verify(repository, times(1)).trendingPersons()
             verify(repository, times(1)).popularPersons()
