@@ -69,7 +69,7 @@ internal class PersonDetailsVMTest : BaseViewModelTest() {
     }
     @Test
     fun `verify person details api calls fetch is successful`() {
-        runTest(mainCoroutineRule.testDispatcher) {
+        runTest {
             whenever(
                 repository.personTvShowsCredits(personId)
             ).thenReturn(

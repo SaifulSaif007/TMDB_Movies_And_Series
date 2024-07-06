@@ -1,11 +1,6 @@
 package com.saiful.movie.view.collection
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.only
-import com.nhaarman.mockito_kotlin.reset
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base_unit_test.BaseViewModelTest
 import com.saiful.base_unit_test.rules.MainCoroutineRule
@@ -50,7 +45,7 @@ class CollectionVMTest : BaseViewModelTest() {
 
     @Test
     fun `verify fetch collections returns success result`() {
-        runTest(mainCoroutineRule.testDispatcher) {
+        runTest {
             whenever(collectionRepo.movieCollection(id)).thenReturn(
                 BaseResponse.Success(
                     movieCollection

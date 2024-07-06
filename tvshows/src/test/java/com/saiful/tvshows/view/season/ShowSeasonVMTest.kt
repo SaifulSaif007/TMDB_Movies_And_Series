@@ -48,7 +48,7 @@ internal class ShowSeasonVMTest : BaseViewModelTest() {
 
     @Test
     fun `verify season fetch is successful`() {
-        runTest(mainCoroutineRule.testDispatcher) {
+        runTest {
             whenever(
                 repository.seasonDetails(showId, seasonNo)
             ).thenReturn(

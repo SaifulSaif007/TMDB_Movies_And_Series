@@ -1,19 +1,12 @@
 package com.saiful.tvshows.view.details
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.reset
-import com.nhaarman.mockito_kotlin.times
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base_unit_test.BaseViewModelTest
 import com.saiful.base_unit_test.rules.MainCoroutineRule
 import com.saiful.shared.model.TvShows
 import com.saiful.tvshows.data.repository.ShowDetailsRepo
-import com.saiful.tvshows.model.TvShowCastResponse
-import com.saiful.tvshows.model.TvShowDetails
-import com.saiful.tvshows.model.TvShowsResponse
+import com.saiful.tvshows.model.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -56,7 +49,7 @@ internal class TvShowsDetailsVMTest : BaseViewModelTest() {
 
     @Test
     fun `verify fetch show details is successful`() {
-        runTest(mainCoroutineRule.testDispatcher) {
+        runTest {
             whenever(repository.showDetails(showId)).thenReturn(
                 BaseResponse.Success(tvShowDetails)
             )

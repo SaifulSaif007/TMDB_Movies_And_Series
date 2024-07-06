@@ -32,9 +32,8 @@ jobs:
         run: ./gradlew buildDebug --console=plain
 
       - name: Run Coverage
-        run: |
-          chmod +x gradlew
-          ./gradlew clean testDebugUnitTestCoverage
+        run:
+          ./gradlew testDebugUnitTestCoverage
 
       - name: Add coverage to PR
         id: jacoco

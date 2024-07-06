@@ -1,18 +1,11 @@
 package com.saiful.tvshows.data.repository
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.only
-import com.nhaarman.mockito_kotlin.reset
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base_unit_test.BaseRepositoryTest
 import com.saiful.tvshows.data.api.TvShowsApiService
-import com.saiful.tvshows.model.TvShowCastResponse
-import com.saiful.tvshows.model.TvShowDetails
-import com.saiful.tvshows.model.TvShowsResponse
-import kotlinx.coroutines.runBlocking
+import com.saiful.tvshows.model.*
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 internal class ShowDetailsRepoTest : BaseRepositoryTest() {
@@ -51,7 +44,7 @@ internal class ShowDetailsRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify show details fetch is successful`() {
-        runBlocking {
+        runTest {
             whenever(
                 apiService.showDetails(showId)
             ).thenReturn(
@@ -65,7 +58,7 @@ internal class ShowDetailsRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify show casts fetch is successful`() {
-        runBlocking {
+        runTest {
             whenever(
                 apiService.showCasts(showId)
             ).thenReturn(
@@ -79,7 +72,7 @@ internal class ShowDetailsRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify show recommendation fetch is successful`() {
-        runBlocking {
+        runTest {
             whenever(
                 apiService.recommendations(showId)
             ).thenReturn(
@@ -93,7 +86,7 @@ internal class ShowDetailsRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify similar show fetch is successful`() {
-        runBlocking {
+        runTest {
             whenever(
                 apiService.similarShows(showId)
             ).thenReturn(

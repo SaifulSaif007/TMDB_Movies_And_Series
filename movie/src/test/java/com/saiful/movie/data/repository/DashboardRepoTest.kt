@@ -1,17 +1,13 @@
 package com.saiful.movie.data.repository
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.reset
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base_unit_test.BaseRepositoryTest
 import com.saiful.movie.data.api.MovieApiService
 import com.saiful.movie.model.DateRange
 import com.saiful.movie.model.MoviesResponse
-import kotlinx.coroutines.runBlocking
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
+import kotlinx.coroutines.test.runTest
+import org.junit.*
 
 class DashboardRepoTest : BaseRepositoryTest() {
     private val movieApiService: MovieApiService = mock()
@@ -39,7 +35,7 @@ class DashboardRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify popular movie fetch returns success result`() {
-        runBlocking {
+        runTest {
             whenever(movieApiService.popularMovies(pageNo)).thenReturn(
                 BaseResponse.Success(movieResponse)
             )
@@ -50,7 +46,7 @@ class DashboardRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify popular movie fetch causes api error`() {
-        runBlocking {
+        runTest {
             whenever(movieApiService.popularMovies(pageNo)).thenReturn(
                 apiError
             )
@@ -61,7 +57,7 @@ class DashboardRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify now playing movie fetch returns success result`() {
-        runBlocking {
+        runTest {
             whenever(movieApiService.nowPlayingMovies(pageNo)).thenReturn(
                 BaseResponse.Success(movieResponse)
             )
@@ -72,7 +68,7 @@ class DashboardRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify now playing movie fetch returns network error`() {
-        runBlocking {
+        runTest {
             whenever(movieApiService.nowPlayingMovies(pageNo)).thenReturn(
                networkError
             )
@@ -83,7 +79,7 @@ class DashboardRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify top rated movie fetch returns success result`() {
-        runBlocking {
+        runTest {
             whenever(movieApiService.topRatedMovies(pageNo)).thenReturn(
                 BaseResponse.Success(movieResponse)
             )
@@ -94,7 +90,7 @@ class DashboardRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify top rated movie fetch returns unknown error`() {
-        runBlocking {
+        runTest {
             whenever(movieApiService.topRatedMovies(pageNo)).thenReturn(
                 unknownError
             )
@@ -105,7 +101,7 @@ class DashboardRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify upcoming movie fetch returns success result`() {
-        runBlocking {
+        runTest {
             whenever(movieApiService.upcomingMovies(pageNo)).thenReturn(
                 BaseResponse.Success(movieResponse)
             )

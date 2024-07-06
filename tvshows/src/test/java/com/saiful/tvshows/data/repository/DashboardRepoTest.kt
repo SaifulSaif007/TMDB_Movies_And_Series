@@ -1,17 +1,12 @@
 package com.saiful.tvshows.data.repository
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.only
-import com.nhaarman.mockito_kotlin.reset
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base_unit_test.BaseRepositoryTest
 import com.saiful.shared.model.TvShows
 import com.saiful.tvshows.data.api.TvShowsApiService
 import com.saiful.tvshows.model.TvShowsResponse
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 internal class DashboardRepoTest : BaseRepositoryTest() {
@@ -44,7 +39,7 @@ internal class DashboardRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify trending shows fetch is successful`() {
-        runBlocking {
+        runTest {
             whenever(
                 tvShowsApiService.trendingTvShows(page)
             ).thenReturn(
@@ -58,7 +53,7 @@ internal class DashboardRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify popular shows fetch is successful`(){
-        runBlocking {
+        runTest {
             whenever(
                 tvShowsApiService.popularTvShows(page)
             ).thenReturn(
@@ -72,7 +67,7 @@ internal class DashboardRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify top rated shows fetch is successful`(){
-        runBlocking {
+        runTest {
             whenever(
                 tvShowsApiService.topRatedTvShows(page)
             ).thenReturn(
@@ -86,7 +81,7 @@ internal class DashboardRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify on air shows fetch is successful`(){
-        runBlocking {
+        runTest {
             whenever(
                 tvShowsApiService.onAirTvShows(page)
             ).thenReturn(

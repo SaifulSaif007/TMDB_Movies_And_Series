@@ -1,18 +1,11 @@
 package com.saiful.movie.view.details
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.reset
-import com.nhaarman.mockito_kotlin.times
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base_unit_test.BaseViewModelTest
 import com.saiful.base_unit_test.rules.MainCoroutineRule
 import com.saiful.movie.data.repository.MovieDetailsRepo
-import com.saiful.movie.model.DateRange
-import com.saiful.movie.model.MovieCastResponse
-import com.saiful.movie.model.MovieDetailsResponse
-import com.saiful.movie.model.MoviesResponse
+import com.saiful.movie.model.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -61,7 +54,7 @@ internal class MovieDetailsVMTest : BaseViewModelTest() {
 
     @Test
     fun `verify movie details data fetch successful`() {
-        runTest(coroutineRule.testDispatcher) {
+        runTest {
             whenever(repository.movieDetails(1)).thenReturn(
                 BaseResponse.Success(movieDetailsResponse)
             )

@@ -1,16 +1,12 @@
 package com.saiful.person.data.repository
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.only
-import com.nhaarman.mockito_kotlin.reset
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base_unit_test.BaseRepositoryTest
 import com.saiful.person.data.api.PersonApiService
 import com.saiful.person.model.Person
 import com.saiful.person.model.PersonResponse
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 internal class DashboardRepoTest : BaseRepositoryTest() {
@@ -50,7 +46,7 @@ internal class DashboardRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify popular person returns success result`() {
-        runBlocking {
+        runTest {
             whenever(
                 apiService.popularPersons()
             ).thenReturn(
@@ -64,7 +60,7 @@ internal class DashboardRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify trending person returns success result`() {
-        runBlocking {
+        runTest {
             whenever(
                 apiService.trendingPersons()
             ).thenReturn(

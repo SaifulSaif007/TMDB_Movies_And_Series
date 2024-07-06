@@ -48,7 +48,7 @@ internal class ShowsDashboardVMTest : BaseViewModelTest() {
 
     @Test
     fun `verify all dashboard tv shows fetch successful`() {
-        runTest(coroutineRule.testDispatcher) {
+        runTest {
             whenever(dashboardRepo.getTrendingShows(pageNo)).thenReturn(
                 BaseResponse.Success(tvShowsResponse)
             )

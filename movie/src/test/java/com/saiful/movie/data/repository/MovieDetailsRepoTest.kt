@@ -1,19 +1,12 @@
 package com.saiful.movie.data.repository
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.reset
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base_unit_test.BaseRepositoryTest
 import com.saiful.movie.data.api.MovieApiService
-import com.saiful.movie.model.DateRange
-import com.saiful.movie.model.MovieCastResponse
-import com.saiful.movie.model.MovieDetailsResponse
-import com.saiful.movie.model.MoviesResponse
-import kotlinx.coroutines.runBlocking
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
+import com.saiful.movie.model.*
+import kotlinx.coroutines.test.runTest
+import org.junit.*
 
 class MovieDetailsRepoTest : BaseRepositoryTest() {
 
@@ -50,7 +43,7 @@ class MovieDetailsRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify movie details fetch successful`() {
-        runBlocking {
+        runTest {
             whenever(movieApiService.movieDetails(movieId)).thenReturn(
                 BaseResponse.Success(movieDetailsResponse)
             )
@@ -62,7 +55,7 @@ class MovieDetailsRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify movie details fetch returns fail result`() {
-        runBlocking {
+        runTest {
             whenever(movieApiService.movieDetails(movieId)).thenReturn(
                 apiError
             )
@@ -73,7 +66,7 @@ class MovieDetailsRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify movie casts fetch successful`() {
-        runBlocking {
+        runTest {
             whenever(movieApiService.movieCast(movieId)).thenReturn(
                 BaseResponse.Success(
                     movieCastResponse
@@ -86,7 +79,7 @@ class MovieDetailsRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify movie casts fetch causes network error`() {
-        runBlocking {
+        runTest {
             whenever(movieApiService.movieCast(movieId)).thenReturn(
                 networkError
             )
@@ -97,7 +90,7 @@ class MovieDetailsRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify recommendation movie fetch successful`() {
-        runBlocking {
+        runTest {
             whenever(movieApiService.recommendation(movieId)).thenReturn(
                 BaseResponse.Success(movieResponse)
             )
@@ -108,7 +101,7 @@ class MovieDetailsRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify recommendation movie fetch returns unknown error`() {
-        runBlocking {
+        runTest {
             whenever(movieApiService.recommendation(movieId)).thenReturn(
                 unknownError
             )
@@ -119,7 +112,7 @@ class MovieDetailsRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify similar movie fetch successful`() {
-        runBlocking {
+        runTest {
             whenever(
                 movieApiService.similarMovie(
                     movieId
@@ -134,7 +127,7 @@ class MovieDetailsRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify similar movie returns api error`() {
-        runBlocking {
+        runTest {
             whenever(
                 movieApiService.similarMovie(
                     movieId

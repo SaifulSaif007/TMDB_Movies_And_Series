@@ -1,13 +1,11 @@
 package com.saiful.movie.data.repository
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.reset
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base_unit_test.BaseRepositoryTest
 import com.saiful.movie.data.api.MovieApiService
 import com.saiful.movie.model.MovieCollection
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class CollectionRepoRepositoryTest: BaseRepositoryTest() {
@@ -35,7 +33,7 @@ class CollectionRepoRepositoryTest: BaseRepositoryTest() {
 
     @Test
     fun `verify movie collection returns success result`() {
-        runBlocking {
+        runTest {
             whenever(apiService.collections(id)).thenReturn(
                 BaseResponse.Success(movieCollection)
             )
@@ -46,7 +44,7 @@ class CollectionRepoRepositoryTest: BaseRepositoryTest() {
 
     @Test
     fun `verify movie collection returns api error`() {
-        runBlocking {
+        runTest {
             whenever(apiService.collections(id)).thenReturn(
                apiError
             )

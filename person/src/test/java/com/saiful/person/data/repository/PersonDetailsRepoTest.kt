@@ -6,7 +6,7 @@ import com.saiful.base_unit_test.BaseRepositoryTest
 import com.saiful.person.data.api.PersonApiService
 import com.saiful.person.model.*
 import com.saiful.shared.model.Image
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 internal class PersonDetailsRepoTest : BaseRepositoryTest() {
@@ -54,7 +54,7 @@ internal class PersonDetailsRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify person details fetch is successful`() {
-        runBlocking {
+        runTest {
             whenever(
                 apiService.personDetails(any())
             ).thenReturn(
@@ -70,7 +70,7 @@ internal class PersonDetailsRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify person image fetch is successful`() {
-        runBlocking {
+        runTest {
             whenever(
                 apiService.personImage(any())
             ).thenReturn(
@@ -85,7 +85,7 @@ internal class PersonDetailsRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify person movie credits fetch is successful`() {
-        runBlocking {
+        runTest {
             whenever(
                 apiService.movieCredits(any())
             ).thenReturn(
@@ -100,7 +100,7 @@ internal class PersonDetailsRepoTest : BaseRepositoryTest() {
 
     @Test
     fun `verify person shows credits fetch is successful`(){
-        runBlocking {
+        runTest {
             whenever(
                 apiService.tvShowsCredits(any())
             ).thenReturn(

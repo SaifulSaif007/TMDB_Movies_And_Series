@@ -41,7 +41,7 @@ internal class PersonDashboardVMTest : BaseViewModelTest() {
 
     @Test
     fun `verify trending person & popular person fetch is successful`() {
-        runTest(mainCoroutineRule.testDispatcher) {
+        runTest {
             whenever(
                 repository.popularPersons()
             ).thenReturn(
