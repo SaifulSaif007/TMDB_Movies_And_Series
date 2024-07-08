@@ -1,10 +1,6 @@
 package com.saiful.person.view.dashboard
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.reset
-import com.nhaarman.mockito_kotlin.times
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base_unit_test.BaseViewModelTest
 import com.saiful.base_unit_test.rules.MainCoroutineRule
@@ -16,10 +12,10 @@ import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-internal class PersonDashboardVMTest : BaseViewModelTest() {
+class PersonDashboardVMTest : BaseViewModelTest() {
 
     @get:Rule
-    val mainCoroutineRule = MainCoroutineRule()
+    internal val mainCoroutineRule = MainCoroutineRule()
 
     private val repository: DashboardRepo = mock()
     private lateinit var viewModel: PersonDashboardVM
@@ -43,7 +39,7 @@ internal class PersonDashboardVMTest : BaseViewModelTest() {
 
     @Test
     fun `verify trending person & popular person fetch is successful`() {
-        runTest(mainCoroutineRule.testDispatcher) {
+        runTest {
             whenever(
                 repository.popularPersons()
             ).thenReturn(
