@@ -1,11 +1,6 @@
 package com.saiful.tvshows.view.dashboard
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.reset
-import com.nhaarman.mockito_kotlin.times
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base_unit_test.BaseViewModelTest
 import com.saiful.base_unit_test.rules.MainCoroutineRule
@@ -18,7 +13,7 @@ import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-internal class ShowsDashboardVMTest : BaseViewModelTest() {
+class ShowsDashboardVMTest : BaseViewModelTest() {
 
     @get:Rule
     internal var coroutineRule = MainCoroutineRule()
@@ -51,7 +46,7 @@ internal class ShowsDashboardVMTest : BaseViewModelTest() {
 
     @Test
     fun `verify all dashboard tv shows fetch successful`() {
-        runTest(coroutineRule.testDispatcher) {
+        runTest {
             whenever(dashboardRepo.getTrendingShows(pageNo)).thenReturn(
                 BaseResponse.Success(tvShowsResponse)
             )
