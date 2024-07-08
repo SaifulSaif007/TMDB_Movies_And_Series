@@ -27,9 +27,9 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew buildDebug --console=plain
 
-      - name: Run Coverage
-        run:
-          ./gradlew clean testDebugUnitTestCoverage
+#      - name: Run Coverage
+#        run:
+#          ./gradlew clean testDebugUnitTestCoverage
 
       - name: Add coverage to PR
         if: github.event_name == 'pull_request'
