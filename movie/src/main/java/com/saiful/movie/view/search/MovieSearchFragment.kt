@@ -72,6 +72,13 @@ class MovieSearchFragment : BaseFragment<FragmentMovieSearchBinding>() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        movieAdapter.addLoadStateListener { loaderState ->
+            println(loaderState)
+        }
+    }
+
     private fun movieItemClick(movieId: Int) {
         val bundle = Bundle()
         bundle.putInt(MOVIE_ID, movieId)

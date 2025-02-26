@@ -1,16 +1,17 @@
 plugins {
-    id 'com.android.library'
-    id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.hilt.plugin)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
-    compileSdk 33
+    namespace 'com.saiful.base'
+    compileSdk 35
 
     defaultConfig {
         minSdk 24
-        targetSdk 33
+        targetSdk 35
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -40,7 +41,9 @@ android {
     lint {
         abortOnError false
     }
-    namespace 'com.saiful.base'
+    buildFeatures {
+        buildConfig = true // Enable BuildConfig generation
+    }
 }
 
 dependencies {
@@ -53,14 +56,14 @@ dependencies {
 
     api libs.androidx.viewpager
 
-    implementation libs.dagger.hilt
-    implementation libs.bundles.androidxNavigation
-    kapt libs.hilt.compiler
+    implementation libs.androidx.navigation.runtime
 
-    api libs.bumtech.glide
-    api libs.androidx.paging
+////
 
-    api platform(libs.firebase.bom)
-    api libs.bundles.firebaseBom
+////
+//    api platform(libs.firebase.bom)
+//    api libs.bundles.firebaseBom
 
+    implementation(libs.dagger.hilt)
+    kapt(libs.hilt.compiler)
 }

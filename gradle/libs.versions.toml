@@ -1,86 +1,77 @@
 [versions]
-
-ktx = "1.9.0"
-lifeCycle = "2.4.1"
-material = "1.8.0"
-androidGradlePlugin = "8.0.0"
-kotlinJetbrains = "1.7.0"
-constainLayout = "2.1.4"
-retrofit = "2.9.0"
-logging-interceptor = "4.10.0"
-viewpager = "1.0.0"
-glide = "4.15.1"
-paging = "3.1.1"
-hilt = "2.42"
-navigation = "2.4.2"
-firebase-crashlytics = "2.9.5"
-google-service = "4.3.15"
-safe-args = "2.5.3"
+agp = "8.8.1"
+kotlin = "2.0.0"
+coreKtx = "1.15.0"
 junit = "4.13.2"
-expresso = "3.5.1"
-firebase-bom = "30.3.2"
-mockito = "5.2.0"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+lifecycleRuntimeKtx = "2.8.7"
+activityCompose = "1.10.0"
+composeBom = "2024.04.01"
+hilt = "2.51.1"
+retrofit = "2.9.0"
+logging-interceptor = "4.12.0"
+lifeCycle = "2.8.7"
+viewpager = "1.1.0"
+glide = "4.15.1"
+paging = "3.3.6"
+navigation = "2.8.7"
+mockito = "5.3.1"
 mockito-kotlin = "1.5.0"
-jacoco = "0.8.8"
 coroutine-test = "1.7.1"
-moshi = "1.12.0"
+material = "1.12.0"
 
 [libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 
-androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
-androidx-lifecycle-viewModel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifeCycle" }
-androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifeCycle" }
-google-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-androidx-constainlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constainLayout" }
+mockito = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
+mockito-kotlin = { group = "com.nhaarman", name = "mockito-kotlin-kt1.1", version.ref = "mockito-kotlin" }
+coroutine-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutine-test" }
+
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+
+dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 moshi-converter = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
-moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "moshi" }
-moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
-moshi-adpter = { group = "com.squareup.moshi", name = "moshi-adapters", version.ref = "moshi" }
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "logging-interceptor" }
+
+androidx-lifecycle-viewModel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifeCycle" }
 
 androidx-viewpager = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager" }
 bumtech-glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 androidx-paging = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
 
-dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
-
-androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
 androidx-navigation-runtime = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigation" }
+androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
 androidx-navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
 
-firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebase-crashlytics" }
-
-google-service = { group = "com.google.gms", name = "google-services", version.ref = "google-service" }
-navgiation-safeagrs = { group = "androidx.navigation", name = "navigation-safe-args-gradle-plugin", version.ref = "safe-args" }
-hilt-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt" }
-
-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
-
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "expresso" }
-mockito = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
-mockito-kotlin = { group = "com.nhaarman", name = "mockito-kotlin-kt1.1", version.ref = "mockito-kotlin" }
-coroutine-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutine-test" }
-firebase-analytics-bom = { module = "com.google.firebase:firebase-analytics-ktx" }
-firebase-crashlytics-bom = { module = "com.google.firebase:firebase-crashlytics-ktx" }
-
-jococo-report = { group = "org.jacoco", name = "org.jacoco.core", version.ref = "jacoco" }
-kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlinJetbrains" }
+google-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [bundles]
-
-androidxLifecycle = ["androidx-lifecycle-viewModel", "androidx-lifecycle-runtime"]
-androidxNavigation = ["androidx-lifecycle-runtime", "androidx-navigation-fragment", "androidx-navigation-ui"]
-firebaseBom = ["firebase-analytics-bom", "firebase-crashlytics-bom"]
-mockito = ["mockito", "mockito-kotlin"]
-
+androidxLifecycle = ["androidx-lifecycle-viewModel"]
+androidxNavigation = ["androidx-lifecycle-runtime-ktx", "androidx-navigation-fragment", "androidx-navigation-ui"]
 
 [plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" } #Remove this
 
-android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
-android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
-kotlin-jetbrains = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinJetbrains" }
+hilt-plugin = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+navigation-safeargs = { id = "androidx.navigation.safeargs", version.ref = "navigation" }
 
