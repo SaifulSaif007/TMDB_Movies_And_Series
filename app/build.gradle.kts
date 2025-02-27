@@ -4,7 +4,10 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt.plugin)
     alias(libs.plugins.kotlin.kapt)
+    jacoco
 }
+
+apply(from = "${project.rootDir}/jacoco.gradle")
 
 android {
     namespace = "com.saiful.tmdb2"
