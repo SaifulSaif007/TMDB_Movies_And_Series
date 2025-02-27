@@ -6,15 +6,15 @@ plugins {
     id 'androidx.navigation.safeargs.kotlin'
 }
 
-
 apply from: "$project.rootDir/jacoco.gradle"
 
 android {
-    compileSdk 33
+    namespace 'com.saiful.tvshows'
+    compileSdk 35
 
     defaultConfig {
         minSdk 24
-        targetSdk 33
+        targetSdk 35
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -42,8 +42,8 @@ android {
     buildFeatures {
         viewBinding true
     }
-    
-    namespace 'com.saiful.tvshows'
+
+
 }
 
 dependencies {

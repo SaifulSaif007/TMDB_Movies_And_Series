@@ -1,18 +1,19 @@
 plugins {
-    id 'com.android.library'
-    id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.hilt.plugin)
+    alias(libs.plugins.kotlin.kapt)
     id 'androidx.navigation.safeargs.kotlin'
     id 'kotlin-parcelize'
 }
 
 android {
-    compileSdk 33
+    namespace 'com.saiful.shared'
+    compileSdk 35
 
     defaultConfig {
         minSdk 24
-        targetSdk 33
+        targetSdk 35
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -34,14 +35,17 @@ android {
     buildFeatures {
         viewBinding true
     }
-    namespace 'com.saiful.shared'
+
 }
 
 dependencies {
     implementation project(path: ':base')
 
     implementation libs.dagger.hilt
-    implementation libs.bundles.androidxNavigation
     kapt libs.hilt.compiler
 
+    api libs.bumtech.glide
+    api libs.androidx.paging
+
+    api libs.bundles.androidxNavigation
 }
