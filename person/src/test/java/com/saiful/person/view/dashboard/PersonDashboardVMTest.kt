@@ -53,6 +53,9 @@ class PersonDashboardVMTest : BaseViewModelTest() {
 
             initViewModel()
 
+            // Advance the test scheduler to ensure all coroutines complete
+            testScheduler.advanceUntilIdle()
+
             verify(repository, times(1)).trendingPersons()
             verify(repository, times(1)).popularPersons()
 
