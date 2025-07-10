@@ -21,6 +21,21 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    flavorDimensions += "environment"
+    
+    productFlavors {
+        create("stg") {
+            dimension = "environment"
+            applicationIdSuffix = ".stg"
+            versionNameSuffix = "-STG"
+        }
+        create("prod") {
+            dimension = "environment"
+            applicationIdSuffix = ".prod"
+            versionNameSuffix = "-PROD"
+        }
+    }
+    
     buildTypes {
         release {
             isMinifyEnabled = false
