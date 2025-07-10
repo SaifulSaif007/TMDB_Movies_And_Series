@@ -1,4 +1,4 @@
-package com.saiful.tmdb2
+package com.saiful.tmdbexplorer
 
 import org.junit.Test
 

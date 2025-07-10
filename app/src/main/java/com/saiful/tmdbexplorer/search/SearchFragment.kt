@@ -1,4 +1,4 @@
-package com.saiful.tmdbmoviesseries.search
+package com.saiful.tmdbexplorer.search
 
 import android.os.Bundle
 import android.view.*
@@ -15,9 +15,9 @@ import com.saiful.shared.utils.RequestKeys.MOVIE_REQUEST_KEY
 import com.saiful.shared.utils.RequestKeys.PERSON_REQUEST_KEY
 import com.saiful.shared.utils.RequestKeys.SERIES_REQUEST_KEY
 import com.saiful.shared.view.SharedSearchVM
-import com.saiful.tmdbmoviesseries.MainActivity
-import com.saiful.tmdbmoviesseries.R
-import com.saiful.tmdbmoviesseries.databinding.FragmentSearchBinding
+import com.saiful.tmdbexplorer.MainActivity
+import com.saiful.tmdbexplorer.R
+import com.saiful.tmdbexplorer.databinding.FragmentSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
@@ -69,7 +69,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
             searchView.editText.setOnEditorActionListener { p0, _, _ ->
                 val inputText = p0?.text.toString()
                 searchView.hide()
-                searchBar.text = inputText
+                searchBar.textView.text = inputText
                 viewmodel.updateSearchQuery(inputText)
                 true
             }

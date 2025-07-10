@@ -1,4 +1,4 @@
-package com.saiful.tmdb2
+package com.saiful.tmdbexplorer
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

@@ -36,14 +36,14 @@ jobs:
 
       - name: Run Coverage
         run:
-          ./gradlew clean testDebugUnitTestCoverage
+          ./gradlew clean jacocoConsolidatedReport
 
       - name: Add coverage to PR only
         if: github.event_name == 'pull_request'
         id: jacoco
         uses: madrapps/jacoco-report@v1.3
         with:
-          paths: ${{ github.workspace }}/build/reports/jacoco/testDebugUnitTestCoverage.xml
+          paths: ${{ github.workspace }}/build/reports/jacoco/jacocoConsolidatedReport.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 80
           min-coverage-changed-files: 80

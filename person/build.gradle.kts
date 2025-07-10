@@ -1,48 +1,31 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.hilt.plugin)
-    alias(libs.plugins.kotlin.kapt)
+    id("com.android.library")
+    id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
+    id("androidx.navigation.safeargs.kotlin")
     id("jacoco")
 }
 
 android {
-    namespace = "com.saiful.tmdbexplorer"
+    namespace = "com.saiful.person"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.saiful.tmdb2"
         minSdk = 24
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
-    flavorDimensions += "environment"
-    
-    productFlavors {
-        create("stg") {
-            dimension = "environment"
-            applicationIdSuffix = ".stg"
-            versionNameSuffix = "-STG"
-        }
-        create("prod") {
-            dimension = "environment"
-            applicationIdSuffix = ".prod"
-            versionNameSuffix = "-PROD"
-        }
-    }
-    
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+        debug {
+            isTestCoverageEnabled = true
         }
     }
     compileOptions {
@@ -55,48 +38,21 @@ android {
     buildFeatures {
         viewBinding = true
     }
-    buildFeatures {
-        compose = true
-    }
 }
 
 dependencies {
-
     implementation(project(":base"))
     implementation(project(":shared"))
-    implementation(project(":movie"))
-    implementation(project(":person"))
-    implementation(project(":tvshows"))
-
     testImplementation(project(":base-unit-test"))
 
     implementation(libs.dagger.hilt)
+    implementation(libs.bundles.androidxNavigation)
     kapt(libs.hilt.compiler)
-
-    implementation(libs.google.material)
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
-
 }
 
 // Jacoco configuration for code coverage
 configure<JacocoPluginExtension> {
-    toolVersion = "0.8.11"
+    toolVersion = "0.8.8"
 }
 
 afterEvaluate {
@@ -106,8 +62,8 @@ afterEvaluate {
         "**/hilt_aggregated*/*", "**/*MembersInjector*.*", "**/*_Factory.*", "**/*_Provide*Factory*.*",
         "**/*_ViewBinding*.*", "**/AutoValue_*.*", "**/R2.class", "**/R2$*.class", "**/*Directions$*",
         "**/*Directions.*", "**/*Binding.*", "**/mock/*", "**/remote/*", "**/di/**", "**/ui/**",
-        "**/*DispatcherProvider*/", "**/model/*", "**/*Fragment*", "**/*adapter*", "**/navigation/*",
-        "**/data/repository/paging/*", "**/view/list/*", "**/search/*"
+        "**/*DispatcherProvider*/", "**/model/*", "**/*Fragment*", "**/view/adapter/*", "**/navigation/*",
+        "**/data/repository/paging/*", "**/view/list/*"
     )
 
     fun createVariantCoverage(variant: com.android.build.gradle.api.BaseVariant) {
@@ -192,4 +148,4 @@ afterEvaluate {
         else -> null
     }
     variants?.forEach { variant -> createVariantCoverage(variant) }
-}
+} 
