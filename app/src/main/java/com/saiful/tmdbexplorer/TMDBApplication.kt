@@ -1,4 +1,4 @@
-package com.saiful.tmdb2
+package com.saiful.tmdbexplorer
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

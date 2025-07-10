@@ -19,7 +19,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "TMDB2"
+rootProject.name = "tmdb-explorer"
 include(":app")
 include(":base")
 include(":shared")

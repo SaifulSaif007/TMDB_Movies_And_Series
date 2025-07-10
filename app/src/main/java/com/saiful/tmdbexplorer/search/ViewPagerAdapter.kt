@@ -1,4 +1,4 @@
-package com.saiful.tmdbmoviesseries.search
+package com.saiful.tmdbexplorer.search
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

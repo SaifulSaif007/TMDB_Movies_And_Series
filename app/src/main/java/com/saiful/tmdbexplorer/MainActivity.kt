@@ -1,4 +1,4 @@
-package com.saiful.tmdb2
+package com.saiful.tmdbexplorer
 
 import android.os.Bundle
 import android.view.View
@@ -8,7 +8,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.saiful.tmdb2.databinding.ActivityMainBinding
+import com.saiful.tmdbexplorer.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 

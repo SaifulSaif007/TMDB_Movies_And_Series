@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.saiful.tmdb2"
+    namespace = "com.saiful.tmdbexplorer"
     compileSdk = 35
 
     defaultConfig {
