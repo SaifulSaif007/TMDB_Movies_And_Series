@@ -126,7 +126,7 @@ afterEvaluate {
                     "$projectDir/src/$variantName/kotlin"
                 )
             )
-            executionData.setFrom(files("$buildDir/jacoco/${testTaskName}.exec"))
+            executionData.setFrom(files("$buildDir/outputs/unit_test_code_coverage/${variantName}UnitTest/${testTaskName}.exec"))
         }
 
         tasks.register("${testTaskName}CoverageVerification", JacocoCoverageVerification::class.java) {
