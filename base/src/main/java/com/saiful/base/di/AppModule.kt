@@ -3,6 +3,7 @@ package com.saiful.base.di
 import com.saiful.base.BuildConfig
 import com.saiful.base.network.*
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,6 +43,7 @@ object AppModule {
     @Singleton
     fun moshi(): Moshi = Moshi.Builder()
         .add(ThrowableAdapter())
+        .addLast(KotlinJsonAdapterFactory())
         .build()
 
     @Provides

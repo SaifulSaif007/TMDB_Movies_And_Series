@@ -2,7 +2,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt.plugin)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.navigation.safeargs)
     id("jacoco")
 }
@@ -50,7 +51,10 @@ dependencies {
 
     implementation(libs.dagger.hilt)
     implementation(libs.bundles.androidxNavigation)
-    kapt(libs.hilt.compiler)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.coil.compose)
+    ksp(libs.hilt.compiler)
 }
 
 // Jacoco configuration for code coverage
