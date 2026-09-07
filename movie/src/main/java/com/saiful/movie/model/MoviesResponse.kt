@@ -2,7 +2,9 @@ package com.saiful.movie.model
 
 import com.saiful.shared.model.Movies
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class MoviesResponse(
     val dates: DateRange,
     val page: Int,

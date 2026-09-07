@@ -2,7 +2,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt.plugin)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
     id("androidx.navigation.safeargs.kotlin")
     id("kotlin-parcelize")
 }
@@ -41,9 +42,10 @@ dependencies {
     implementation(project(":base"))
 
     implementation(libs.dagger.hilt)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
     api(libs.bumtech.glide)
+    api(libs.coil.compose)
     api(libs.androidx.paging)
 
     api(libs.bundles.androidxNavigation)

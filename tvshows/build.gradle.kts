@@ -1,7 +1,8 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
+    id("org.jetbrains.kotlin.plugin.serialization")
     id("dagger.hilt.android.plugin")
     id("androidx.navigation.safeargs.kotlin")
     id("jacoco")
@@ -50,7 +51,10 @@ dependencies {
 
     implementation(libs.dagger.hilt)
     implementation(libs.bundles.androidxNavigation)
-    kapt(libs.hilt.compiler)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.coil.compose)
+    ksp(libs.hilt.compiler)
 }
 
 // Jacoco configuration for code coverage

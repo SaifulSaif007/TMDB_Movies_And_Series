@@ -36,7 +36,7 @@ fun ImageView.loadOriginalSizeImage(url: String?, drawable: Int = R.drawable.no_
 
 }
 
-fun ImageView.loadYoutubeImage(key: String?) {
+fun ImageView.loadYoutubeImage(key: String?, drawable: Int = R.drawable.no_image_icon) {
     Glide.with(this.context)
         .load(AppConstants.YOUTUBE_IMAGE_URL_PREFIX + key + AppConstants.YOUTUBE_IMAGE_URL_SUFFIX)
         .transition(DrawableTransitionOptions.withCrossFade(500))

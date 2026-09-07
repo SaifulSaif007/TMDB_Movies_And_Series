@@ -15,9 +15,9 @@ This plan outlines the full refactoring of the `tmdb-explorer` project from a hy
 
 ## Proposed Changes
 
-### Phase 0: Plan Persistence
+### Phase 0: Plan Persistence [DONE]
 #### Task:
-1.  **[NEW] [Plan.md](file:///G:/ComposeProjects/TMDB2/Plan.md)**: Save the full approved implementation plan to the project root for easy reference.
+1.  **[DONE] [Plan.md](file:///G:/ComposeProjects/TMDB2/Plan.md)**: Save the full approved implementation plan to the project root for easy reference.
 
 ---
 
@@ -25,7 +25,7 @@ This plan outlines the full refactoring of the `tmdb-explorer` project from a hy
 Set up the tooling and libraries required for the modern stack.
 
 #### Tasks:
-1.  **[libs.versions.toml](file:///G:/ComposeProjects/TMDB2/gradle/libs.versions.toml)**: Add KSP, Kotlin Serialization, Coil, and Compose Navigation versions/libraries.
+1.  **[DONE] [libs.versions.toml](file:///G:/ComposeProjects/TMDB2/gradle/libs.versions.toml)**: Add KSP, Kotlin Serialization, Coil, and Compose Navigation versions/libraries.
 2.  **Root Build Configuration**: Add KSP and Serialization plugins to the project-level `build.gradle.kts`.
 3.  **Module Build Configuration**: Apply plugins and update dependencies in `:app`, `:base`, `:shared`, and feature modules.
 4.  **Edge-to-Edge Support**: Call `enableEdgeToEdge()` in `MainActivity` and prepare for inset handling.
@@ -41,6 +41,17 @@ Refactor the foundational layers to support the new architecture.
 3.  **Base ViewModels**: Refactor `BaseViewModel` and `BaseOpsViewModel` to support Compose-native state collection and lifecycle awareness.
 4.  **Shared Models**: Annotate all models in `:shared` and features with `@Serializable`.
 5.  **Common UI Components**: Migrate shared views (Gallery, SearchBar, Adapters) to reusable Composables in `:shared`.
+
+---
+
+### Phase 2.1: Network Layer Stability [DONE]
+Fix the Retrofit `CallAdapter` crash by properly configuring Moshi for Kotlin.
+
+#### Tasks:
+1.  **[DONE] [libs.versions.toml](file:///G:/ComposeProjects/TMDB2/gradle/libs.versions.toml)**: Add `moshi-kotlin` and `moshi-kotlin-codegen`.
+2.  **[DONE] [:base build.gradle.kts](file:///G:/ComposeProjects/TMDB2/base/build.gradle.kts)**: Add Moshi Kotlin dependencies.
+3.  **[DONE] [AppModule.kt](file:///G:/ComposeProjects/TMDB2/base/src/main/java/com/saiful/base/di/AppModule.kt)**: Configure Moshi with `KotlinJsonAdapterFactory`.
+4.  **[DONE] Network Models**: Add `@JsonClass(generateAdapter = true)` to `GenericError` and `MoviesResponse`.
 
 ---
 

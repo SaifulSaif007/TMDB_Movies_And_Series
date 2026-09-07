@@ -2,7 +2,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt.plugin)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -48,8 +49,11 @@ android {
 
 dependencies {
     implementation(libs.retrofit)
+    implementation(libs.moshi.kt)
+    ksp(libs.moshi.kt.codegen)
     api(libs.moshi.converter)
     implementation(libs.logging.interceptor)
+    implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.bundles.androidxLifecycle)
 
@@ -59,5 +63,5 @@ dependencies {
     
 
     implementation(libs.dagger.hilt)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 }
