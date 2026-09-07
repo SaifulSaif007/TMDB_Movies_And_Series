@@ -1,0 +1,86 @@
+# Project Modernization & Migration Plan (XML to Jetpack Compose)
+
+This plan outlines the full refactoring of the `tmdb-explorer` project from a hybrid Fragment/XML architecture to a modern, 100% Jetpack Compose architecture using the latest Android libraries and best practices.
+
+## User Review Required
+
+> [!IMPORTANT]
+> This is a destructive migration for the UI layer. Once completed, all XML layouts, ViewBinding, and Fragments will be removed.
+>
+> Key decisions:
+> 1. **Coil over Glide**: Migration to Coil for image loading (Compose-first).
+> 2. **Kotlin Serialization**: Replacing Moshi for better integration with Type-Safe Navigation.
+> 3. **Single Activity**: The app will move towards a true Single Activity architecture with a Compose `NavHost`.
+> 4. **KSP**: Moving from `kapt` to `ksp` for faster builds.
+
+## Proposed Changes
+
+### Phase 0: Plan Persistence
+#### Task:
+1.  **[NEW] [Plan.md](file:///G:/ComposeProjects/TMDB2/Plan.md)**: Save the full approved implementation plan to the project root for easy reference.
+
+---
+
+### Phase 1: Infrastructure & Foundation
+Set up the tooling and libraries required for the modern stack.
+
+#### Tasks:
+1.  **[libs.versions.toml](file:///G:/ComposeProjects/TMDB2/gradle/libs.versions.toml)**: Add KSP, Kotlin Serialization, Coil, and Compose Navigation versions/libraries.
+2.  **Root Build Configuration**: Add KSP and Serialization plugins to the project-level `build.gradle.kts`.
+3.  **Module Build Configuration**: Apply plugins and update dependencies in `:app`, `:base`, `:shared`, and feature modules.
+4.  **Edge-to-Edge Support**: Call `enableEdgeToEdge()` in `MainActivity` and prepare for inset handling.
+
+---
+
+### Phase 2: Core Layer Migration (`:base` & `:shared`)
+Refactor the foundational layers to support the new architecture.
+
+#### Tasks:
+1.  **Network Layer Migration**: Replace Moshi with Kotlin Serialization in `:base network classes (e.g., `ResponseAdapter`, `BaseResponse`).
+2.  **Material 3 Theme**: Implement a centralized Compose Theme (Color, Type, Shape) in `:base`.
+3.  **Base ViewModels**: Refactor `BaseViewModel` and `BaseOpsViewModel` to support Compose-native state collection and lifecycle awareness.
+4.  **Shared Models**: Annotate all models in `:shared` and features with `@Serializable`.
+5.  **Common UI Components**: Migrate shared views (Gallery, SearchBar, Adapters) to reusable Composables in `:shared`.
+
+---
+
+### Phase 3: Feature Migration (`:movie`, `:tvshows`, `:person`)
+Iteratively migrate each feature module to Compose.
+
+#### Tasks:
+1.  **Movie Module Migration**:
+    *   Implement `MovieDashboardScreen`, `MovieDetailsScreen`, and `MovieListScreen` in Compose.
+    *   Update `DashboardVM` to expose `StateFlow`.
+    *   Remove `MovieDashboardFragment` and related XMLs.
+2.  **TV Shows Module Migration**:
+    *   Implement `TVShowsScreen`, `TVShowDetailsScreen` in Compose.
+    *   Remove legacy Fragments and XMLs.
+3.  **Person Module Migration**:
+    *   Implement `PersonDashboardScreen`, `PersonDetailsScreen` in Compose.
+    *   Remove legacy Fragments and XMLs.
+
+---
+
+### Phase 4: Integration & Cleanup (`:app`)
+Finalize the app structure and remove legacy code.
+
+#### Tasks:
+1.  **Type-Safe Navigation**: Define the app's route structure using Kotlin Serialization objects.
+2.  **Main Navigation Host**: Implement `NavHost` in `MainActivity` to orchestrate screen transitions.
+3.  **Bottom Navigation**: Create a Compose-based `BottomNavigationBar`.
+4.  **Final Cleanup**: Remove all unused XML files, Fragments, ViewBinding, and legacy dependencies (Glide, Moshi, SafeArgs).
+
+---
+
+## Verification Plan
+
+### Automated Tests
+- Run existing unit tests (refactored for serialization changes).
+- Create new Compose UI tests for critical flows (Dashboard, Search).
+- `gradlew test` to ensure no regressions in business logic.
+
+### Manual Verification
+- Verify Edge-to-Edge rendering on status and navigation bars.
+- Test navigation flows and backstack handling.
+- Verify image loading and caching with Coil.
+- Test dark/light mode switching.
