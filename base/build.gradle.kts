@@ -49,11 +49,12 @@ android {
 
 dependencies {
     implementation(libs.retrofit)
+    implementation(libs.retrofit.kotlinx.serialization)
     implementation(libs.moshi.kt)
     ksp(libs.moshi.kt.codegen)
     api(libs.moshi.converter)
     implementation(libs.logging.interceptor)
-    implementation(libs.kotlinx.serialization.json)
+    api(libs.kotlinx.serialization.json)
 
     implementation(libs.bundles.androidxLifecycle)
 

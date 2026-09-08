@@ -1,46 +1,49 @@
 package com.saiful.person.model
 
-import com.squareup.moshi.Json
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Person(
     val adult: Boolean? = false,
     val gender: Int = 0,
     val id: Int,
-    @field:Json(name = "known_for")
+    @SerialName("known_for")
     val knownFor: List<KnownFor>? = null,
-    @field:Json(name = "known_for_department")
+    @SerialName("known_for_department")
     val knownForDepartment: String? = "",
     val name: String,
     val popularity: Double,
-    @field:Json(name = "profile_path")
-    val profilePath: String
+    @SerialName("profile_path")
+    val profilePath: String? = ""
 )
 
-
+@Serializable
 data class KnownFor(
-    @field:Json(name = "backdrop_path")
-    val backdropPath: String,
-    @field:Json(name = "first_air_date")
-    val firstAirDate: String,
+    @SerialName("backdrop_path")
+    val backdropPath: String? = null,
+    @SerialName("first_air_date")
+    val firstAirDate: String? = null,
     val id: Int,
-    @field:Json(name = "media_type")
-    val mediaType: String,
+    @SerialName("media_type")
+    val mediaType: String? = null,
 
     //series
     val title: String? = null,
-    @field:Json(name = "original_name")
-    val originalName: String,
+    @SerialName("original_name")
+    val originalName: String? = null,
 
     //tv
     val name: String? = null,
-    @field:Json(name = "original_title")
-    val originalTitle: String,
+    @SerialName("original_title")
+    val originalTitle: String? = null,
 
-    val overview: String,
-    @field:Json(name = "poster_path")
-    val posterPath: String,
-    @field:Json(name = "vote_average")
+    val overview: String? = null,
+    @SerialName("poster_path")
+    val posterPath: String? = null,
+    @SerialName("vote_average")
     val voteAverage: Double,
-    @field:Json(name = "vote_count")
+    @SerialName("vote_count")
     val voteCount: Int? = 0
 )
+

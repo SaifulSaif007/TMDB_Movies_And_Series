@@ -21,14 +21,14 @@ This plan outlines the full refactoring of the `tmdb-explorer` project from a hy
 
 ---
 
-### Phase 1: Infrastructure & Foundation
+### Phase 1: Infrastructure & Foundation [DONE]
 Set up the tooling and libraries required for the modern stack.
 
 #### Tasks:
 1.  **[DONE] [libs.versions.toml](file:///G:/ComposeProjects/TMDB2/gradle/libs.versions.toml)**: Add KSP, Kotlin Serialization, Coil, and Compose Navigation versions/libraries.
-2.  **Root Build Configuration**: Add KSP and Serialization plugins to the project-level `build.gradle.kts`.
-3.  **Module Build Configuration**: Apply plugins and update dependencies in `:app`, `:base`, `:shared`, and feature modules.
-4.  **Edge-to-Edge Support**: Call `enableEdgeToEdge()` in `MainActivity` and prepare for inset handling.
+2.  **[DONE] Root Build Configuration**: Add KSP and Serialization plugins to the project-level `build.gradle.kts`.
+3.  **[DONE] Module Build Configuration**: Apply plugins and update dependencies in `:app`, `:base`, `:shared`, and feature modules.
+4.  **[DONE] Edge-to-Edge Support**: Call `enableEdgeToEdge()` in `MainActivity` and prepare for inset handling.
 
 ---
 
@@ -36,7 +36,7 @@ Set up the tooling and libraries required for the modern stack.
 Refactor the foundational layers to support the new architecture.
 
 #### Tasks:
-1.  **Network Layer Migration**: Replace Moshi with Kotlin Serialization in `:base network classes (e.g., `ResponseAdapter`, `BaseResponse`).
+1.  **[DONE] Network Layer Migration**: Replace Moshi with Kotlin Serialization in `:base network classes (e.g., `ResponseAdapter`, `BaseResponse`).
 2.  **Material 3 Theme**: Implement a centralized Compose Theme (Color, Type, Shape) in `:base`.
 3.  **Base ViewModels**: Refactor `BaseViewModel` and `BaseOpsViewModel` to support Compose-native state collection and lifecycle awareness.
 4.  **Shared Models**: Annotate all models in `:shared` and features with `@Serializable`.

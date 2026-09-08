@@ -1,5 +1,6 @@
 package com.saiful.base.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -15,6 +16,7 @@ abstract class BaseViewModel : ViewModel() {
     fun emitMessage(message : String?){
         viewModelScope.launch(Dispatchers.Main) {
             message?.let {
+                Log.d("BaseViewModel", "emitMessage: $message")
                 _showMessage.emit(it)
             }
         }
