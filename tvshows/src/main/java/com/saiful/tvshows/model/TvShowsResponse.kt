@@ -1,13 +1,15 @@
 package com.saiful.tvshows.model
 
 import com.saiful.shared.model.TvShows
-import com.squareup.moshi.Json
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class TvShowsResponse(
     val page: Int,
     val results: List<TvShows>,
-    @field:Json(name = "total_pages")
+    @SerialName("total_pages")
     val totalPages: Int,
-    @field:Json(name = "total_results")
+    @SerialName("total_results")
     val totalResults: Int
 )

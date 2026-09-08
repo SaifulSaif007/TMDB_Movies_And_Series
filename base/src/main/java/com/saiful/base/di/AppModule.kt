@@ -8,9 +8,12 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -41,6 +44,14 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideJson(): Json = Json {
+        ignoreUnknownKeys = true
+        coerceInputValues = true
+        isLenient = true
+    }
+
+    @Provides
+    @Singleton
     fun moshi(): Moshi = Moshi.Builder()
         .add(ThrowableAdapter())
         .addLast(KotlinJsonAdapterFactory())
@@ -48,11 +59,12 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(client: OkHttpClient, moshi: Moshi) : Retrofit =
+    fun provideRetrofit(client: OkHttpClient, moshi: Moshi, json: Json) : Retrofit =
         Retrofit.Builder()
             .client(client)
             .baseUrl(baseUrl)
             .addCallAdapterFactory(ResponseAdapterFactory())
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 }

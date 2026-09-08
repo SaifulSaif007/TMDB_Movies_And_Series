@@ -1,16 +1,18 @@
 package com.saiful.movie.model
 
 import com.saiful.shared.model.Movies
-import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 @JsonClass(generateAdapter = true)
 data class MoviesResponse(
-    val dates: DateRange,
+    val dates: DateRange? = null,
     val page: Int,
     val results: List<Movies>,
-    @field:Json(name = "total_pages")
+    @SerialName("total_pages")
     val totalPages: Int,
-    @field:Json(name = "total_results")
+    @SerialName("total_results")
     val totalResults: Int
 )

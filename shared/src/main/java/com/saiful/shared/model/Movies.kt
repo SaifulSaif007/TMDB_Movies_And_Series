@@ -1,26 +1,28 @@
 package com.saiful.shared.model
 
-import com.squareup.moshi.Json
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 class Movies(
     val adult: Boolean? = null,
-    @field:Json(name = "backdrop_path")
+    @SerialName("backdrop_path")
     val backdropPath: String? = null,
     val id: Int,
-    @field:Json(name = "original_language")
+    @SerialName("original_language")
     val originalLanguage: String? = null,
-    @field:Json(name = "original_title")
+    @SerialName("original_title")
     val originalTitle: String? = null,
-    @field:Json(name = "overview")
+    @SerialName("overview")
     val overview: String? = null,
     val popularity: Double? = null,
-    @field:Json(name = "poster_path")
+    @SerialName("poster_path")
     val posterPath: String? = null,
-    @field:Json(name = "release_date")
+    @SerialName("release_date")
     val releaseDate: String? = null,
     val title: String? = null,
-    @field:Json(name = "vote_average")
+    @SerialName("vote_average")
     val voteAverage: Double? = null,
-    @field:Json(name = "vote_count")
+    @SerialName("vote_count")
     val voteCount: Int? = null
 )
