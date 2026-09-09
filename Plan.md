@@ -37,7 +37,7 @@ Refactor the foundational layers to support the new architecture.
 
 #### Tasks:
 1.  **[DONE] Network Layer Migration**: Replace Moshi with Kotlin Serialization in `:base network classes (e.g., `ResponseAdapter`, `BaseResponse`).
-2.  **Material 3 Theme**: Implement a centralized Compose Theme (Color, Type, Shape) in `:base`.
+2.  **[DONE] Material 3 Theme**: Implement a centralized Compose Theme (Color, Type, Shape) in `:base`.
 3.  **Base ViewModels**: Refactor `BaseViewModel` and `BaseOpsViewModel` to support Compose-native state collection and lifecycle awareness.
 4.  **Shared Models**: Annotate all models in `:shared` and features with `@Serializable`.
 5.  **Common UI Components**: Migrate shared views (Gallery, SearchBar, Adapters) to reusable Composables in `:shared`.
