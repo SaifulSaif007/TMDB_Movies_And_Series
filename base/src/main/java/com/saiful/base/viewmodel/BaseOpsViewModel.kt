@@ -6,23 +6,29 @@ import com.saiful.base.network.model.GenericError
 import com.saiful.base.network.model.GenericResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 abstract class BaseOpsViewModel : BaseViewModel() {
 
     protected fun executeRestCodeBlock(
         operationTag: String = String(),
+        showLoader: Boolean = true,
         codeBlock: suspend () -> GenericResponse<Any>
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            when (val data = codeBlock()) {
+        viewModelScope.launch {
+            if (showLoader) updateLoading(true)
+            val result = withContext(Dispatchers.IO) { codeBlock() }
+            if (showLoader) updateLoading(false)
+
+            when (result) {
                 is BaseResponse.Success ->
-                    onSuccessResponse(operationTag, data)
+                    onSuccessResponse(operationTag, result)
                 is BaseResponse.ApiError ->
-                    onApiError(operationTag, data)
+                    onApiError(operationTag, result)
                 is BaseResponse.NetworkError ->
-                    onNetworkError(operationTag, data)
+                    onNetworkError(operationTag, result)
                 is BaseResponse.UnknownError ->
-                    onUnknownError(operationTag, data)
+                    onUnknownError(operationTag, result)
             }
         }
     }
