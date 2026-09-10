@@ -1,7 +1,6 @@
 package com.saiful.movie.model
 
 import com.saiful.shared.model.Movies
-import com.squareup.moshi.Json
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

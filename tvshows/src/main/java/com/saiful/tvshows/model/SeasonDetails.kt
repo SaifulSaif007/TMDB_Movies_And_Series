@@ -1,17 +1,18 @@
 package com.saiful.tvshows.model
 
-import com.squareup.moshi.Json
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class SeasonDetails(
     val id: Int,
-    @field:Json(name = "air_date")
+    @SerialName("air_date")
     val airDate: String,
     val name: String,
     val overview: String,
-    @field:Json(name = "poster_path")
+    @SerialName("poster_path")
     val posterPath: String,
-    @field:Json(name = "season_number")
+    @SerialName("season_number")
     val seasonNumber: Int,
     val episodes: List<Episode> = listOf()
 )
-
