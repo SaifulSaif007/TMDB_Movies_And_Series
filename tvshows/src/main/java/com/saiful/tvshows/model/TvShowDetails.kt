@@ -1,115 +1,122 @@
 package com.saiful.tvshows.model
 
-import com.squareup.moshi.Json
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class TvShowDetails(
     val adult: Boolean? = false,
-    @field:Json(name = "backdrop_path")
+    @SerialName("backdrop_path")
     val backdropPath: String? = "",
-    @field:Json(name = "created_by")
+    @SerialName("created_by")
     val createdBy: List<CreatedBy?>? = null,
-    @field:Json(name = "episode_run_time")
+    @SerialName("episode_run_time")
     val episodeRunTime: List<Int?>? = null,
-    @field:Json(name = "first_air_date")
+    @SerialName("first_air_date")
     val firstAirDate: String? = null,
     val genres: List<Genre?>? = null,
     val homepage: String? = null,
     val id: Int? = null,
-    @field:Json(name = "in_production")
+    @SerialName("in_production")
     val inProduction: Boolean? = null,
     val languages: List<String?>? = null,
     val lastAirDate: String? = null,
     val name: String? = null,
     val networks: List<Network?>? = null,
-    @field:Json(name = "number_of_episodes")
+    @SerialName("number_of_episodes")
     val numberOfEpisodes: Int? = null,
-    @field:Json(name = "number_of_seasons")
+    @SerialName("number_of_seasons")
     val numberOfSeasons: Int? = null,
     val originCountry: List<String?>? = null,
     val originalLanguage: String? = null,
-    @field:Json(name = "original_name")
+    @SerialName("original_name")
     val originalName: String? = null,
-    @field:Json(name = "overview")
     val overview: String? = null,
-    @field:Json(name = "popularity")
     val popularity: Double? = null,
-    @field:Json(name = "poster_path")
+    @SerialName("poster_path")
     val posterPath: String? = null,
-    @field:Json(name = "production_companies")
+    @SerialName("production_companies")
     val productionCompanies: List<ProductionCompany?>? = null,
     val seasons: List<Season>? = null,
     val status: String? = null,
     val tagline: String? = null,
     val type: String? = null,
-    @field:Json(name = "vote_average")
+    @SerialName("vote_average")
     val voteAverage: Double? = null,
-    @field:Json(name = "vote_count")
+    @SerialName("vote_count")
     val voteCount: Int? = null,
     val videos: Videos? = null,
-    @field:Json(name = "spoken_languages")
+    @SerialName("spoken_languages")
     val spokenLanguage: List<SpokenLanguagesItem?>? = null,
 )
 
+@Serializable
 data class CreatedBy(
-    @field:Json(name = "credit_id")
+    @SerialName("credit_id")
     val creditId: String? = null,
-    @field:Json(name = "gender")
     val gender: Int? = null,
     val id: Int? = null,
     val name: String? = null,
-    @field:Json(name = "profile_path")
-    val profilePath: Any? = null
+    @SerialName("profile_path")
+    val profilePath: String? = null
 )
 
+@Serializable
 data class Genre(
     val id: Int? = null,
     val name: String? = null
 )
 
+@Serializable
 data class Network(
     val id: Int? = null,
-    @field:Json(name = "logo_path")
+    @SerialName("logo_path")
     val logoPath: String? = null,
     val name: String? = null,
-    @field:Json(name = "origin_country")
+    @SerialName("origin_country")
     val originCountry: String? = null
 )
 
+@Serializable
 data class ProductionCompany(
     val id: Int? = null,
-    @field:Json(name = "logo_path")
+    @SerialName("logo_path")
     val logoPath: String? = null,
     val name: String? = null,
-    @field:Json(name = "origin_country")
+    @SerialName("origin_country")
     val originCountry: String? = null
 )
 
+@Serializable
 data class Season(
-    @field:Json(name = "air_date")
+    @SerialName("air_date")
     val airDate: String? = null,
-    @field:Json(name = "episode_count")
+    @SerialName("episode_count")
     val episodeCount: Int? = null,
     val id: Int? = null,
     val name: String? = null,
     val overview: String? = null,
-    @field:Json(name = "poster_path")
+    @SerialName("poster_path")
     val posterPath: String? = null,
-    @field:Json(name = "season_number")
+    @SerialName("season_number")
     val seasonNumber: Int = 0
 )
 
+@Serializable
 data class Videos(
     val results: List<VideoResult>? = null
 )
 
+@Serializable
 data class SpokenLanguagesItem(
     val name: String? = null,
-    @field:Json(name = "english_name")
+    @SerialName("english_name")
     val englishName: String? = null
 )
 
+@Serializable
 data class VideoResult(
-    @field:Json(name = "video_id")
+    @SerialName("video_id")
     val videoId: String?,
     val key: String? = null,
     val name: String? = null,
