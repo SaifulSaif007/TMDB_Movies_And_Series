@@ -59,10 +59,10 @@ Fix the Retrofit `CallAdapter` crash by properly configuring Moshi for Kotlin.
 Iteratively migrate each feature module to Compose.
 
 #### Tasks:
-1.  **Movie Module Migration**:
+1.  **[DONE] Movie Module Migration**:
     *   Implement `MovieDashboardScreen`, `MovieDetailsScreen`, and `MovieListScreen` in Compose.
     *   Update `DashboardVM` to expose `StateFlow`.
-    *   Remove `MovieDashboardFragment` and related XMLs.
+    *   [TODO in Phase 4] Remove `MovieDashboardFragment` and related XMLs.
 2.  **TV Shows Module Migration**:
     *   Implement `TVShowsScreen`, `TVShowDetailsScreen` in Compose.
     *   Remove legacy Fragments and XMLs.
