@@ -1,6 +1,5 @@
 package com.saiful.shared.components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,7 +27,6 @@ import com.saiful.base.ui.theme.TMDBTheme
 import com.saiful.shared.model.Movies
 import com.saiful.shared.utils.AppConstants
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TMDBImageSlider(
     movies: List<Movies>,

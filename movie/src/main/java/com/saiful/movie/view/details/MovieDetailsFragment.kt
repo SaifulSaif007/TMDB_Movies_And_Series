@@ -8,7 +8,9 @@ import android.os.Bundle
 import android.view.*
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
@@ -24,7 +26,10 @@ import com.saiful.movie.model.GenresItem
 import com.saiful.movie.view.adapter.*
 import com.saiful.shared.utils.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -86,7 +91,7 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
 
             movieCollectionLayout.root.setOnClickListener {
                 val collectionId =
-                    viewModel.movieDetailsResponse.value?.belongsToCollection?.id ?: 0
+                    viewModel.uiState.value.movieDetails?.belongsToCollection?.id ?: 0
                 findNavController().navigate(
                     R.id.movie_collection_nav_graph,
                     bundleOf("collection_id" to collectionId)
@@ -94,75 +99,79 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
             }
         }
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.movieDetailsResponse.collect { movie ->
-                bindingView.apply {
-                    backdropImage.loadBackDropSizeImage(movie?.backdropPath)
-                    posterImage.loadPosterSizeImage(movie?.posterPath)
-                    toolbar.title = movie?.title
-                    movieName.text = movie?.title
-                    ratingBar2.rating = movie?.voteAverage?.toFloat() ?: 0f
-                    movieRating.text =
-                        "(" + floatNumberFormatter(movie?.voteAverage?.toFloat()) + ")"
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.uiState.map { it.movieDetails }.distinctUntilChanged().collectLatest { movie ->
+                        bindingView.apply {
+                            backdropImage.loadBackDropSizeImage(movie?.backdropPath)
+                            posterImage.loadPosterSizeImage(movie?.posterPath)
+                            toolbar.title = movie?.title
+                            movieName.text = movie?.title
+                            ratingBar2.rating = movie?.voteAverage?.toFloat() ?: 0f
+                            movieRating.text =
+                                "(" + floatNumberFormatter(movie?.voteAverage?.toFloat()) + ")"
 
-                    addChips(movie?.genres)
+                            addChips(movie?.genres)
 
-                    movieTagline.text = movie?.tagline
-                    movieOverview.text = movie?.overview
+                            movieTagline.text = movie?.tagline
+                            movieOverview.text = movie?.overview
 
-                    movieInfoLayout.apply {
-                        movieBudget.text = movie?.budget?.toLong()?.formatToShortNumber()
-                        movieRevenue.text = movie?.revenue?.toLong()?.formatToShortNumber()
-                        movieStatus.text = movie?.status
-                        movieReleaseDate.text = movie?.releaseDate?.formatDate()
-                        movieRuntime.text = movie?.runtime.toString().plus(" mins")
-                        movieProduction.text =
-                            movie?.productionCompanies?.map { it?.name }?.joinToString(", ")
-                    }
+                            movieInfoLayout.apply {
+                                movieBudget.text = movie?.budget?.toLong()?.formatToShortNumber()
+                                movieRevenue.text = movie?.revenue?.toLong()?.formatToShortNumber()
+                                movieStatus.text = movie?.status
+                                movieReleaseDate.text = movie?.releaseDate?.formatDate()
+                                movieRuntime.text = movie?.runtime.toString().plus(" mins")
+                                movieProduction.text =
+                                    movie?.productionCompanies?.map { it?.name }?.joinToString(", ")
+                            }
 
-                    val movieTrailers =
-                        movie?.videos?.results?.filter { it.type == "Trailer" || it.type == "Teaser" }
+                            val movieTrailers =
+                                movie?.videos?.results?.filter { it.type == "Trailer" || it.type == "Teaser" }
 
-                    movieTrailers?.let {
-                        trailerAdapter.submitList(it)
-                    }
+                            movieTrailers?.let {
+                                trailerAdapter.submitList(it)
+                            }
 
-                    if (movie?.belongsToCollection != null) {
-                        movieCollectionLayout.apply {
-                            collectionImage.loadPosterSizeImage(movie.belongsToCollection.posterPath)
+                            if (movie?.belongsToCollection != null) {
+                                movieCollectionLayout.apply {
+                                    collectionImage.loadPosterSizeImage(movie.belongsToCollection.posterPath)
 
-                            collectionName.text = movie.belongsToCollection.name
-                            movieCollectionLayout.root.visibility = View.VISIBLE
+                                    collectionName.text = movie.belongsToCollection.name
+                                    movieCollectionLayout.root.visibility = View.VISIBLE
+                                }
+                            } else {
+                                movieCollectionLayout.root.visibility = View.GONE
+                            }
                         }
-                    } else {
-                        movieCollectionLayout.root.visibility = View.GONE
                     }
-
                 }
-            }
-        }
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.movieCast.collect {
-                it?.cast?.let { casts -> castAdapter.submitList(casts) }
-            }
-        }
+                launch {
+                    viewModel.uiState.map { it.cast }.distinctUntilChanged().collectLatest { casts ->
+                        castAdapter.submitList(casts)
+                    }
+                }
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.recommendation.collect {
-                it?.results?.let { recommend -> recommendationAdapter.submitList(recommend) }
-            }
-        }
+                launch {
+                    viewModel.uiState.map { it.recommendationsList }.distinctUntilChanged().collectLatest { recommend ->
+                        recommendationAdapter.submitList(recommend)
+                    }
+                }
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.similar.collect {
-                it?.results?.let { similar -> similarAdapter.submitList(similar) }
+                launch {
+                    viewModel.uiState.map { it.similarMoviesList }.distinctUntilChanged().collectLatest { similar ->
+                        similarAdapter.submitList(similar)
+                    }
+                }
             }
         }
     }
 
     private fun addChips(genres: List<GenresItem?>?) {
         if (genres != null) {
+            bindingView.chipGroup.removeAllViews()
             for (chip in genres) {
                 bindingView.chipGroup.addView(
                     createTagChip(
@@ -200,7 +209,7 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
         return Chip(context).apply {
             text = chipName
             textStartPadding = 0f
-            textStartPadding = 0f
+            textEndPadding = 0f
         }
 
     }
@@ -216,4 +225,3 @@ class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
         personNavigation.navigateToPersonDetails(personId, findNavController())
     }
 }
-

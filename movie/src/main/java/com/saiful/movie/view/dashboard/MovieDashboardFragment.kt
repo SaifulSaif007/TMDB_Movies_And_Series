@@ -5,7 +5,9 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -21,8 +23,12 @@ import com.saiful.movie.model.MovieCategory
 import com.saiful.movie.view.adapter.MovieDashboardAdapter
 import com.saiful.movie.view.adapter.SliderAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.abs
 
 @AndroidEntryPoint
 class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
@@ -75,49 +81,40 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
             adapter = upcomingMovieAdapter
         }
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.popularMoviesList.collect { popular ->
-                popular?.results?.let { movies ->
-                    popularMovieAdapter.submitList(movies)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.uiState.map { it.popularMovies }.distinctUntilChanged().collectLatest { movies ->
+                        popularMovieAdapter.submitList(movies)
+                    }
+                }
+                launch {
+                    viewModel.uiState.map { it.nowPlayingMovies }.distinctUntilChanged().collectLatest { movies ->
+                        nowPlayingMovieAdapter.submitList(movies)
+                    }
+                }
+                launch {
+                    viewModel.uiState.map { it.topRatedMovies }.distinctUntilChanged().collectLatest { movies ->
+                        topRatedMovieAdapter.submitList(movies)
+                    }
+                }
+                launch {
+                    viewModel.uiState.map { it.upcomingMovies }.distinctUntilChanged().collectLatest { movies ->
+                        upcomingMovieAdapter.submitList(movies)
+                    }
                 }
             }
         }
-
-        lifecycleScope.launchWhenStarted {
-            viewModel.nowPlayingMoviesList.collect { nowPlaying ->
-                nowPlaying?.results?.let { movies ->
-                    nowPlayingMovieAdapter.submitList(movies)
-                }
-            }
-        }
-
-        lifecycleScope.launchWhenStarted {
-            viewModel.topRatedMoviesList.collect { topRated ->
-                topRated?.results?.let { movies ->
-                    topRatedMovieAdapter.submitList(movies)
-                }
-            }
-        }
-
-        lifecycleScope.launchWhenStarted {
-            viewModel.upcomingMoviesList.collect { upcoming ->
-                upcoming?.results?.let { movies ->
-                    upcomingMovieAdapter.submitList(movies)
-                }
-            }
-        }
-
     }
 
     private fun setUpImageSlider() {
         viewPager = bindingView.imageSlider
         mPageChangeHandler = Handler(Looper.getMainLooper())
-        val pageAdapter = SliderAdapter(viewModel.sliderList, viewPager, ::movieItemClick)
-
+        
         val transformer = CompositePageTransformer()
         transformer.addTransformer(MarginPageTransformer(25))
         transformer.addTransformer { page, position ->
-            val r = 1 - kotlin.math.abs(position)
+            val r = 1 - abs(position)
             page.scaleY = 0.85f + r * 0.17f
         }
         viewPager.setPageTransformer(transformer)
@@ -131,14 +128,17 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
             }
         })
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.sliderLoaded.collect {
-                if (it == true) {
-                    viewPager.apply {
-                        adapter = pageAdapter
-                        offscreenPageLimit = 3
-                        clipChildren = false
-                        clipToPadding = false
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.map { it.sliderMovies }.distinctUntilChanged().collectLatest { movies ->
+                    if (movies.isNotEmpty()) {
+                        val pageAdapter = SliderAdapter(movies.toMutableList(), viewPager, ::movieItemClick)
+                        viewPager.apply {
+                            adapter = pageAdapter
+                            offscreenPageLimit = 3
+                            clipChildren = false
+                            clipToPadding = false
+                        }
                     }
                 }
             }
@@ -177,7 +177,9 @@ class MovieDashboardFragment : BaseFragment<FragmentMovieDashboardBinding>() {
     }
 
     private val runnable = Runnable {
-        viewPager.currentItem = viewPager.currentItem + 1
+        if (viewPager.adapter != null && viewPager.adapter!!.itemCount > 0) {
+            viewPager.currentItem = (viewPager.currentItem + 1) % viewPager.adapter!!.itemCount
+        }
     }
 
     override fun onPause() {
