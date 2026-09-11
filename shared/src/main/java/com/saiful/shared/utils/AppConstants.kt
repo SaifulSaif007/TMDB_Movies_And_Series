@@ -6,6 +6,7 @@ object AppConstants {
     const val ORIGINAL_SIZE = "w1280"
     const val BACKDROP_SIZE = "w780" //w1280 // original
     const val POSTER_SIZE = "w342" // w500 // w780 // original
+    const val PROFILE_SIZE = "w185"
 
     const val YOUTUBE_IMAGE_URL_PREFIX = "https://img.youtube.com/vi/"
     const val YOUTUBE_IMAGE_URL_SUFFIX = "/0.jpg"
