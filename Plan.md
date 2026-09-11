@@ -40,7 +40,7 @@ Refactor the foundational layers to support the new architecture.
 2.  **[DONE] Material 3 Theme**: Implement a centralized Compose Theme (Color, Type, Shape) in `:base`.
 3.  **[DONE] Base ViewModels**: Refactor `BaseViewModel` and `BaseOpsViewModel` to support Compose-native state collection and lifecycle awareness.
 4.  **[DONE] Shared Models**: Annotate all models in `:shared` and features with `@Serializable`.
-5.  **Common UI Components**: Migrate shared views (Gallery, SearchBar, Adapters) to reusable Composables in `:shared`.
+5.  **[DONE] Common UI Components**: Migrate shared views (Gallery, SearchBar, Adapters) to reusable Composables in `:shared`.
 
 ---
 
