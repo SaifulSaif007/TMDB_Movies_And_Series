@@ -5,16 +5,25 @@ import com.saiful.base.network.model.GenericResponse
 import com.saiful.base.viewmodel.BaseOpsViewModel
 import com.saiful.person.data.repository.DashboardRepo
 import com.saiful.person.model.PersonResponse
+import com.saiful.shared.model.Person
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-@HiltViewModel
-class PersonDashboardVM
-@Inject constructor(private val repo: DashboardRepo) : BaseOpsViewModel() {
+data class PersonDashboardUiState(
+    val popularPersons: List<Person> = emptyList(),
+    val trendingPersons: List<Person> = emptyList()
+)
 
-    val popularPersonList = MutableStateFlow<PersonResponse?>(null)
-    val trendingPersonList = MutableStateFlow<PersonResponse?>(null)
+@HiltViewModel
+class PersonDashboardVM @Inject constructor(
+    private val repo: DashboardRepo
+) : BaseOpsViewModel() {
+
+    private val _uiState = MutableStateFlow(PersonDashboardUiState())
+    val uiState = _uiState.asStateFlow()
 
     init {
         popularPerson()
@@ -34,33 +43,21 @@ class PersonDashboardVM
     }
 
     override fun onSuccessResponse(operationTag: String, data: BaseResponse.Success<Any>) {
-        when (operationTag) {
-            popularPersons -> {
-                when (val response = data as GenericResponse<*>) {
-                    is BaseResponse.Success -> {
-                        popularPersonList.value = response.body as PersonResponse
-                    }
+        val response = (data as? GenericResponse<*>)?.let {
+            if (it is BaseResponse.Success) it.body as? PersonResponse else null
+        } ?: return
 
-                    else -> {}
-                }
-            }
-
-            trendingPersons -> {
-                when (val response = data as GenericResponse<*>) {
-                    is BaseResponse.Success -> {
-                        trendingPersonList.value = response.body as PersonResponse
-                    }
-
-                    else -> {}
-                }
+        _uiState.update { currentState ->
+            when (operationTag) {
+                popularPersons -> currentState.copy(popularPersons = response.results)
+                trendingPersons -> currentState.copy(trendingPersons = response.results)
+                else -> currentState
             }
         }
     }
-
 
     private companion object {
         const val popularPersons = "POPULAR_PERSON"
         const val trendingPersons = "TRENDING_PERSON"
     }
-
 }

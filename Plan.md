@@ -66,7 +66,7 @@ Iteratively migrate each feature module to Compose.
 2.  **[DONE] TV Shows Module Migration**:
     *   Implement `TVShowsScreen`, `TVShowDetailsScreen` in Compose.
     *   Remove legacy Fragments and XMLs.
-3.  **Person Module Migration**:
+3.  **[DONE] Person Module Migration**:
     *   Implement `PersonDashboardScreen`, `PersonDetailsScreen` in Compose.
     *   Remove legacy Fragments and XMLs.
 
