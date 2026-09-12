@@ -6,16 +6,24 @@ import com.saiful.tvshows.data.repository.ShowDetailsRepo
 import com.saiful.tvshows.model.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-@HiltViewModel
-class TvShowsDetailsVM
-@Inject constructor(private val repo: ShowDetailsRepo) : BaseOpsViewModel() {
+data class TvShowsDetailsUiState(
+    val showDetails: TvShowDetails? = null,
+    val showCasts: TvShowCastResponse? = null,
+    val recommendations: TvShowsResponse? = null,
+    val similarShows: TvShowsResponse? = null
+)
 
-    val showDetails = MutableStateFlow<TvShowDetails?>(null)
-    val showCasts = MutableStateFlow<TvShowCastResponse?>(null)
-    val recommendation = MutableStateFlow<TvShowsResponse?>(null)
-    val similarShow = MutableStateFlow<TvShowsResponse?>(null)
+@HiltViewModel
+class TvShowsDetailsVM @Inject constructor(
+    private val repo: ShowDetailsRepo
+) : BaseOpsViewModel() {
+
+    private val _uiState = MutableStateFlow(TvShowsDetailsUiState())
+    val uiState = _uiState.asStateFlow()
 
     fun fetchShowDetails(showId: Int) {
         executeRestCodeBlock(show_details) {
@@ -35,36 +43,16 @@ class TvShowsDetailsVM
     override fun onSuccessResponse(operationTag: String, data: BaseResponse.Success<Any>) {
         when (operationTag) {
             show_details -> {
-                when (data) {
-                    is BaseResponse.Success -> {
-                        showDetails.value = data.body as TvShowDetails
-                    }
-                    else -> {}
-                }
+                _uiState.update { it.copy(showDetails = data.body as TvShowDetails) }
             }
             show_cast -> {
-                when (data) {
-                    is BaseResponse.Success -> {
-                        showCasts.value = data.body as TvShowCastResponse
-                    }
-                    else -> {}
-                }
+                _uiState.update { it.copy(showCasts = data.body as TvShowCastResponse) }
             }
             show_recommendation -> {
-                when (data) {
-                    is BaseResponse.Success -> {
-                        recommendation.value = data.body as TvShowsResponse
-                    }
-                    else -> {}
-                }
+                _uiState.update { it.copy(recommendations = data.body as TvShowsResponse) }
             }
             similar_show -> {
-                when (data) {
-                    is BaseResponse.Success -> {
-                        similarShow.value = data.body as TvShowsResponse
-                    }
-                    else -> {}
-                }
+                _uiState.update { it.copy(similarShows = data.body as TvShowsResponse) }
             }
         }
     }

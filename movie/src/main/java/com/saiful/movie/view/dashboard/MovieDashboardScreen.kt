@@ -20,6 +20,7 @@ import com.saiful.shared.components.TMDBImageSlider
 import com.saiful.shared.components.TMDBMovieItem
 import com.saiful.shared.components.TMDBSectionHeader
 import com.saiful.shared.model.Movies
+import com.saiful.shared.model.SliderItem
 
 @Composable
 fun MovieDashboardScreen(
@@ -50,7 +51,9 @@ fun MovieDashboardContent(
     ) {
         if (uiState.sliderMovies.isNotEmpty()) {
             TMDBImageSlider(
-                movies = uiState.sliderMovies,
+                items = uiState.sliderMovies.map { 
+                    SliderItem(it.id, it.title, it.backdropPath)
+                },
                 onItemClick = onMovieClick,
                 modifier = Modifier.padding(top = 16.dp)
             )

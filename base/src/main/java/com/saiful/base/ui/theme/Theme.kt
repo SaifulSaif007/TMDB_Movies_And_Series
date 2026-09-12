@@ -1,6 +1,8 @@
 package com.saiful.base.ui.theme
 
 import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -56,9 +58,11 @@ fun TMDBTheme(
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+            val window = view.context.findActivity()?.window
+            if (window != null) {
+                window.statusBarColor = colorScheme.primary.toArgb()
+                WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+            }
         }
     }
 
@@ -68,4 +72,10 @@ fun TMDBTheme(
         shapes = Shapes,
         content = content
     )
+}
+
+private tailrec fun Context.findActivity(): Activity? = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> null
 }

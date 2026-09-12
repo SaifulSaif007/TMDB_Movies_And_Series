@@ -1,4 +1,4 @@
-package com.saiful.movie.view.components
+package com.saiful.shared.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
