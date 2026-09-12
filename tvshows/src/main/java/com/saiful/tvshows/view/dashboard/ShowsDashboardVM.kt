@@ -9,31 +9,31 @@ import com.saiful.shared.model.TvShows
 import com.saiful.tvshows.model.TvShowsResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
+data class DashboardUiState(
+    val trendingShows: List<TvShows> = emptyList(),
+    val popularShows: List<TvShows> = emptyList(),
+    val topRatedShows: List<TvShows> = emptyList(),
+    val onAirShows: List<TvShows> = emptyList(),
+    val sliderShows: List<TvShows> = emptyList()
+)
+
 @HiltViewModel
-class ShowsDashboardVM
-@Inject constructor(private val repo: DashboardRepo) : BaseOpsViewModel() {
+class ShowsDashboardVM @Inject constructor(
+    private val repo: DashboardRepo
+) : BaseOpsViewModel() {
 
-    val trendingShowsList = MutableStateFlow<TvShowsResponse?>(null)
-    val popularShowsList = MutableStateFlow<TvShowsResponse?>(null)
-    val topRatedShowsList = MutableStateFlow<TvShowsResponse?>(null)
-    val onAirShowsList = MutableStateFlow<TvShowsResponse?>(null)
-    val sliderList = arrayListOf<TvShows>()
-
-    val sliderLoaded = combine(
-        topRatedShowsList,
-        popularShowsList,
-        trendingShowsList,
-        onAirShowsList
-    ) { top, pop, trend, on ->
-        top?.results != null || pop?.results != null || trend != null || on != null
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+    private val _uiState = MutableStateFlow(DashboardUiState())
+    val uiState = _uiState.asStateFlow()
 
     init {
+        fetchAll()
+    }
+
+    private fun fetchAll() {
         fetchTrendingShows()
         fetchPopularShows()
         fetchTopRatedShows()
@@ -65,58 +65,40 @@ class ShowsDashboardVM
     }
 
     override fun onSuccessResponse(operationTag: String, data: BaseResponse.Success<Any>) {
-        when (operationTag) {
-            trendingShows -> {
-                when (val response = data as GenericResponse<*>) {
-                    is BaseResponse.Success -> {
-                        trendingShowsList.value = response.body as TvShowsResponse
-                        trendingShowsList.value?.results?.shuffled()?.subList(0, 2)?.let {
-                            sliderList.addAll(it)
-                        }
-                    }
-                    else -> {}
-                }
-            }
-            popularShows -> {
-                when (val response = data as GenericResponse<*>) {
-                    is BaseResponse.Success -> {
-                        popularShowsList.value = response.body as TvShowsResponse
-                        popularShowsList.value?.results?.shuffled()?.subList(0, 2)?.let {
-                            sliderList.addAll(it)
-                        }
-                    }
-                    else -> {}
-                }
-            }
-            topRatedShows -> {
-                when (val response = data as GenericResponse<*>) {
-                    is BaseResponse.Success -> {
-                        topRatedShowsList.value = response.body as TvShowsResponse
-                        topRatedShowsList.value?.results?.shuffled()?.subList(0, 2)?.let {
-                            sliderList.addAll(it)
-                        }
-                    }
-                    else -> {}
-                }
-            }
-            onAirShows -> {
-                when (val response = data as GenericResponse<*>) {
-                    is BaseResponse.Success -> {
-                        onAirShowsList.value = response.body as TvShowsResponse
-                        onAirShowsList.value?.results?.shuffled()?.subList(0, 2)?.let {
-                            sliderList.addAll(it)
-                        }
-                    }
-                    else -> {}
-                }
+        val response = (data as? GenericResponse<*>)?.let {
+            if (it is BaseResponse.Success) it.body as? TvShowsResponse else null
+        } ?: return
+
+        val shows = response.results
+        val sliderItems = if (shows.isNotEmpty()) shows.shuffled().take(2) else emptyList()
+
+        _uiState.update { currentState ->
+            when (operationTag) {
+                trendingShows -> currentState.copy(
+                    trendingShows = shows,
+                    sliderShows = currentState.sliderShows + sliderItems
+                )
+                popularShows -> currentState.copy(
+                    popularShows = shows,
+                    sliderShows = currentState.sliderShows + sliderItems
+                )
+                topRatedShows -> currentState.copy(
+                    topRatedShows = shows,
+                    sliderShows = currentState.sliderShows + sliderItems
+                )
+                onAirShows -> currentState.copy(
+                    onAirShows = shows,
+                    sliderShows = currentState.sliderShows + sliderItems
+                )
+                else -> currentState
             }
         }
     }
 
-    companion object {
-        private const val trendingShows = "TRENDING_SHOWS"
-        private const val popularShows = "POPULAR_SHOWS"
-        private const val topRatedShows = "TOP_RATED_SHOWS"
-        private const val onAirShows = "ON_AIR_SHOWS"
+    private companion object {
+        const val trendingShows = "TRENDING_SHOWS"
+        const val popularShows = "POPULAR_SHOWS"
+        const val topRatedShows = "TOP_RATED_SHOWS"
+        const val onAirShows = "ON_AIR_SHOWS"
     }
 }

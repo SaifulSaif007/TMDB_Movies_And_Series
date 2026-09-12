@@ -1,4 +1,4 @@
-package com.saiful.movie.view.details
+package com.saiful.tvshows.view.details
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -19,32 +19,31 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.saiful.base.ui.theme.TMDBTheme
-import com.saiful.movie.model.Cast
-import com.saiful.movie.model.MovieDetailsResponse
+import com.saiful.tvshows.model.*
 import com.saiful.shared.components.*
-import com.saiful.shared.model.Movies
+import com.saiful.shared.model.TvShows
 import com.saiful.shared.utils.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MovieDetailsScreen(
-    movieId: Int,
-    viewModel: MovieDetailsVM,
+fun TvShowsDetailsScreen(
+    showId: Int,
+    viewModel: TvShowsDetailsVM,
     onBackClick: () -> Unit,
-    onMovieClick: (Int) -> Unit,
+    onShowClick: (Int) -> Unit,
     onCastClick: (Int) -> Unit,
     onTrailerClick: (String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    LaunchedEffect(movieId) {
-        viewModel.fetchMovieDetails(movieId)
+    LaunchedEffect(showId) {
+        viewModel.fetchShowDetails(showId)
     }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = uiState.movieDetails?.title ?: "") },
+                title = { Text(text = uiState.showDetails?.name ?: "") },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -53,10 +52,10 @@ fun MovieDetailsScreen(
             )
         }
     ) { padding ->
-        MovieDetailsContent(
+        TvShowsDetailsContent(
             modifier = Modifier.padding(padding),
             uiState = uiState,
-            onMovieClick = onMovieClick,
+            onShowClick = onShowClick,
             onCastClick = onCastClick,
             onTrailerClick = onTrailerClick
         )
@@ -64,14 +63,14 @@ fun MovieDetailsScreen(
 }
 
 @Composable
-fun MovieDetailsContent(
-    uiState: MovieDetailsUiState,
-    onMovieClick: (Int) -> Unit,
+fun TvShowsDetailsContent(
+    uiState: TvShowsDetailsUiState,
+    onShowClick: (Int) -> Unit,
     onCastClick: (Int) -> Unit,
     onTrailerClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val movie = uiState.movieDetails
+    val show = uiState.showDetails
 
     Column(
         modifier = modifier
@@ -80,7 +79,7 @@ fun MovieDetailsContent(
     ) {
         Box(modifier = Modifier.height(250.dp)) {
             AsyncImage(
-                model = AppConstants.IMAGE_BASE_URL + AppConstants.BACKDROP_SIZE + movie?.backdropPath,
+                model = AppConstants.IMAGE_BASE_URL + AppConstants.BACKDROP_SIZE + show?.backdropPath,
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
@@ -94,7 +93,7 @@ fun MovieDetailsContent(
                 elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
             ) {
                 AsyncImage(
-                    model = AppConstants.IMAGE_BASE_URL + AppConstants.POSTER_SIZE + movie?.posterPath,
+                    model = AppConstants.IMAGE_BASE_URL + AppConstants.POSTER_SIZE + show?.posterPath,
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
@@ -104,12 +103,12 @@ fun MovieDetailsContent(
 
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = movie?.title ?: "",
+                text = show?.name ?: "",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "(${floatNumberFormatter(movie?.voteAverage?.toFloat())})",
+                text = "(${floatNumberFormatter(show?.voteAverage?.toFloat())})",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.secondary
             )
@@ -120,7 +119,7 @@ fun MovieDetailsContent(
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                movie?.genres?.filterNotNull()?.forEach { genre ->
+                show?.genres?.filterNotNull()?.forEach { genre ->
                     SuggestionChip(
                         onClick = { },
                         label = { Text(genre.name ?: "") }
@@ -129,28 +128,28 @@ fun MovieDetailsContent(
             }
 
             Text(
-                text = movie?.tagline ?: "",
+                text = show?.tagline ?: "",
                 style = MaterialTheme.typography.bodyLarge,
                 fontStyle = FontStyle.Italic,
                 color = MaterialTheme.colorScheme.secondary
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = movie?.overview ?: "",
+                text = show?.overview ?: "",
                 style = MaterialTheme.typography.bodyMedium
             )
         }
 
-        MovieInfoSection(movie)
+        TvShowInfoSection(show)
 
-        if (uiState.cast.isNotEmpty()) {
+        if (uiState.showCasts?.cast != null && uiState.showCasts.cast.isNotEmpty()) {
             TMDBSectionHeader(title = "Cast", onSeeAllClick = {}, showSeeAll = false)
             TMDBHorizontalList(
-                items = uiState.cast,
+                items = uiState.showCasts.cast,
                 itemContent = { cast ->
                     TMDBCastItem(
                         name = cast.name ?: "",
-                        character = cast.character,
+                        character = cast.roles.firstOrNull()?.character ?: "",
                         profilePath = cast.profilePath,
                         onClick = { onCastClick(cast.id) }
                     )
@@ -158,7 +157,7 @@ fun MovieDetailsContent(
             )
         }
 
-        val trailers = movie?.videos?.results?.filter { it.type == "Trailer" || it.type == "Teaser" }
+        val trailers = show?.videos?.results?.filter { it.type == "Trailer" || it.type == "Teaser" }
         if (!trailers.isNullOrEmpty()) {
             TMDBSectionHeader(title = "Trailers", onSeeAllClick = {}, showSeeAll = false)
             TMDBHorizontalList(
@@ -173,22 +172,22 @@ fun MovieDetailsContent(
             )
         }
 
-        if (uiState.recommendationsList.isNotEmpty()) {
+        if (uiState.recommendations?.results != null && uiState.recommendations.results.isNotEmpty()) {
             TMDBSectionHeader(title = "Recommendations", onSeeAllClick = {}, showSeeAll = false)
             TMDBHorizontalList(
-                items = uiState.recommendationsList,
+                items = uiState.recommendations.results,
                 itemContent = { recommendation ->
-                    TMDBMovieItem(movie = recommendation, onClick = onMovieClick)
+                    TMDBTvShowItem(tvShow = recommendation, onClick = onShowClick)
                 }
             )
         }
 
-        if (uiState.similarMoviesList.isNotEmpty()) {
-            TMDBSectionHeader(title = "Similar Movies", onSeeAllClick = {}, showSeeAll = false)
+        if (uiState.similarShows?.results != null && uiState.similarShows.results.isNotEmpty()) {
+            TMDBSectionHeader(title = "Similar Shows", onSeeAllClick = {}, showSeeAll = false)
             TMDBHorizontalList(
-                items = uiState.similarMoviesList,
+                items = uiState.similarShows.results,
                 itemContent = { similar ->
-                    TMDBMovieItem(movie = similar, onClick = onMovieClick)
+                    TMDBTvShowItem(tvShow = similar, onClick = onShowClick)
                 }
             )
         }
@@ -198,7 +197,7 @@ fun MovieDetailsContent(
 }
 
 @Composable
-private fun MovieInfoSection(movie: MovieDetailsResponse?) {
+private fun TvShowInfoSection(show: TvShowDetails?) {
     Column(modifier = Modifier.padding(16.dp)) {
         Text(
             text = "Information",
@@ -206,12 +205,12 @@ private fun MovieInfoSection(movie: MovieDetailsResponse?) {
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(8.dp))
-        InfoRow("Budget", movie?.budget?.toLong()?.formatToShortNumber() ?: "")
-        InfoRow("Revenue", movie?.revenue?.toLong()?.formatToShortNumber() ?: "")
-        InfoRow("Status", movie?.status ?: "")
-        InfoRow("Release Date", movie?.releaseDate?.formatDate() ?: "")
-        InfoRow("Runtime", "${movie?.runtime} mins")
-        InfoRow("Production", movie?.productionCompanies?.map { it?.name }?.joinToString(", ") ?: "")
+        InfoRow("Status", show?.status ?: "")
+        InfoRow("First Air Date", show?.firstAirDate?.formatDate() ?: "")
+        InfoRow("Seasons", show?.numberOfSeasons?.toString() ?: "")
+        InfoRow("Episodes", show?.numberOfEpisodes?.toString() ?: "")
+        InfoRow("Type", show?.type ?: "")
+        InfoRow("Production", show?.productionCompanies?.map { it?.name }?.joinToString(", ") ?: "")
     }
 }
 
@@ -230,15 +229,15 @@ private fun InfoRow(label: String, value: String) {
 
 @Preview(showBackground = true)
 @Composable
-private fun MovieInfoSectionPreview() {
+private fun TvShowInfoSectionPreview() {
     TMDBTheme {
-        MovieInfoSection(
-            movie = MovieDetailsResponse(
-                budget = 200000000,
-                revenue = 1900000000.0,
-                status = "Released",
-                releaseDate = "2021-12-17",
-                runtime = 148
+        TvShowInfoSection(
+            show = TvShowDetails(
+                status = "Returning Series",
+                firstAirDate = "2023-01-15",
+                numberOfSeasons = 1,
+                numberOfEpisodes = 9,
+                type = "Scripted"
             )
         )
     }
@@ -246,36 +245,31 @@ private fun MovieInfoSectionPreview() {
 
 @Preview(showBackground = true)
 @Composable
-private fun MovieDetailsContentPreview() {
-    val dummyMovie = Movies(
+private fun TvShowsDetailsContentPreview() {
+    val dummyShow = TvShows(
         id = 1,
-        title = "Spider-Man: No Way Home",
-        posterPath = "/1g0dhYEjmvl6Y7KEmUz9AUIXo7r.jpg",
-        backdropPath = "/1g0dhYEjmvl6Y7KEmUz9AUIXo7r.jpg",
-        voteAverage = 8.2
+        name = "The Last of Us",
+        posterPath = null,
+        backdropPath = null,
+        voteAverage = 8.8
     )
     TMDBTheme {
-        MovieDetailsContent(
-            uiState = MovieDetailsUiState(
-                movieDetails = MovieDetailsResponse(
-                    title = "Spider-Man: No Way Home",
-                    overview = "Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes of being a Super Hero. When he asks for help from Doctor Strange, the stakes become even more dangerous, forcing him to discover what it truly means to be Spider-Man.",
-                    voteAverage = 8.2,
-                    tagline = "The Multiverse unleashed.",
-                    budget = 200000000,
-                    revenue = 1900000000.0,
-                    status = "Released",
-                    releaseDate = "2021-12-17",
-                    runtime = 148
+        TvShowsDetailsContent(
+            uiState = TvShowsDetailsUiState(
+                showDetails = TvShowDetails(
+                    name = "The Last of Us",
+                    overview = "Twenty years after modern civilization has been destroyed...",
+                    voteAverage = 8.8,
+                    tagline = "When you're lost in the darkness, look for the light.",
+                    status = "Returning Series",
+                    firstAirDate = "2023-01-15",
+                    numberOfSeasons = 1,
+                    numberOfEpisodes = 9
                 ),
-                cast = listOf(
-                    Cast(id = 1, name = "Tom Holland", character = "Peter Parker / Spider-Man", profilePath = null),
-                    Cast(id = 2, name = "Zendaya", character = "MJ", profilePath = null)
-                ),
-                recommendationsList = listOf(dummyMovie, dummyMovie),
-                similarMoviesList = listOf(dummyMovie, dummyMovie)
+                recommendations = TvShowsResponse(1, listOf(dummyShow), 1, 1),
+                similarShows = TvShowsResponse(1, listOf(dummyShow), 1, 1)
             ),
-            onMovieClick = {},
+            onShowClick = {},
             onCastClick = {},
             onTrailerClick = {}
         )

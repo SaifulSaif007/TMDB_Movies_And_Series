@@ -63,7 +63,7 @@ Iteratively migrate each feature module to Compose.
     *   Implement `MovieDashboardScreen`, `MovieDetailsScreen`, and `MovieListScreen` in Compose.
     *   Update `DashboardVM` to expose `StateFlow`.
     *   [TODO in Phase 4] Remove `MovieDashboardFragment` and related XMLs.
-2.  **TV Shows Module Migration**:
+2.  **[DONE] TV Shows Module Migration**:
     *   Implement `TVShowsScreen`, `TVShowDetailsScreen` in Compose.
     *   Remove legacy Fragments and XMLs.
 3.  **Person Module Migration**:

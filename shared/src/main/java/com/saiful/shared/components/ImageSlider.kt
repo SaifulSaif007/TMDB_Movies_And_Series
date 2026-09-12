@@ -24,16 +24,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.saiful.base.ui.theme.TMDBTheme
-import com.saiful.shared.model.Movies
+import com.saiful.shared.model.SliderItem
 import com.saiful.shared.utils.AppConstants
 
 @Composable
 fun TMDBImageSlider(
-    movies: List<Movies>,
+    items: List<SliderItem>,
     onItemClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val pagerState = rememberPagerState(pageCount = { movies.size })
+    val pagerState = rememberPagerState(pageCount = { items.size })
 
     Column(modifier = modifier.fillMaxWidth()) {
         HorizontalPager(
@@ -44,16 +44,16 @@ fun TMDBImageSlider(
                 .padding(horizontal = 16.dp),
             pageSpacing = 8.dp
         ) { page ->
-            val movie = movies[page]
+            val item = items[page]
             Card(
-                onClick = { onItemClick(movie.id) },
+                onClick = { onItemClick(item.id) },
                 shape = MaterialTheme.shapes.large,
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
                 Box(modifier = Modifier.fillMaxSize()) {
                     AsyncImage(
-                        model = AppConstants.IMAGE_BASE_URL + AppConstants.BACKDROP_SIZE + movie.backdropPath,
-                        contentDescription = movie.title,
+                        model = AppConstants.IMAGE_BASE_URL + AppConstants.BACKDROP_SIZE + item.backdropPath,
+                        contentDescription = item.title,
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop
                     )
@@ -72,7 +72,7 @@ fun TMDBImageSlider(
                             )
                     )
                     Text(
-                        text = movie.title ?: "",
+                        text = item.title ?: "",
                         modifier = Modifier
                             .align(Alignment.BottomStart)
                             .padding(16.dp),
@@ -91,9 +91,9 @@ fun TMDBImageSlider(
 private fun TMDBImageSliderPreview() {
     TMDBTheme {
         TMDBImageSlider(
-            movies = listOf(
-                Movies(id = 1, title = "Movie 1", backdropPath = null),
-                Movies(id = 2, title = "Movie 2", backdropPath = null)
+            items = listOf(
+                SliderItem(id = 1, title = "Item 1", backdropPath = null),
+                SliderItem(id = 2, title = "Item 2", backdropPath = null)
             ),
             onItemClick = {}
         )
