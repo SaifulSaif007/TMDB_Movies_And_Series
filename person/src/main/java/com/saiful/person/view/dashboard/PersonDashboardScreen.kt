@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.saiful.base.ui.theme.TMDBTheme
-import com.saiful.person.model.PersonCategory
+import com.saiful.shared.model.PersonCategory
 import com.saiful.shared.components.TMDBHorizontalList
 import com.saiful.shared.components.TMDBPersonItem
 import com.saiful.shared.components.TMDBSectionHeader

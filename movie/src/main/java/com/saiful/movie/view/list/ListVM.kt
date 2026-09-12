@@ -6,7 +6,7 @@ import androidx.paging.cachedIn
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.data.api.MovieApiService
 import com.saiful.movie.data.repository.paging.lists.ListRepo
-import com.saiful.movie.model.MovieCategory
+import com.saiful.shared.model.MovieCategory
 import com.saiful.shared.model.Movies
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
