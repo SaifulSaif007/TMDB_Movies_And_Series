@@ -19,7 +19,7 @@ import com.saiful.base.view.BaseFragment
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.movie.R
 import com.saiful.movie.databinding.FragmentMovieDashboardBinding
-import com.saiful.movie.model.MovieCategory
+import com.saiful.shared.model.MovieCategory
 import com.saiful.movie.view.adapter.MovieDashboardAdapter
 import com.saiful.movie.view.adapter.SliderAdapter
 import dagger.hilt.android.AndroidEntryPoint

@@ -6,7 +6,7 @@ import androidx.paging.cachedIn
 import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.person.data.api.PersonApiService
 import com.saiful.person.data.repository.paging.list.ListRepo
-import com.saiful.person.model.PersonCategory
+import com.saiful.shared.model.PersonCategory
 import com.saiful.shared.model.Person
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

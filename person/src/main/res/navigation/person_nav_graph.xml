@@ -24,7 +24,7 @@
         tools:layout="@layout/fragment_person_list" >
         <argument
             android:name="category"
-            app:argType="com.saiful.person.model.PersonCategory" />
+            app:argType="com.saiful.shared.model.PersonCategory" />
         <action
             android:id="@+id/action_personListFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />

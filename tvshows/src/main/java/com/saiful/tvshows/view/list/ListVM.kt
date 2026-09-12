@@ -7,7 +7,7 @@ import com.saiful.base.viewmodel.BaseViewModel
 import com.saiful.shared.model.TvShows
 import com.saiful.tvshows.data.api.TvShowsApiService
 import com.saiful.tvshows.data.repository.paging.list.ListRepo
-import com.saiful.tvshows.model.TvShowsCategory
+import com.saiful.shared.model.TvShowsCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

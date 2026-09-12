@@ -22,7 +22,7 @@ import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import coil.compose.AsyncImage
 import com.saiful.base.ui.theme.TMDBTheme
-import com.saiful.movie.model.MovieCategory
+import com.saiful.shared.model.MovieCategory
 import com.saiful.shared.components.TMDBErrorView
 import com.saiful.shared.components.TMDBLoadingView
 import com.saiful.shared.model.Movies

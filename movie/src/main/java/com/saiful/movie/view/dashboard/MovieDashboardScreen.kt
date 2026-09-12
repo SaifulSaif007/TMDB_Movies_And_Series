@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.saiful.base.ui.theme.TMDBTheme
-import com.saiful.movie.model.MovieCategory
+import com.saiful.shared.model.MovieCategory
 import com.saiful.shared.components.TMDBHorizontalList
 import com.saiful.shared.components.TMDBImageSlider
 import com.saiful.shared.components.TMDBMovieItem

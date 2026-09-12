@@ -23,7 +23,7 @@
         tools:layout="@layout/fragment_shows_list">
         <argument
             android:name="show_category"
-            app:argType="com.saiful.tvshows.model.TvShowsCategory" />
+            app:argType="com.saiful.shared.model.TvShowsCategory" />
         <action
             android:id="@+id/action_showListFragment_to_tvShowsDetailsFragment"
             app:destination="@id/tvShowsDetailsFragment" />
