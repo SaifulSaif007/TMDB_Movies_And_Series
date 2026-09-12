@@ -7,7 +7,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.saiful.person.databinding.LayoutPersonListItemBinding
-import com.saiful.person.model.Person
+import com.saiful.shared.model.Person
 import com.saiful.shared.utils.loadBackDropSizeImage
 
 class PersonListAdapter(private val listener: (Int) -> Unit) :

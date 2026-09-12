@@ -10,16 +10,24 @@ import com.saiful.person.model.PersonImage
 import com.saiful.person.model.TvShowsCredits
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-@HiltViewModel
-class PersonDetailsVM
-@Inject constructor(private val repo: PersonDetailsRepo) : BaseOpsViewModel() {
+data class PersonDetailsUiState(
+    val personDetails: PersonDetails? = null,
+    val personImageList: PersonImage? = null,
+    val personMovieList: MovieCredits? = null,
+    val personShowsList: TvShowsCredits? = null
+)
 
-    val personDetails = MutableStateFlow<PersonDetails?>(null)
-    val personImageList = MutableStateFlow<PersonImage?>(null)
-    val personMovieList = MutableStateFlow<MovieCredits?>(null)
-    val personShowsList = MutableStateFlow<TvShowsCredits?>(null)
+@HiltViewModel
+class PersonDetailsVM @Inject constructor(
+    private val repo: PersonDetailsRepo
+) : BaseOpsViewModel() {
+
+    private val _uiState = MutableStateFlow(PersonDetailsUiState())
+    val uiState = _uiState.asStateFlow()
 
     fun fetchPersonDetails(personId: Int) {
         executeRestCodeBlock(person_details) {
@@ -39,40 +47,19 @@ class PersonDetailsVM
     override fun onSuccessResponse(operationTag: String, data: BaseResponse.Success<Any>) {
         when (operationTag) {
             person_details -> {
-                when (data as GenericResponse<*>) {
-                    is BaseResponse.Success -> {
-                        personDetails.value = data.body as PersonDetails
-                    }
-                    else -> {}
-                }
+                _uiState.update { it.copy(personDetails = data.body as PersonDetails) }
             }
             person_image -> {
-                when (data as GenericResponse<*>) {
-                    is BaseResponse.Success -> {
-                        personImageList.value = data.body as PersonImage
-                    }
-                    else -> {}
-                }
+                _uiState.update { it.copy(personImageList = data.body as PersonImage) }
             }
             person_movie_credits -> {
-                when (data as GenericResponse<*>) {
-                    is BaseResponse.Success -> {
-                        personMovieList.value = data.body as MovieCredits
-                    }
-                    else -> {}
-                }
+                _uiState.update { it.copy(personMovieList = data.body as MovieCredits) }
             }
             person_shows_credits -> {
-                when (data as GenericResponse<*>) {
-                    is BaseResponse.Success -> {
-                        personShowsList.value = data.body as TvShowsCredits
-                    }
-                    else -> {}
-                }
+                _uiState.update { it.copy(personShowsList = data.body as TvShowsCredits) }
             }
         }
     }
-
 
     private companion object {
         const val person_details = "PERSON_DETAILS"
@@ -80,5 +67,4 @@ class PersonDetailsVM
         const val person_movie_credits = "MOVIE_CREDITS"
         const val person_shows_credits = "SHOWS_CREDITS"
     }
-
 }

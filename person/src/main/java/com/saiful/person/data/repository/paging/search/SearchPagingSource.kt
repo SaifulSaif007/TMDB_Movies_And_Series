@@ -4,7 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.person.data.api.PersonApiService
-import com.saiful.person.model.Person
+import com.saiful.shared.model.Person
 
 class SearchPagingSource(private val apiService: PersonApiService, private val query: String) :
     PagingSource<Int, Person>() {

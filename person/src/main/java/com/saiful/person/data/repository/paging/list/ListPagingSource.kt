@@ -4,7 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base.network.model.GenericResponse
-import com.saiful.person.model.Person
+import com.saiful.shared.model.Person
 import com.saiful.person.model.PersonResponse
 
 class ListPagingSource(private val apiCall: suspend (page: Int) -> GenericResponse<PersonResponse>) :

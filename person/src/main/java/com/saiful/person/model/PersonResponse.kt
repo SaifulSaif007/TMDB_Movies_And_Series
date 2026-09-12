@@ -1,5 +1,6 @@
 package com.saiful.person.model
 
+import com.saiful.shared.model.Person
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
