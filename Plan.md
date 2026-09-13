@@ -77,8 +77,8 @@ Finalize the app structure and remove legacy code.
 
 #### Tasks:
 1.  **[DONE] Type-Safe Navigation**: Define the app's route structure using Kotlin Serialization objects.
-2.  **Main Navigation Host**: Implement `NavHost` in `MainActivity` to orchestrate screen transitions.
-3.  **Bottom Navigation**: Create a Compose-based `BottomNavigationBar`.
+2.  **[DONE] Main Navigation Host**: Implement `NavHost` in `MainActivity` to orchestrate screen transitions.
+3.  **[DONE] Bottom Navigation**: Create a Compose-based `BottomNavigationBar`.
 4.  **Final Cleanup**: Remove all unused XML files, Fragments, ViewBinding, and legacy dependencies (Glide, Moshi, SafeArgs).
 
 ---
