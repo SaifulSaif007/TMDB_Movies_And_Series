@@ -1,8 +1,6 @@
 package com.saiful.tvshows.di
 
-import com.saiful.base.util.navigation.TvShowModuleNavigation
 import com.saiful.tvshows.data.api.TvShowsApiService
-import com.saiful.tvshows.navigation.ShowNavigationImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,9 +16,5 @@ object TvShowsService {
     @Singleton
     fun provideTvShowsApi(retrofit: Retrofit): TvShowsApiService =
         retrofit.create(TvShowsApiService::class.java)
-
-    @Provides
-    @Singleton
-    fun provideNavigation(): TvShowModuleNavigation = ShowNavigationImpl()
 
 }

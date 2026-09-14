@@ -16,7 +16,7 @@
         android:theme="@style/Theme.TMDBMoviesSeries"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".MainComposeActivity"
             android:exported="true"
             android:theme="@style/Theme.TMDBMoviesSeries">
             <intent-filter>

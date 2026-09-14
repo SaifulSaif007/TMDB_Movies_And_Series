@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,6 +38,7 @@ import com.saiful.shared.model.Image
 import com.saiful.shared.navigation.Route
 import com.saiful.shared.utils.JsonConverter
 import com.saiful.shared.view.gallery.GalleryScreen
+import com.saiful.tmdbexplorer.search.SearchScreen
 import com.saiful.tvshows.view.dashboard.TvShowsDashboardScreen
 import com.saiful.tvshows.view.details.TvShowsDetailsScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,7 +67,8 @@ data class TopLevelDestination<T : Any>(
 val topLevelDestinations = listOf(
     TopLevelDestination("Movies", Icons.Default.Home, Route.MovieDashboard),
     TopLevelDestination("TV Shows", Icons.Default.PlayArrow, Route.TvShowsDashboard),
-    TopLevelDestination("Celebrities", Icons.Default.Person, Route.PersonDashboard)
+    TopLevelDestination("Celebrities", Icons.Default.Person, Route.PersonDashboard),
+    TopLevelDestination("Search", Icons.Default.Search, Route.Search)
 )
 
 @Composable
@@ -145,6 +148,14 @@ fun MainScreen(context: Context) {
                     viewModel = hiltViewModel(),
                     onShowClick = { showId -> navController.navigate(Route.TvShowsDetails(showId)) },
                     onSeeAllClick = { /* Not fully implemented yet */ }
+                )
+            }
+
+            composable<Route.Search> {
+                SearchScreen(
+                    onMovieClick = { movieId -> navController.navigate(Route.MovieDetails(movieId)) },
+                    onShowClick = { showId -> navController.navigate(Route.TvShowsDetails(showId)) },
+                    onPersonClick = { personId -> navController.navigate(Route.PersonDetails(personId)) }
                 )
             }
 

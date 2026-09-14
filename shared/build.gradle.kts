@@ -59,6 +59,7 @@ dependencies {
     api(libs.bumtech.glide)
     api(libs.coil.compose)
     api(libs.androidx.paging)
+    api(libs.androidx.paging.compose)
 
     api(libs.bundles.androidxNavigation)
 } 

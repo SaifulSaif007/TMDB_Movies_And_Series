@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
-internal class SearchVM @Inject constructor(
+class SearchVM @Inject constructor(
     private val apiService: MovieApiService
 ) : BaseViewModel() {
 

@@ -55,14 +55,14 @@ Fix the Retrofit `CallAdapter` crash by properly configuring Moshi for Kotlin.
 
 ---
 
-### Phase 3: Feature Migration (`:movie`, `:tvshows`, `:person`)
+### Phase 3: Feature Migration (`:movie`, `:tvshows`, `:person`) [DONE]
 Iteratively migrate each feature module to Compose.
 
 #### Tasks:
 1.  **[DONE] Movie Module Migration**:
     *   Implement `MovieDashboardScreen`, `MovieDetailsScreen`, and `MovieListScreen` in Compose.
     *   Update `DashboardVM` to expose `StateFlow`.
-    *   [TODO in Phase 4] Remove `MovieDashboardFragment` and related XMLs.
+    *   [DONE] Remove `MovieDashboardFragment` and related XMLs.
 2.  **[DONE] TV Shows Module Migration**:
     *   Implement `TVShowsScreen`, `TVShowDetailsScreen` in Compose.
     *   Remove legacy Fragments and XMLs.
@@ -72,14 +72,14 @@ Iteratively migrate each feature module to Compose.
 
 ---
 
-### Phase 4: Integration & Cleanup (`:app`)
+### Phase 4: Integration & Cleanup (`:app`) [DONE]
 Finalize the app structure and remove legacy code.
 
 #### Tasks:
 1.  **[DONE] Type-Safe Navigation**: Define the app's route structure using Kotlin Serialization objects.
 2.  **[DONE] Main Navigation Host**: Implement `NavHost` in `MainActivity` to orchestrate screen transitions.
 3.  **[DONE] Bottom Navigation**: Create a Compose-based `BottomNavigationBar`.
-4.  **Final Cleanup**: Remove all unused XML files, Fragments, ViewBinding, and legacy dependencies (Glide, Moshi, SafeArgs).
+4.  **[DONE] Final Cleanup**: Remove all unused XML files, Fragments, ViewBinding, and legacy dependencies (Glide, Moshi, SafeArgs).
 
 ---
 
