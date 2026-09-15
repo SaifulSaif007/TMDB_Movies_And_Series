@@ -99,7 +99,7 @@ data class Season(
     @SerialName("poster_path")
     val posterPath: String? = null,
     @SerialName("season_number")
-    val seasonNumber: Int = 0
+    val seasonNumber: Int? = 0
 )
 
 @Serializable

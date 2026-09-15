@@ -18,6 +18,9 @@ sealed interface Route {
     data class MovieList(val category: MovieCategory) : Route
 
     @Serializable
+    data class MovieCollectionDetails(val collectionId: Int) : Route
+
+    @Serializable
     data object TvShowsDashboard : Route
 
     @Serializable

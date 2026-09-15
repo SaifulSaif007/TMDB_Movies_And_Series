@@ -1,5 +1,6 @@
 package com.saiful.movie.view.details
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -33,7 +34,8 @@ fun MovieDetailsScreen(
     onBackClick: () -> Unit,
     onMovieClick: (Int) -> Unit,
     onCastClick: (Int) -> Unit,
-    onTrailerClick: (String) -> Unit
+    onTrailerClick: (String) -> Unit,
+    onCollectionClick: (Int) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -58,7 +60,8 @@ fun MovieDetailsScreen(
             uiState = uiState,
             onMovieClick = onMovieClick,
             onCastClick = onCastClick,
-            onTrailerClick = onTrailerClick
+            onTrailerClick = onTrailerClick,
+            onCollectionClick = onCollectionClick
         )
     }
 }
@@ -69,6 +72,7 @@ fun MovieDetailsContent(
     onMovieClick: (Int) -> Unit,
     onCastClick: (Int) -> Unit,
     onTrailerClick: (String) -> Unit,
+    onCollectionClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val movie = uiState.movieDetails
@@ -99,6 +103,36 @@ fun MovieDetailsContent(
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
                 )
+            }
+        }
+
+        // Collection Card Button if present
+        movie?.belongsToCollection?.let { collection ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .clickable { onCollectionClick(collection.id ?: 0) },
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Part of the ${collection.name}",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Text(
+                        text = "View Collection",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
         }
 
@@ -277,7 +311,8 @@ private fun MovieDetailsContentPreview() {
             ),
             onMovieClick = {},
             onCastClick = {},
-            onTrailerClick = {}
+            onTrailerClick = {},
+            onCollectionClick = {}
         )
     }
 }

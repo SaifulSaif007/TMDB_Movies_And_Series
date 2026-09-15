@@ -29,6 +29,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.saiful.base.ui.theme.TMDBTheme
+import com.saiful.movie.view.collection.MovieCollectionScreen
 import com.saiful.movie.view.dashboard.MovieDashboardScreen
 import com.saiful.movie.view.details.MovieDetailsScreen
 import com.saiful.movie.view.list.MovieListScreen
@@ -41,6 +42,7 @@ import com.saiful.shared.view.gallery.GalleryScreen
 import com.saiful.tmdbexplorer.search.SearchScreen
 import com.saiful.tvshows.view.dashboard.TvShowsDashboardScreen
 import com.saiful.tvshows.view.details.TvShowsDetailsScreen
+import com.saiful.tvshows.view.season.TvShowSeasonScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -129,7 +131,18 @@ fun MainScreen(context: Context) {
                     onBackClick = { navController.navigateUp() },
                     onMovieClick = { movieId -> navController.navigate(Route.MovieDetails(movieId)) },
                     onCastClick = { castId -> navController.navigate(Route.PersonDetails(castId)) },
-                    onTrailerClick = { key -> launchYoutube(context, key) }
+                    onTrailerClick = { key -> launchYoutube(context, key) },
+                    onCollectionClick = { collectionId -> navController.navigate(Route.MovieCollectionDetails(collectionId)) }
+                )
+            }
+
+            composable<Route.MovieCollectionDetails> { backStackEntry ->
+                val args = backStackEntry.toRoute<Route.MovieCollectionDetails>()
+                MovieCollectionScreen(
+                    collectionId = args.collectionId,
+                    viewModel = hiltViewModel(),
+                    onBackClick = { navController.navigateUp() },
+                    onMovieClick = { movieId -> navController.navigate(Route.MovieDetails(movieId)) }
                 )
             }
 
@@ -167,7 +180,18 @@ fun MainScreen(context: Context) {
                     onBackClick = { navController.navigateUp() },
                     onShowClick = { showId -> navController.navigate(Route.TvShowsDetails(showId)) },
                     onCastClick = { castId -> navController.navigate(Route.PersonDetails(castId)) },
-                    onTrailerClick = { key -> launchYoutube(context, key) }
+                    onTrailerClick = { key -> launchYoutube(context, key) },
+                    onSeasonClick = { showId, seasonNo -> navController.navigate(Route.TvShowSeasonDetails(showId, seasonNo)) }
+                )
+            }
+
+            composable<Route.TvShowSeasonDetails> { backStackEntry ->
+                val args = backStackEntry.toRoute<Route.TvShowSeasonDetails>()
+                TvShowSeasonScreen(
+                    showId = args.showId,
+                    seasonNo = args.seasonNo,
+                    viewModel = hiltViewModel(),
+                    onBackClick = { navController.navigateUp() }
                 )
             }
 
