@@ -1,5 +1,6 @@
 package com.saiful.tvshows.view.details
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -32,7 +34,8 @@ fun TvShowsDetailsScreen(
     onBackClick: () -> Unit,
     onShowClick: (Int) -> Unit,
     onCastClick: (Int) -> Unit,
-    onTrailerClick: (String) -> Unit
+    onTrailerClick: (String) -> Unit,
+    onSeasonClick: (Int, Int) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -57,7 +60,8 @@ fun TvShowsDetailsScreen(
             uiState = uiState,
             onShowClick = onShowClick,
             onCastClick = onCastClick,
-            onTrailerClick = onTrailerClick
+            onTrailerClick = onTrailerClick,
+            onSeasonClick = onSeasonClick
         )
     }
 }
@@ -68,6 +72,7 @@ fun TvShowsDetailsContent(
     onShowClick: (Int) -> Unit,
     onCastClick: (Int) -> Unit,
     onTrailerClick: (String) -> Unit,
+    onSeasonClick: (Int, Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val show = uiState.showDetails
@@ -141,6 +146,47 @@ fun TvShowsDetailsContent(
         }
 
         TvShowInfoSection(show)
+
+        TMDBSectionHeader(title = "Seasons", onSeeAllClick = {}, showSeeAll = false)
+        if (show != null && !show.seasons.isNullOrEmpty()) {
+            TMDBHorizontalList(
+                items = show.seasons,
+                itemContent = { season ->
+                    Card(
+                        modifier = Modifier
+                            .width(120.dp)
+                            .padding(4.dp)
+                            .clickable { onSeasonClick(show.id ?: 0, season.seasonNumber ?: 0) },
+                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                    ) {
+                        Column {
+                            AsyncImage(
+                                model = AppConstants.IMAGE_BASE_URL + AppConstants.POSTER_SIZE + season.posterPath,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(150.dp),
+                                contentScale = ContentScale.Crop
+                            )
+                            Text(
+                                text = season.name ?: "",
+                                modifier = Modifier.padding(8.dp),
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Bold,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
+                    }
+                }
+            )
+        } else if (show != null) {
+            Text(
+                text = "No seasons data available",
+                modifier = Modifier.padding(16.dp),
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
 
         if (uiState.showCasts?.cast != null && uiState.showCasts.cast.isNotEmpty()) {
             TMDBSectionHeader(title = "Cast", onSeeAllClick = {}, showSeeAll = false)
@@ -257,6 +303,7 @@ private fun TvShowsDetailsContentPreview() {
         TvShowsDetailsContent(
             uiState = TvShowsDetailsUiState(
                 showDetails = TvShowDetails(
+                    id = 1,
                     name = "The Last of Us",
                     overview = "Twenty years after modern civilization has been destroyed...",
                     voteAverage = 8.8,
@@ -264,14 +311,18 @@ private fun TvShowsDetailsContentPreview() {
                     status = "Returning Series",
                     firstAirDate = "2023-01-15",
                     numberOfSeasons = 1,
-                    numberOfEpisodes = 9
+                    numberOfEpisodes = 9,
+                    seasons = listOf(
+                        Season(id = 1, name = "Season 1", seasonNumber = 1, posterPath = null)
+                    )
                 ),
                 recommendations = TvShowsResponse(1, listOf(dummyShow), 1, 1),
                 similarShows = TvShowsResponse(1, listOf(dummyShow), 1, 1)
             ),
             onShowClick = {},
             onCastClick = {},
-            onTrailerClick = {}
+            onTrailerClick = {},
+            onSeasonClick = { _, _ -> }
         )
     }
 }
