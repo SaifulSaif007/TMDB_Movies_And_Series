@@ -35,13 +35,17 @@ import com.saiful.movie.view.details.MovieDetailsScreen
 import com.saiful.movie.view.list.MovieListScreen
 import com.saiful.person.view.dashboard.PersonDashboardScreen
 import com.saiful.person.view.details.PersonDetailsScreen
+import com.saiful.person.view.list.PersonListScreen
 import com.saiful.shared.model.Image
+import com.saiful.shared.model.MovieCategory
+import com.saiful.shared.model.TvShowsCategory
 import com.saiful.shared.navigation.Route
 import com.saiful.shared.utils.JsonConverter
 import com.saiful.shared.view.gallery.GalleryScreen
 import com.saiful.tmdbexplorer.search.SearchScreen
 import com.saiful.tvshows.view.dashboard.TvShowsDashboardScreen
 import com.saiful.tvshows.view.details.TvShowsDetailsScreen
+import com.saiful.tvshows.view.list.TvShowListScreen
 import com.saiful.tvshows.view.season.TvShowSeasonScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -119,7 +123,7 @@ fun MainScreen(context: Context) {
                 MovieDashboardScreen(
                     viewModel = hiltViewModel(),
                     onMovieClick = { movieId -> navController.navigate(Route.MovieDetails(movieId)) },
-                    onSeeAllClick = { category -> navController.navigate(Route.MovieList(category)) }
+                    onSeeAllClick = { category -> navController.navigate(Route.MovieList(category.name)) }
                 )
             }
 
@@ -149,7 +153,7 @@ fun MainScreen(context: Context) {
             composable<Route.MovieList> { backStackEntry ->
                 val args = backStackEntry.toRoute<Route.MovieList>()
                 MovieListScreen(
-                    category = args.category,
+                    category = MovieCategory.valueOf(args.category),
                     viewModel = hiltViewModel(),
                     onBackClick = { navController.navigateUp() },
                     onMovieClick = { movieId -> navController.navigate(Route.MovieDetails(movieId)) }
@@ -160,7 +164,17 @@ fun MainScreen(context: Context) {
                 TvShowsDashboardScreen(
                     viewModel = hiltViewModel(),
                     onShowClick = { showId -> navController.navigate(Route.TvShowsDetails(showId)) },
-                    onSeeAllClick = { /* Not fully implemented yet */ }
+                    onSeeAllClick = { category -> navController.navigate(Route.TvShowsList(category.name)) }
+                )
+            }
+
+            composable<Route.TvShowsList> { backStackEntry ->
+                val args = backStackEntry.toRoute<Route.TvShowsList>()
+                TvShowListScreen(
+                    category = TvShowsCategory.valueOf(args.category),
+                    viewModel = hiltViewModel(),
+                    onBackClick = { navController.navigateUp() },
+                    onShowClick = { showId -> navController.navigate(Route.TvShowsDetails(showId)) }
                 )
             }
 
@@ -199,7 +213,17 @@ fun MainScreen(context: Context) {
                 PersonDashboardScreen(
                     viewModel = hiltViewModel(),
                     onPersonClick = { personId -> navController.navigate(Route.PersonDetails(personId)) },
-                    onSeeAllClick = { /* Not fully implemented yet */ }
+                    onSeeAllClick = { category -> navController.navigate(Route.PersonList(category.name)) }
+                )
+            }
+
+            composable<Route.PersonList> { backStackEntry ->
+                val args = backStackEntry.toRoute<Route.PersonList>()
+                PersonListScreen(
+                    category = com.saiful.shared.model.PersonCategory.valueOf(args.category),
+                    viewModel = hiltViewModel(),
+                    onBackClick = { navController.navigateUp() },
+                    onPersonClick = { personId -> navController.navigate(Route.PersonDetails(personId)) }
                 )
             }
 
