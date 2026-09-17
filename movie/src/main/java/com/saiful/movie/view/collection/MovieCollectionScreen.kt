@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.saiful.base.ui.theme.TMDBTheme
 import com.saiful.movie.model.MovieCollection
+import com.saiful.movie.view.components.MovieListItem
 import com.saiful.shared.components.TMDBMovieItem
 import com.saiful.shared.model.Movies
 import com.saiful.shared.utils.AppConstants
@@ -107,10 +108,9 @@ private fun MovieCollectionContent(
         }
 
         items(collection.parts ?: emptyList()) { movie ->
-            TMDBMovieItem(
+            MovieListItem(
                 movie = movie,
-                onClick = onMovieClick,
-                modifier = Modifier.fillMaxWidth()
+                onClick = onMovieClick
             )
         }
     }
