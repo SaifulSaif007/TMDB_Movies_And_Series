@@ -15,7 +15,7 @@ sealed interface Route {
     data class MovieDetails(val movieId: Int) : Route
 
     @Serializable
-    data class MovieList(val category: MovieCategory) : Route
+    data class MovieList(val category: String) : Route
 
     @Serializable
     data class MovieCollectionDetails(val collectionId: Int) : Route
@@ -27,7 +27,7 @@ sealed interface Route {
     data class TvShowsDetails(val showId: Int) : Route
 
     @Serializable
-    data class TvShowsList(val category: TvShowsCategory) : Route
+    data class TvShowsList(val category: String) : Route
     
     @Serializable
     data class TvShowSeasonDetails(val showId: Int, val seasonNo: Int) : Route
@@ -39,7 +39,7 @@ sealed interface Route {
     data class PersonDetails(val personId: Int) : Route
 
     @Serializable
-    data class PersonList(val category: PersonCategory) : Route
+    data class PersonList(val category: String) : Route
 
     @Serializable
     data object Search : Route

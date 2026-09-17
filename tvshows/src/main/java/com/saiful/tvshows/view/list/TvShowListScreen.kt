@@ -1,4 +1,4 @@
-package com.saiful.movie.view.list
+package com.saiful.tvshows.view.list
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -7,13 +7,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -21,23 +19,22 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import coil.compose.AsyncImage
-import com.saiful.base.ui.theme.TMDBTheme
-import com.saiful.shared.model.MovieCategory
 import com.saiful.shared.components.TMDBErrorView
 import com.saiful.shared.components.TMDBLoadingView
-import com.saiful.shared.model.Movies
+import com.saiful.shared.model.TvShows
+import com.saiful.shared.model.TvShowsCategory
 import com.saiful.shared.utils.AppConstants
 import com.saiful.shared.utils.floatNumberFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MovieListScreen(
-    category: MovieCategory,
+fun TvShowListScreen(
+    category: TvShowsCategory,
     viewModel: ListVM,
     onBackClick: () -> Unit,
-    onMovieClick: (Int) -> Unit
+    onShowClick: (Int) -> Unit
 ) {
-    val movies = viewModel.movieList.collectAsLazyPagingItems()
+    val shows = viewModel.showsList.collectAsLazyPagingItems()
 
     Scaffold(
         topBar = {
@@ -51,18 +48,18 @@ fun MovieListScreen(
             )
         }
     ) { padding ->
-        MovieListContent(
+        TvShowListContent(
             modifier = Modifier.padding(padding),
-            movies = movies,
-            onMovieClick = onMovieClick
+            shows = shows,
+            onShowClick = onShowClick
         )
     }
 }
 
 @Composable
-fun MovieListContent(
-    movies: LazyPagingItems<Movies>,
-    onMovieClick: (Int) -> Unit,
+fun TvShowListContent(
+    shows: LazyPagingItems<TvShows>,
+    onShowClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize()) {
@@ -72,16 +69,16 @@ fun MovieListContent(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(
-                count = movies.itemCount,
-                key = movies.itemKey { it.id },
-                contentType = movies.itemContentType { "movie" }
+                count = shows.itemCount,
+                key = shows.itemKey { it.id },
+                contentType = shows.itemContentType { "show" }
             ) { index ->
-                movies[index]?.let { movie ->
-                    MovieListItem(movie = movie, onClick = onMovieClick)
+                shows[index]?.let { show ->
+                    TvShowListItem(show = show, onClick = onShowClick)
                 }
             }
 
-            when (val state = movies.loadState.append) {
+            when (val state = shows.loadState.append) {
                 is LoadState.Loading -> {
                     item {
                         Box(
@@ -103,12 +100,12 @@ fun MovieListContent(
             }
         }
 
-        when (val state = movies.loadState.refresh) {
+        when (val state = shows.loadState.refresh) {
             is LoadState.Loading -> {
                 TMDBLoadingView()
             }
             is LoadState.Error -> {
-                TMDBErrorView(message = state.error.message ?: "Error loading movies")
+                TMDBErrorView(message = state.error.message ?: "Error loading shows")
             }
             else -> {}
         }
@@ -116,14 +113,14 @@ fun MovieListContent(
 }
 
 @Composable
-private fun MovieListItem(
-    movie: Movies,
+private fun TvShowListItem(
+    show: TvShows,
     onClick: (Int) -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick(movie.id) },
+            .clickable { onClick(show.id) },
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
@@ -133,8 +130,8 @@ private fun MovieListItem(
                 .height(IntrinsicSize.Min)
         ) {
             AsyncImage(
-                model = AppConstants.IMAGE_BASE_URL + AppConstants.POSTER_SIZE + movie.posterPath,
-                contentDescription = movie.title,
+                model = AppConstants.IMAGE_BASE_URL + AppConstants.POSTER_SIZE + show.posterPath,
+                contentDescription = show.name,
                 modifier = Modifier
                     .width(100.dp)
                     .fillMaxHeight(),
@@ -146,7 +143,7 @@ private fun MovieListItem(
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = movie.title ?: "",
+                    text = show.name ?: "",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
@@ -154,7 +151,7 @@ private fun MovieListItem(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = movie.overview ?: "",
+                    text = show.overview ?: "",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.secondary,
                     maxLines = 2,
@@ -163,7 +160,7 @@ private fun MovieListItem(
                 Spacer(modifier = Modifier.weight(1f))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = floatNumberFormatter(movie.voteAverage?.toFloat()),
+                        text = floatNumberFormatter(show.voteAverage?.toFloat()),
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Bold
                     )
@@ -176,21 +173,5 @@ private fun MovieListItem(
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun MovieListItemPreview() {
-    TMDBTheme {
-        MovieListItem(
-            movie = Movies(
-                id = 1,
-                title = "Spider-Man: No Way Home",
-                overview = "Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes of being a Super Hero.",
-                voteAverage = 8.2
-            ),
-            onClick = {}
-        )
     }
 }
