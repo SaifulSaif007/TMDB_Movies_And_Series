@@ -47,7 +47,7 @@ interface TvShowsApiService {
         @Path("show_id") id: Int
     ): GenericResponse<TvShowsResponse>
 
-    @GET("tv/{show_id}}/season/{season_no}")
+    @GET("tv/{show_id}/season/{season_no}")
     suspend fun seasonDetails(
         @Path("show_id") id: Int,
         @Path("season_no") no: Int
