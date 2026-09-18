@@ -116,7 +116,7 @@ private fun MovieCollectionContent(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = false)
 @Composable
 private fun MovieCollectionContentPreview() {
     TMDBTheme {

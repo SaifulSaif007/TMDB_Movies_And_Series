@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class TvShowDetails(
     val adult: Boolean? = false,
     @SerialName("backdrop_path")
-    val backdropPath: String? = "",
+    val backdropPath: String? = null,
     @SerialName("created_by")
     val createdBy: List<CreatedBy?>? = null,
     @SerialName("episode_run_time")
@@ -104,7 +104,7 @@ data class Season(
 
 @Serializable
 data class Videos(
-    val results: List<VideoResult>? = null
+    val results: List<VideoResult>? = listOf()
 )
 
 @Serializable
@@ -116,11 +116,10 @@ data class SpokenLanguagesItem(
 
 @Serializable
 data class VideoResult(
-    @SerialName("video_id")
-    val videoId: String?,
+    val id: String? = null,
     val key: String? = null,
     val name: String? = null,
     val site: String? = null,
-    val size: String? = null,
+    val size: Int? = null,
     val type: String? = null
 )

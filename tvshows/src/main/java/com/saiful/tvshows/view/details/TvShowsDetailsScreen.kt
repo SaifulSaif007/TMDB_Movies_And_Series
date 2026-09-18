@@ -17,13 +17,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.saiful.base.ui.theme.TMDBTheme
 import com.saiful.tvshows.model.*
 import com.saiful.shared.components.*
-import com.saiful.shared.model.TvShows
 import com.saiful.shared.utils.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,6 +74,13 @@ fun TvShowsDetailsContent(
 ) {
     val show = uiState.showDetails
 
+    if (show == null) {
+        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+        return
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -84,7 +88,7 @@ fun TvShowsDetailsContent(
     ) {
         Box(modifier = Modifier.height(250.dp)) {
             AsyncImage(
-                model = AppConstants.IMAGE_BASE_URL + AppConstants.BACKDROP_SIZE + show?.backdropPath,
+                model = AppConstants.IMAGE_BASE_URL + AppConstants.BACKDROP_SIZE + (show.backdropPath ?: ""),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
@@ -98,7 +102,7 @@ fun TvShowsDetailsContent(
                 elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
             ) {
                 AsyncImage(
-                    model = AppConstants.IMAGE_BASE_URL + AppConstants.POSTER_SIZE + show?.posterPath,
+                    model = AppConstants.IMAGE_BASE_URL + AppConstants.POSTER_SIZE + (show.posterPath ?: ""),
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
@@ -108,12 +112,12 @@ fun TvShowsDetailsContent(
 
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = show?.name ?: "",
+                text = show.name ?: "",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "(${floatNumberFormatter(show?.voteAverage?.toFloat())})",
+                text = "(${floatNumberFormatter(show.voteAverage?.toFloat())})",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.secondary
             )
@@ -124,7 +128,7 @@ fun TvShowsDetailsContent(
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                show?.genres?.filterNotNull()?.forEach { genre ->
+                show.genres?.filterNotNull()?.forEach { genre ->
                     SuggestionChip(
                         onClick = { },
                         label = { Text(genre.name ?: "") }
@@ -132,23 +136,25 @@ fun TvShowsDetailsContent(
                 }
             }
 
-            Text(
-                text = show?.tagline ?: "",
-                style = MaterialTheme.typography.bodyLarge,
-                fontStyle = FontStyle.Italic,
-                color = MaterialTheme.colorScheme.secondary
-            )
+            if (!show.tagline.isNullOrEmpty()) {
+                Text(
+                    text = show.tagline,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontStyle = FontStyle.Italic,
+                    color = MaterialTheme.colorScheme.secondary
+                )
+            }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = show?.overview ?: "",
+                text = show.overview ?: "",
                 style = MaterialTheme.typography.bodyMedium
             )
         }
 
         TvShowInfoSection(show)
 
-        TMDBSectionHeader(title = "Seasons", onSeeAllClick = {}, showSeeAll = false)
-        if (show != null && !show.seasons.isNullOrEmpty()) {
+        if (!show.seasons.isNullOrEmpty()) {
+            TMDBSectionHeader(title = "Seasons", onSeeAllClick = {}, showSeeAll = false)
             TMDBHorizontalList(
                 items = show.seasons,
                 itemContent = { season ->
@@ -161,7 +167,7 @@ fun TvShowsDetailsContent(
                     ) {
                         Column {
                             AsyncImage(
-                                model = AppConstants.IMAGE_BASE_URL + AppConstants.POSTER_SIZE + season.posterPath,
+                                model = AppConstants.IMAGE_BASE_URL + AppConstants.POSTER_SIZE + (season.posterPath ?: ""),
                                 contentDescription = null,
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -180,12 +186,6 @@ fun TvShowsDetailsContent(
                     }
                 }
             )
-        } else if (show != null) {
-            Text(
-                text = "No seasons data available",
-                modifier = Modifier.padding(16.dp),
-                style = MaterialTheme.typography.bodyMedium
-            )
         }
 
         if (uiState.showCasts?.cast != null && uiState.showCasts.cast.isNotEmpty()) {
@@ -203,7 +203,7 @@ fun TvShowsDetailsContent(
             )
         }
 
-        val trailers = show?.videos?.results?.filter { it.type == "Trailer" || it.type == "Teaser" }
+        val trailers = show.videos?.results?.filter { it.type == "Trailer" || it.type == "Teaser" }
         if (!trailers.isNullOrEmpty()) {
             TMDBSectionHeader(title = "Trailers", onSeeAllClick = {}, showSeeAll = false)
             TMDBHorizontalList(
@@ -243,7 +243,7 @@ fun TvShowsDetailsContent(
 }
 
 @Composable
-private fun TvShowInfoSection(show: TvShowDetails?) {
+private fun TvShowInfoSection(show: TvShowDetails) {
     Column(modifier = Modifier.padding(16.dp)) {
         Text(
             text = "Information",
@@ -251,12 +251,12 @@ private fun TvShowInfoSection(show: TvShowDetails?) {
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(8.dp))
-        InfoRow("Status", show?.status ?: "")
-        InfoRow("First Air Date", show?.firstAirDate?.formatDate() ?: "")
-        InfoRow("Seasons", show?.numberOfSeasons?.toString() ?: "")
-        InfoRow("Episodes", show?.numberOfEpisodes?.toString() ?: "")
-        InfoRow("Type", show?.type ?: "")
-        InfoRow("Production", show?.productionCompanies?.map { it?.name }?.joinToString(", ") ?: "")
+        InfoRow("Status", show.status ?: "")
+        InfoRow("First Air Date", show.firstAirDate?.formatDate() ?: "")
+        InfoRow("Seasons", show.numberOfSeasons?.toString() ?: "")
+        InfoRow("Episodes", show.numberOfEpisodes?.toString() ?: "")
+        InfoRow("Type", show.type ?: "")
+        InfoRow("Production", show.productionCompanies?.map { it?.name }?.joinToString(", ") ?: "")
     }
 }
 
@@ -270,59 +270,5 @@ private fun InfoRow(label: String, value: String) {
     ) {
         Text(text = label, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
         Text(text = value, style = MaterialTheme.typography.bodyMedium)
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun TvShowInfoSectionPreview() {
-    TMDBTheme {
-        TvShowInfoSection(
-            show = TvShowDetails(
-                status = "Returning Series",
-                firstAirDate = "2023-01-15",
-                numberOfSeasons = 1,
-                numberOfEpisodes = 9,
-                type = "Scripted"
-            )
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun TvShowsDetailsContentPreview() {
-    val dummyShow = TvShows(
-        id = 1,
-        name = "The Last of Us",
-        posterPath = null,
-        backdropPath = null,
-        voteAverage = 8.8
-    )
-    TMDBTheme {
-        TvShowsDetailsContent(
-            uiState = TvShowsDetailsUiState(
-                showDetails = TvShowDetails(
-                    id = 1,
-                    name = "The Last of Us",
-                    overview = "Twenty years after modern civilization has been destroyed...",
-                    voteAverage = 8.8,
-                    tagline = "When you're lost in the darkness, look for the light.",
-                    status = "Returning Series",
-                    firstAirDate = "2023-01-15",
-                    numberOfSeasons = 1,
-                    numberOfEpisodes = 9,
-                    seasons = listOf(
-                        Season(id = 1, name = "Season 1", seasonNumber = 1, posterPath = null)
-                    )
-                ),
-                recommendations = TvShowsResponse(1, listOf(dummyShow), 1, 1),
-                similarShows = TvShowsResponse(1, listOf(dummyShow), 1, 1)
-            ),
-            onShowClick = {},
-            onCastClick = {},
-            onTrailerClick = {},
-            onSeasonClick = { _, _ -> }
-        )
     }
 }
