@@ -25,6 +25,7 @@ import com.saiful.shared.model.TvShows
 import com.saiful.shared.model.TvShowsCategory
 import com.saiful.shared.utils.AppConstants
 import com.saiful.shared.utils.floatNumberFormatter
+import com.saiful.tvshows.view.component.TvShowListItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -91,11 +92,13 @@ fun TvShowListContent(
                         }
                     }
                 }
+
                 is LoadState.Error -> {
                     item {
                         TMDBErrorView(message = state.error.message ?: "Error loading more")
                     }
                 }
+
                 else -> {}
             }
         }
@@ -104,74 +107,14 @@ fun TvShowListContent(
             is LoadState.Loading -> {
                 TMDBLoadingView()
             }
+
             is LoadState.Error -> {
                 TMDBErrorView(message = state.error.message ?: "Error loading shows")
             }
+
             else -> {}
         }
     }
 }
 
-@Composable
-private fun TvShowListItem(
-    show: TvShows,
-    onClick: (Int) -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick(show.id) },
-        shape = MaterialTheme.shapes.medium,
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min)
-        ) {
-            AsyncImage(
-                model = AppConstants.IMAGE_BASE_URL + AppConstants.POSTER_SIZE + show.posterPath,
-                contentDescription = show.name,
-                modifier = Modifier
-                    .width(100.dp)
-                    .fillMaxHeight(),
-                contentScale = ContentScale.Crop
-            )
-            Column(
-                modifier = Modifier
-                    .padding(12.dp)
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = show.name ?: "",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = show.overview ?: "",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.secondary,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = floatNumberFormatter(show.voteAverage?.toFloat()),
-                        style = MaterialTheme.typography.bodySmall,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = "/ 10",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.outline
-                    )
-                }
-            }
-        }
-    }
-}
+
