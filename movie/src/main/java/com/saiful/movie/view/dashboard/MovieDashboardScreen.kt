@@ -2,11 +2,20 @@ package com.saiful.movie.view.dashboard
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -19,9 +28,11 @@ import com.saiful.shared.components.TMDBHorizontalList
 import com.saiful.shared.components.TMDBImageSlider
 import com.saiful.shared.components.TMDBMovieItem
 import com.saiful.shared.components.TMDBSectionHeader
+import com.saiful.shared.components.TopBar
 import com.saiful.shared.model.Movies
 import com.saiful.shared.model.SliderItem
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieDashboardScreen(
     viewModel: DashboardVM,
@@ -30,28 +41,33 @@ fun MovieDashboardScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    MovieDashboardContent(
-        uiState = uiState,
-        onMovieClick = onMovieClick,
-        onSeeAllClick = onSeeAllClick
-    )
+    Scaffold{ paddingValues ->
+        MovieDashboardContent(
+            modifier = Modifier.padding(paddingValues),
+            uiState = uiState,
+            onMovieClick = onMovieClick,
+            onSeeAllClick = onSeeAllClick
+        )
+    }
+
 }
 
 @Composable
 fun MovieDashboardContent(
+    modifier: Modifier,
     uiState: DashboardUiState,
     onMovieClick: (Int) -> Unit,
     onSeeAllClick: (MovieCategory) -> Unit
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(bottom = 16.dp)
     ) {
         if (uiState.sliderMovies.isNotEmpty()) {
             TMDBImageSlider(
-                items = uiState.sliderMovies.map { 
+                items = uiState.sliderMovies.map {
                     SliderItem(it.id, it.title, it.backdropPath)
                 },
                 onItemClick = onMovieClick,
@@ -146,6 +162,7 @@ private fun MovieDashboardContentPreview() {
     )
     TMDBTheme {
         MovieDashboardContent(
+            modifier = Modifier,
             uiState = DashboardUiState(
                 popularMovies = listOf(dummyMovie, dummyMovie, dummyMovie),
                 nowPlayingMovies = listOf(dummyMovie, dummyMovie),

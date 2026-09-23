@@ -3,6 +3,7 @@ package com.saiful.person.view.dashboard
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -24,21 +25,25 @@ fun PersonDashboardScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    PersonDashboardContent(
-        uiState = uiState,
-        onPersonClick = onPersonClick,
-        onSeeAllClick = onSeeAllClick
-    )
+    Scaffold { paddingValues ->
+        PersonDashboardContent(
+            modifier = Modifier.padding(paddingValues),
+            uiState = uiState,
+            onPersonClick = onPersonClick,
+            onSeeAllClick = onSeeAllClick
+        )
+    }
 }
 
 @Composable
 fun PersonDashboardContent(
+    modifier: Modifier,
     uiState: PersonDashboardUiState,
     onPersonClick: (Int) -> Unit,
     onSeeAllClick: (PersonCategory) -> Unit
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(bottom = 16.dp)
@@ -75,7 +80,7 @@ private fun PersonSection(
             title = title,
             onSeeAllClick = onSeeAllClick
         )
-        
+
         // First row
         TMDBHorizontalList(
             items = if (persons.size >= 10) persons.subList(0, 10) else persons,
@@ -90,7 +95,10 @@ private fun PersonSection(
         // Second row if we have enough items
         if (persons.size > 10) {
             TMDBHorizontalList(
-                items = if (persons.size >= 20) persons.subList(10, 20) else persons.subList(10, persons.size),
+                items = if (persons.size >= 20) persons.subList(10, 20) else persons.subList(
+                    10,
+                    persons.size
+                ),
                 itemContent = { person ->
                     TMDBPersonItem(
                         person = person,
@@ -113,6 +121,7 @@ private fun PersonDashboardContentPreview() {
     )
     TMDBTheme {
         PersonDashboardContent(
+            modifier = Modifier,
             uiState = PersonDashboardUiState(
                 popularPersons = List(15) { dummyPerson },
                 trendingPersons = List(5) { dummyPerson }

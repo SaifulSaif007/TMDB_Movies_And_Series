@@ -45,8 +45,8 @@ fun MovieDetailsScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = uiState.movieDetails?.title ?: "") },
+            TopBar(
+                title = uiState.movieDetails?.title ?: "",
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -192,7 +192,8 @@ fun MovieDetailsContent(
             )
         }
 
-        val trailers = movie?.videos?.results?.filter { it.type == "Trailer" || it.type == "Teaser" }
+        val trailers =
+            movie?.videos?.results?.filter { it.type == "Trailer" || it.type == "Teaser" }
         if (!trailers.isNullOrEmpty()) {
             TMDBSectionHeader(title = "Trailers", onSeeAllClick = {}, showSeeAll = false)
             TMDBHorizontalList(
@@ -245,7 +246,10 @@ private fun MovieInfoSection(movie: MovieDetailsResponse?) {
         InfoRow("Status", movie?.status ?: "")
         InfoRow("Release Date", movie?.releaseDate?.formatDate() ?: "")
         InfoRow("Runtime", "${movie?.runtime} mins")
-        InfoRow("Production", movie?.productionCompanies?.map { it?.name }?.joinToString(", ") ?: "")
+        InfoRow(
+            "Production",
+            movie?.productionCompanies?.map { it?.name }?.joinToString(", ") ?: ""
+        )
     }
 }
 
@@ -257,7 +261,11 @@ private fun InfoRow(label: String, value: String) {
             .padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = label, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Bold
+        )
         Text(text = value, style = MaterialTheme.typography.bodyMedium)
     }
 }
@@ -303,7 +311,12 @@ private fun MovieDetailsContentPreview() {
                     runtime = 148
                 ),
                 cast = listOf(
-                    Cast(id = 1, name = "Tom Holland", character = "Peter Parker / Spider-Man", profilePath = null),
+                    Cast(
+                        id = 1,
+                        name = "Tom Holland",
+                        character = "Peter Parker / Spider-Man",
+                        profilePath = null
+                    ),
                     Cast(id = 2, name = "Zendaya", character = "MJ", profilePath = null)
                 ),
                 recommendationsList = listOf(dummyMovie, dummyMovie),
