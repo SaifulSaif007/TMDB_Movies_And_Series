@@ -11,7 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.saiful.movie.view.components.MovieListItem
 import com.saiful.movie.view.search.SearchVM
+import com.saiful.person.view.component.PersonListItem
 import com.saiful.shared.components.TMDBMovieItem
 import com.saiful.shared.components.TMDBPersonItem
 import com.saiful.shared.components.TMDBTvShowItem
@@ -19,6 +21,7 @@ import com.saiful.shared.components.TMDBSearchBar
 import com.saiful.shared.model.Movies
 import com.saiful.shared.model.TvShows
 import com.saiful.shared.model.Person
+import com.saiful.tvshows.view.component.TvShowListItem
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -30,7 +33,7 @@ fun SearchScreen(
 ) {
     var query by remember { mutableStateOf("") }
     var active by remember { mutableStateOf(false) }
-    
+
     val movieSearchVM: SearchVM = hiltViewModel()
     val tvSearchVM: com.saiful.tvshows.view.search.SearchVM = hiltViewModel()
     val personSearchVM: com.saiful.person.view.search.SearchVM = hiltViewModel()
@@ -46,7 +49,7 @@ fun SearchScreen(
     Column(modifier = Modifier.fillMaxSize()) {
         TMDBSearchBar(
             query = query,
-            onQueryChange = { 
+            onQueryChange = {
                 query = it
                 movieSearchVM.searchMovie(it)
                 tvSearchVM.searchShow(it)
@@ -83,23 +86,25 @@ fun SearchScreen(
                         items(movies.itemCount) { index ->
                             val movie = movies[index]
                             if (movie != null) {
-                                TMDBMovieItem(movie = movie, onClick = onMovieClick)
+                                MovieListItem(movie = movie, onClick = onMovieClick)
                             }
                         }
                     }
+
                     1 -> {
                         items(shows.itemCount) { index ->
                             val show = shows[index]
                             if (show != null) {
-                                TMDBTvShowItem(tvShow = show, onClick = onShowClick)
+                                TvShowListItem(show = show, onClick = onShowClick)
                             }
                         }
                     }
+
                     2 -> {
                         items(persons.itemCount) { index ->
                             val person = persons[index]
                             if (person != null) {
-                                TMDBPersonItem(person = person, onClick = onPersonClick)
+                                PersonListItem(person = person, onClick = onPersonClick)
                             }
                         }
                     }

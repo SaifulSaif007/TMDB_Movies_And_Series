@@ -1,4 +1,4 @@
-package com.saiful.movie.view.components
+package com.saiful.tvshows.view.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -20,23 +20,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.saiful.base.ui.theme.TMDBTheme
-import com.saiful.shared.model.Movies
+import com.saiful.shared.model.TvShows
 import com.saiful.shared.utils.AppConstants
 import com.saiful.shared.utils.floatNumberFormatter
 
 @Composable
-fun MovieListItem(
-    movie: Movies,
+fun TvShowListItem(
+    show: TvShows,
     onClick: (Int) -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick(movie.id) },
+            .clickable { onClick(show.id) },
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
@@ -46,8 +44,8 @@ fun MovieListItem(
                 .height(IntrinsicSize.Min)
         ) {
             AsyncImage(
-                model = AppConstants.IMAGE_BASE_URL + AppConstants.POSTER_SIZE + movie.posterPath,
-                contentDescription = movie.title,
+                model = AppConstants.IMAGE_BASE_URL + AppConstants.POSTER_SIZE + show.posterPath,
+                contentDescription = show.name,
                 modifier = Modifier
                     .width(100.dp)
                     .fillMaxHeight(),
@@ -59,7 +57,7 @@ fun MovieListItem(
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = movie.title ?: "",
+                    text = show.name ?: "",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
@@ -67,7 +65,7 @@ fun MovieListItem(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = movie.overview ?: "",
+                    text = show.overview ?: "",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.secondary,
                     maxLines = 2,
@@ -76,7 +74,7 @@ fun MovieListItem(
                 Spacer(modifier = Modifier.weight(1f))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = floatNumberFormatter(movie.voteAverage?.toFloat()),
+                        text = floatNumberFormatter(show.voteAverage?.toFloat()),
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Bold
                     )
@@ -89,22 +87,5 @@ fun MovieListItem(
                 }
             }
         }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-private fun MovieListItemPreview() {
-    TMDBTheme {
-        MovieListItem(
-            movie = Movies(
-                id = 1,
-                title = "Spider-Man: No Way Home",
-                overview = "Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes of being a Super Hero.",
-                voteAverage = 8.2
-            ),
-            onClick = {}
-        )
     }
 }

@@ -19,6 +19,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import coil.compose.AsyncImage
+import com.saiful.person.view.component.PersonListItem
 import com.saiful.shared.components.TMDBErrorView
 import com.saiful.shared.components.TMDBLoadingView
 import com.saiful.shared.model.Person
@@ -111,60 +112,3 @@ fun PersonListContent(
     }
 }
 
-@Composable
-private fun PersonListItem(
-    person: Person,
-    onClick: (Int) -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick(person.id) },
-        shape = MaterialTheme.shapes.medium,
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min)
-        ) {
-            AsyncImage(
-                model = AppConstants.IMAGE_BASE_URL + AppConstants.PROFILE_SIZE + person.profilePath,
-                contentDescription = person.name,
-                modifier = Modifier
-                    .width(100.dp)
-                    .fillMaxHeight(),
-                contentScale = ContentScale.Crop
-            )
-            Column(
-                modifier = Modifier
-                    .padding(12.dp)
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = person.name,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = person.knownForDepartment ?: "",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.secondary,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = person.knownFor?.joinToString(", ") { it.title ?: it.name ?: "" } ?: "",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.outline,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-        }
-    }
-}
