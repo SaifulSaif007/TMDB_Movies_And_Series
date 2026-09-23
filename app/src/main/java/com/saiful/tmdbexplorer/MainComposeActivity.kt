@@ -7,18 +7,40 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -77,6 +99,7 @@ val topLevelDestinations = listOf(
     TopLevelDestination("Search", Icons.Default.Search, Route.Search)
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(context: Context) {
     val navController = rememberNavController()
@@ -90,9 +113,13 @@ fun MainScreen(context: Context) {
     Scaffold(
         bottomBar = {
             if (showBottomBar) {
-                NavigationBar {
+                NavigationBar(
+                    containerColor = Color.Black,
+                    contentColor = Color.White
+                ) {
                     topLevelDestinations.forEach { destination ->
-                        val selected = currentDestination?.hierarchy?.any { it.hasRoute(destination.route::class) } == true
+                        val selected =
+                            currentDestination?.hierarchy?.any { it.hasRoute(destination.route::class) } == true
                         NavigationBarItem(
                             selected = selected,
                             onClick = {
@@ -104,13 +131,27 @@ fun MainScreen(context: Context) {
                                     restoreState = true
                                 }
                             },
-                            icon = { Icon(destination.icon, contentDescription = destination.name) },
-                            label = { Text(destination.name) }
+                            icon = {
+                                Icon(
+                                    destination.icon,
+                                    contentDescription = destination.name
+                                )
+                            },
+                            label = { Text(destination.name) },
+                            colors = NavigationBarItemDefaults.colors(
+                                selectedIconColor = Color.White,
+                                selectedTextColor = Color.White,
+                                indicatorColor = Color.Black,
+                                unselectedIconColor = Color.Gray,
+                                unselectedTextColor = Color.Gray
+                            )
                         )
                     }
                 }
             }
-        }
+
+        },
+        contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Bottom)
     ) { paddingValues ->
         NavHost(
             navController = navController,
@@ -118,6 +159,7 @@ fun MainScreen(context: Context) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .consumeWindowInsets(paddingValues),
         ) {
             composable<Route.MovieDashboard> {
                 MovieDashboardScreen(
@@ -136,7 +178,13 @@ fun MainScreen(context: Context) {
                     onMovieClick = { movieId -> navController.navigate(Route.MovieDetails(movieId)) },
                     onCastClick = { castId -> navController.navigate(Route.PersonDetails(castId)) },
                     onTrailerClick = { key -> launchYoutube(context, key) },
-                    onCollectionClick = { collectionId -> navController.navigate(Route.MovieCollectionDetails(collectionId)) }
+                    onCollectionClick = { collectionId ->
+                        navController.navigate(
+                            Route.MovieCollectionDetails(
+                                collectionId
+                            )
+                        )
+                    }
                 )
             }
 
@@ -182,7 +230,13 @@ fun MainScreen(context: Context) {
                 SearchScreen(
                     onMovieClick = { movieId -> navController.navigate(Route.MovieDetails(movieId)) },
                     onShowClick = { showId -> navController.navigate(Route.TvShowsDetails(showId)) },
-                    onPersonClick = { personId -> navController.navigate(Route.PersonDetails(personId)) }
+                    onPersonClick = { personId ->
+                        navController.navigate(
+                            Route.PersonDetails(
+                                personId
+                            )
+                        )
+                    }
                 )
             }
 
@@ -195,7 +249,14 @@ fun MainScreen(context: Context) {
                     onShowClick = { showId -> navController.navigate(Route.TvShowsDetails(showId)) },
                     onCastClick = { castId -> navController.navigate(Route.PersonDetails(castId)) },
                     onTrailerClick = { key -> launchYoutube(context, key) },
-                    onSeasonClick = { showId, seasonNo -> navController.navigate(Route.TvShowSeasonDetails(showId, seasonNo)) }
+                    onSeasonClick = { showId, seasonNo ->
+                        navController.navigate(
+                            Route.TvShowSeasonDetails(
+                                showId,
+                                seasonNo
+                            )
+                        )
+                    }
                 )
             }
 
@@ -212,7 +273,13 @@ fun MainScreen(context: Context) {
             composable<Route.PersonDashboard> {
                 PersonDashboardScreen(
                     viewModel = hiltViewModel(),
-                    onPersonClick = { personId -> navController.navigate(Route.PersonDetails(personId)) },
+                    onPersonClick = { personId ->
+                        navController.navigate(
+                            Route.PersonDetails(
+                                personId
+                            )
+                        )
+                    },
                     onSeeAllClick = { category -> navController.navigate(Route.PersonList(category.name)) }
                 )
             }
@@ -223,7 +290,13 @@ fun MainScreen(context: Context) {
                     category = com.saiful.shared.model.PersonCategory.valueOf(args.category),
                     viewModel = hiltViewModel(),
                     onBackClick = { navController.navigateUp() },
-                    onPersonClick = { personId -> navController.navigate(Route.PersonDetails(personId)) }
+                    onPersonClick = { personId ->
+                        navController.navigate(
+                            Route.PersonDetails(
+                                personId
+                            )
+                        )
+                    }
                 )
             }
 
@@ -258,4 +331,30 @@ fun MainScreen(context: Context) {
 private fun launchYoutube(context: Context, key: String) {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=$key"))
     context.startActivity(intent)
+}
+
+@Composable
+fun EdgeToEdgeBottomBar(
+    modifier: Modifier = Modifier,
+    windowInsets: WindowInsets = WindowInsets.navigationBars,
+) {
+    Surface(
+        modifier = modifier.fillMaxWidth(),
+        tonalElevation = 3.dp // optional, matches BottomAppBar-ish look
+    ) {
+        Box(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.error)
+                .fillMaxWidth()
+                .windowInsetsPadding(windowInsets) // pushes content above the gesture/nav bar // your normal visual padding
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.dp)
+            ) {
+                Text("OK")
+            }
+        }
+    }
 }

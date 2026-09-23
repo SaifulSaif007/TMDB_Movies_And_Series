@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -30,21 +31,25 @@ fun TvShowsDashboardScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    TvShowsDashboardContent(
-        uiState = uiState,
-        onShowClick = onShowClick,
-        onSeeAllClick = onSeeAllClick
-    )
+    Scaffold { paddingValues ->
+        TvShowsDashboardContent(
+            modifier = Modifier.padding(paddingValues),
+            uiState = uiState,
+            onShowClick = onShowClick,
+            onSeeAllClick = onSeeAllClick
+        )
+    }
 }
 
 @Composable
 fun TvShowsDashboardContent(
+    modifier: Modifier,
     uiState: DashboardUiState,
     onShowClick: (Int) -> Unit,
     onSeeAllClick: (TvShowsCategory) -> Unit
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(bottom = 16.dp)
@@ -146,6 +151,7 @@ private fun TvShowsDashboardContentPreview() {
     )
     TMDBTheme {
         TvShowsDashboardContent(
+            modifier = Modifier,
             uiState = DashboardUiState(
                 trendingShows = listOf(dummyShow, dummyShow),
                 popularShows = listOf(dummyShow, dummyShow),
