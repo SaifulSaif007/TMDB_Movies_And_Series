@@ -1,8 +1,8 @@
 name: Android Production CI
 
 on:
-#  push:
-#    branches: [ "master" ]
+  #  push:
+  #    branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
 
@@ -24,12 +24,12 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-#      - name: Build with Gradle
-#        run: ./gradlew build
+      #      - name: Build with Gradle
+      #        run: ./gradlew build
 
-#      - name: Run Coverage
-#        run:
-#          ./gradlew clean testDebugUnitTestCoverage
+      #      - name: Run Coverage
+      #        run:
+      #          ./gradlew clean testDebugUnitTestCoverage
 
       - name: Add coverage to PR
         if: github.event_name == 'pull_request'
@@ -42,13 +42,13 @@ jobs:
           min-coverage-changed-files: 80
 
       - name: Build Android Release
-        run:  bash ./gradlew assembleDebug
+        run: bash ./gradlew assembleDebug
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v2.2.4
-        with:
-          name: APP
-          path: app/build/outputs/apk/debug/app-debug.apk
+      #     - name: Upload APK
+      #       uses: actions/upload-artifact@v2.2.4
+      #        with:
+      #         name: APP
+      #        path: app/build/outputs/apk/debug/app-debug.apk
 
       - name: upload artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
