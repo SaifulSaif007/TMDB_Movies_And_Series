@@ -1,26 +1,27 @@
 package com.saiful.tmdbexplorer.search
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.saiful.movie.view.components.MovieListItem
 import com.saiful.movie.view.search.SearchVM
 import com.saiful.person.view.component.PersonListItem
-import com.saiful.shared.components.TMDBMovieItem
-import com.saiful.shared.components.TMDBPersonItem
-import com.saiful.shared.components.TMDBTvShowItem
+import com.saiful.shared.R
+import com.saiful.shared.components.TMDBLoadingView
 import com.saiful.shared.components.TMDBSearchBar
-import com.saiful.shared.model.Movies
-import com.saiful.shared.model.TvShows
-import com.saiful.shared.model.Person
 import com.saiful.tvshows.view.component.TvShowListItem
 import kotlinx.coroutines.launch
 
@@ -76,40 +77,97 @@ fun SearchScreen(
             state = pagerState,
             modifier = Modifier.weight(1f)
         ) { page ->
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                when (page) {
-                    0 -> {
-                        items(movies.itemCount) { index ->
-                            val movie = movies[index]
-                            if (movie != null) {
-                                MovieListItem(movie = movie, onClick = onMovieClick)
+            when (page) {
+                0 -> {
+                    SearchPageContent(
+                        pagingItems = movies,
+                        emptyImageRes = R.drawable.ic_movie
+                    ) {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            contentPadding = PaddingValues(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            items(movies.itemCount) { index ->
+                                val movie = movies[index]
+                                if (movie != null) {
+                                    MovieListItem(movie = movie, onClick = onMovieClick)
+                                }
                             }
                         }
                     }
+                }
 
-                    1 -> {
-                        items(shows.itemCount) { index ->
-                            val show = shows[index]
-                            if (show != null) {
-                                TvShowListItem(show = show, onClick = onShowClick)
+                1 -> {
+                    SearchPageContent(
+                        pagingItems = shows,
+                        emptyImageRes = R.drawable.ic_show
+                    ) {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            contentPadding = PaddingValues(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            items(shows.itemCount) { index ->
+                                val show = shows[index]
+                                if (show != null) {
+                                    TvShowListItem(show = show, onClick = onShowClick)
+                                }
                             }
                         }
                     }
+                }
 
-                    2 -> {
-                        items(persons.itemCount) { index ->
-                            val person = persons[index]
-                            if (person != null) {
-                                PersonListItem(person = person, onClick = onPersonClick)
+                2 -> {
+                    SearchPageContent(
+                        pagingItems = persons,
+                        emptyImageRes = R.drawable.ic_person
+                    ) {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            contentPadding = PaddingValues(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            items(persons.itemCount) { index ->
+                                val person = persons[index]
+                                if (person != null) {
+                                    PersonListItem(person = person, onClick = onPersonClick)
+                                }
                             }
                         }
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun SearchPageContent(
+    pagingItems: LazyPagingItems<*>,
+    emptyImageRes: Int,
+    content: @Composable () -> Unit
+) {
+    when {
+        pagingItems.loadState.refresh is LoadState.Loading -> {
+            TMDBLoadingView()
+        }
+
+        pagingItems.itemCount == 0 -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(id = emptyImageRes),
+                    contentDescription = null,
+                    modifier = Modifier.size(200.dp)
+                )
+            }
+        }
+
+        else -> {
+            content()
         }
     }
 }
