@@ -26,8 +26,9 @@ android {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
-        debug {
-            isTestCoverageEnabled = true
+        getByName("debug") {
+            enableUnitTestCoverage = true
+            enableAndroidTestCoverage = true
         }
     }
     compileOptions {
