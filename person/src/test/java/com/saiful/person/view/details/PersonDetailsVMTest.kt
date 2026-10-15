@@ -91,10 +91,10 @@ internal class PersonDetailsVMTest : BaseViewModelTest() {
             verify(repository, times(1)).personImages(any())
             verify(repository, times(1)).personDetails(any())
 
-            assert(viewModel.personDetails.value!!.id == personDetails.id)
-            assert(viewModel.personImageList.value!!.id == personImage.id)
-            assert(viewModel.personMovieList.value!!.id == movieCredits.id)
-            assert(viewModel.personShowsList.value!!.id == tvShowsCredits.id)
+            assert(viewModel.uiState.value.personDetails?.id == personDetails.id)
+            assert(viewModel.uiState.value.personImageList?.id == personImage.id)
+            assert(viewModel.uiState.value.personMovieList?.id == movieCredits.id)
+            assert(viewModel.uiState.value.personShowsList?.id == tvShowsCredits.id)
         }
     }
 }

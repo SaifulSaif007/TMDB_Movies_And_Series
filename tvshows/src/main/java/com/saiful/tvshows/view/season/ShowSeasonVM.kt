@@ -23,10 +23,8 @@ class ShowSeasonVM
 
     override fun onSuccessResponse(operationTag: String, data: BaseResponse.Success<Any>) {
         if (operationTag == seasons) {
-            when (val response = data as GenericResponse<*>) {
-                is BaseResponse.Success ->
-                    seasonDetails.value = response.body as SeasonDetails
-                else -> {}
+            (data.body as? SeasonDetails)?.let {
+                seasonDetails.value = it
             }
         }
     }

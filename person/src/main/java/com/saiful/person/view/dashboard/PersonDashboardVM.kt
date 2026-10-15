@@ -43,9 +43,7 @@ class PersonDashboardVM @Inject constructor(
     }
 
     override fun onSuccessResponse(operationTag: String, data: BaseResponse.Success<Any>) {
-        val response = (data as? GenericResponse<*>)?.let {
-            if (it is BaseResponse.Success) it.body as? PersonResponse else null
-        } ?: return
+        val response = (data.body as? PersonResponse) ?: return
 
         _uiState.update { currentState ->
             when (operationTag) {

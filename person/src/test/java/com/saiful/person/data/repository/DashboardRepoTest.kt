@@ -8,7 +8,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base_unit_test.BaseRepositoryTest
 import com.saiful.person.data.api.PersonApiService
-import com.saiful.person.model.Person
+import com.saiful.shared.model.Person
 import com.saiful.person.model.PersonResponse
 import kotlinx.coroutines.runBlocking
 import org.junit.Test

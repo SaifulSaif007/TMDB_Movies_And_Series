@@ -6,6 +6,7 @@ import com.saiful.base_unit_test.BaseViewModelTest
 import com.saiful.base_unit_test.rules.MainCoroutineRule
 import com.saiful.person.data.repository.DashboardRepo
 import com.saiful.person.model.PersonResponse
+import com.saiful.shared.model.Person
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -23,7 +24,14 @@ class PersonDashboardVMTest : BaseViewModelTest() {
     override fun setup() {
         personResponse = PersonResponse(
             page = 1,
-            results = listOf(),
+            results = listOf(
+                Person(
+                    id = 1,
+                    name = "Tom Cruise",
+                    popularity = 8.9,
+                    profilePath = "url"
+                )
+            ),
             totalPages = 1,
             totalResults = 1
         )
@@ -59,8 +67,8 @@ class PersonDashboardVMTest : BaseViewModelTest() {
             verify(repository, times(1)).trendingPersons()
             verify(repository, times(1)).popularPersons()
 
-            assert(viewModel.popularPersonList.value!!.totalPages == personResponse.totalPages)
-            assert(viewModel.trendingPersonList.value!!.page == personResponse.page)
+            assert(viewModel.uiState.value.popularPersons.isNotEmpty())
+            assert(viewModel.uiState.value.trendingPersons.isNotEmpty())
         }
     }
 

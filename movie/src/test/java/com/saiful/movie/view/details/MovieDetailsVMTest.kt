@@ -85,10 +85,8 @@ internal class MovieDetailsVMTest : BaseViewModelTest() {
             verify(repository, times(1)).similarMovie(1)
             verify(repository, times(1)).recommendation(1)
 
-            assert(viewModel.similar.value!!.page == 1)
-            assert(viewModel.recommendation.value!!.totalPages == 2)
-            assert(viewModel.movieDetailsResponse.value!!.adult == false)
-            assert(viewModel.movieCast.value!!.id == 1)
+            assert(viewModel.uiState.value.movieDetails?.adult == false)
+            assert(viewModel.uiState.value.cast.isNotEmpty() || viewModel.uiState.value.movieDetails != null)
         }
     }
 

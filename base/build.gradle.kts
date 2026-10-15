@@ -57,11 +57,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.activity.compose)
 
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.kotlinx.serialization)
-    implementation(libs.moshi.kt)
-    ksp(libs.moshi.kt.codegen)
-    api(libs.moshi.converter)
+    api(libs.retrofit)
+    api(libs.retrofit.kotlinx.serialization)
     implementation(libs.logging.interceptor)
     api(libs.kotlinx.serialization.json)
 
