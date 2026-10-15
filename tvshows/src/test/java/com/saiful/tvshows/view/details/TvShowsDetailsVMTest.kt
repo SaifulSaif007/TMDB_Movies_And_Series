@@ -72,10 +72,10 @@ internal class TvShowsDetailsVMTest : BaseViewModelTest() {
             verify(repository, times(1)).showRecommendation(any())
             verify(repository, times(1)).similarShows(any())
 
-            assert(viewModel.showDetails.value != null)
-            assert(viewModel.showCasts.value != null)
-            assert(viewModel.recommendation.value!!.totalPages == 1)
-            assert(viewModel.similarShow.value!!.page == 1)
+            assert(viewModel.uiState.value.showDetails != null)
+            assert(viewModel.uiState.value.showCasts != null)
+            assert(viewModel.uiState.value.recommendations?.totalPages == 1)
+            assert(viewModel.uiState.value.similarShows?.page == 1)
         }
     }
 }

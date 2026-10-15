@@ -77,12 +77,11 @@ internal class DashboardVMTest : BaseViewModelTest() {
             verify(repository, times(1)).getTopRatedMovies(any())
             verify(repository, times(1)).getUpcomingMovies(any())
 
-            assert(viewModel.popularMoviesList.value!!.totalPages == 2)
-            assert(viewModel.nowPlayingMoviesList.value!!.results.isNotEmpty())
-            assert(viewModel.topRatedMoviesList.value!!.page == 1)
-            assert(viewModel.upcomingMoviesList.value!!.totalResults == 2)
-            assert(viewModel.sliderList.isNotEmpty())
-            assert(viewModel.sliderLoaded.value == null)
+            assert(viewModel.uiState.value.popularMovies.isNotEmpty())
+            assert(viewModel.uiState.value.nowPlayingMovies.isNotEmpty())
+            assert(viewModel.uiState.value.topRatedMovies.isNotEmpty())
+            assert(viewModel.uiState.value.upcomingMovies.isNotEmpty())
+            assert(viewModel.uiState.value.sliderMovies.isNotEmpty())
         }
     }
 

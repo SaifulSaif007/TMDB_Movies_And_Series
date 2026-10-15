@@ -2,8 +2,6 @@ package com.saiful.base.di
 
 import com.saiful.base.BuildConfig
 import com.saiful.base.network.*
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +12,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -52,19 +49,11 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun moshi(): Moshi = Moshi.Builder()
-        .add(ThrowableAdapter())
-        .addLast(KotlinJsonAdapterFactory())
-        .build()
-
-    @Provides
-    @Singleton
-    fun provideRetrofit(client: OkHttpClient, moshi: Moshi, json: Json) : Retrofit =
+    fun provideRetrofit(client: OkHttpClient, json: Json): Retrofit =
         Retrofit.Builder()
             .client(client)
             .baseUrl(baseUrl)
             .addCallAdapterFactory(ResponseAdapterFactory())
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 }

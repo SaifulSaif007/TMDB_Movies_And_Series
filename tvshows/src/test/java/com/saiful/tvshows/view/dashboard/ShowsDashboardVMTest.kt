@@ -67,12 +67,11 @@ class ShowsDashboardVMTest : BaseViewModelTest() {
             verify(dashboardRepo, times(1)).getTopRatedShows(any())
             verify(dashboardRepo, times(1)).getTrendingShows(any())
 
-            assert(viewModel.onAirShowsList.value!!.totalPages == 1)
-            assert(viewModel.popularShowsList.value!!.totalResults == 2)
-            assert(viewModel.trendingShowsList.value!!.results.isNotEmpty())
-            assert(viewModel.topRatedShowsList.value!!.totalPages == 1)
-            assert(viewModel.sliderList.isNotEmpty())
-            assert(viewModel.sliderLoaded.value == null)
+            assert(viewModel.uiState.value.onAirShows.isNotEmpty())
+            assert(viewModel.uiState.value.popularShows.isNotEmpty())
+            assert(viewModel.uiState.value.trendingShows.isNotEmpty())
+            assert(viewModel.uiState.value.topRatedShows.isNotEmpty())
+            assert(viewModel.uiState.value.sliderShows.isNotEmpty())
         }
     }
 }
