@@ -1,6 +1,6 @@
 package com.saiful.tvshows.view.details
 
-import com.nhaarman.mockito_kotlin.*
+import org.mockito.kotlin.*
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base_unit_test.BaseViewModelTest
 import com.saiful.base_unit_test.rules.MainCoroutineRule

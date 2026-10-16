@@ -39,9 +39,7 @@ dependencies {
     implementation(project(":base"))
 
     api(libs.junit)
-    api(libs.mockito.kotlin) {
-        exclude(group = "org.jetbrains.kotlin", module = "kotlin-reflect")
-    }
+    api(libs.mockito.kotlin)
     api(libs.mockito)
     api(libs.androidx.espresso.core)
     api(libs.coroutine.test)

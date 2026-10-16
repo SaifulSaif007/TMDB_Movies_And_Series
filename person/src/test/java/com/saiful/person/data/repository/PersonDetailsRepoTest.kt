@@ -1,6 +1,6 @@
 package com.saiful.person.data.repository
 
-import com.nhaarman.mockito_kotlin.*
+import org.mockito.kotlin.*
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base_unit_test.BaseRepositoryTest
 import com.saiful.person.data.api.PersonApiService
