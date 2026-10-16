@@ -38,7 +38,10 @@ internal class ShowSeasonVMTest : BaseViewModelTest() {
     }
 
     private fun initViewModel() {
-        viewModel = ShowSeasonVM(repository)
+        viewModel = ShowSeasonVM(
+            repository,
+            mainCoroutineRule.testDispatcherProvider
+        )
     }
 
     @Test

@@ -44,7 +44,10 @@ internal class TvShowsDetailsVMTest : BaseViewModelTest() {
     }
 
     private fun initViewModel() {
-        viewModel = TvShowsDetailsVM(repository)
+        viewModel = TvShowsDetailsVM(
+            repository,
+            mainCoroutineRule.testDispatcherProvider
+        )
     }
 
     @Test

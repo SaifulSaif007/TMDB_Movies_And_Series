@@ -18,7 +18,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.saiful.base.ui.theme.TMDBTheme
 import com.saiful.movie.model.Cast
 import com.saiful.movie.model.MovieDetailsResponse
@@ -26,7 +26,6 @@ import com.saiful.shared.components.*
 import com.saiful.shared.model.Movies
 import com.saiful.shared.utils.*
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieDetailsScreen(
     movieId: Int,

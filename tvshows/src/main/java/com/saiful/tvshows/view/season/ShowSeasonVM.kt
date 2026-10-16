@@ -1,7 +1,8 @@
 package com.saiful.tvshows.view.season
 
 import com.saiful.base.network.model.BaseResponse
-import com.saiful.base.network.model.GenericResponse
+import com.saiful.base.util.DefaultDispatcherProvider
+import com.saiful.base.util.DispatcherProvider
 import com.saiful.base.viewmodel.BaseOpsViewModel
 import com.saiful.tvshows.data.repository.SeasonRepo
 import com.saiful.tvshows.model.SeasonDetails
@@ -10,8 +11,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class ShowSeasonVM
-@Inject constructor(private val repo: SeasonRepo) : BaseOpsViewModel() {
+class ShowSeasonVM @Inject constructor(
+    private val repo: SeasonRepo,
+    dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider
+) : BaseOpsViewModel(dispatcherProvider) {
 
     val seasonDetails = MutableStateFlow<SeasonDetails?>(null)
 
