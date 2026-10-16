@@ -1,7 +1,8 @@
 package com.saiful.person.view.dashboard
 
 import com.saiful.base.network.model.BaseResponse
-import com.saiful.base.network.model.GenericResponse
+import com.saiful.base.util.DefaultDispatcherProvider
+import com.saiful.base.util.DispatcherProvider
 import com.saiful.base.viewmodel.BaseOpsViewModel
 import com.saiful.person.data.repository.DashboardRepo
 import com.saiful.person.model.PersonResponse
@@ -19,8 +20,9 @@ data class PersonDashboardUiState(
 
 @HiltViewModel
 class PersonDashboardVM @Inject constructor(
-    private val repo: DashboardRepo
-) : BaseOpsViewModel() {
+    private val repo: DashboardRepo,
+    dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider
+) : BaseOpsViewModel(dispatcherProvider) {
 
     private val _uiState = MutableStateFlow(PersonDashboardUiState())
     val uiState = _uiState.asStateFlow()

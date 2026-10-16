@@ -1,6 +1,8 @@
 package com.saiful.tvshows.view.details
 
 import com.saiful.base.network.model.BaseResponse
+import com.saiful.base.util.DefaultDispatcherProvider
+import com.saiful.base.util.DispatcherProvider
 import com.saiful.base.viewmodel.BaseOpsViewModel
 import com.saiful.tvshows.data.repository.ShowDetailsRepo
 import com.saiful.tvshows.model.*
@@ -19,8 +21,9 @@ data class TvShowsDetailsUiState(
 
 @HiltViewModel
 class TvShowsDetailsVM @Inject constructor(
-    private val repo: ShowDetailsRepo
-) : BaseOpsViewModel() {
+    private val repo: ShowDetailsRepo,
+    dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider
+) : BaseOpsViewModel(dispatcherProvider) {
 
     private val _uiState = MutableStateFlow(TvShowsDetailsUiState())
     val uiState = _uiState.asStateFlow()

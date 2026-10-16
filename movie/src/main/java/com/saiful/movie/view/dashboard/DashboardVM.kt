@@ -1,12 +1,13 @@
 package com.saiful.movie.view.dashboard
 
-import androidx.lifecycle.viewModelScope
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base.network.model.GenericResponse
+import com.saiful.base.util.DefaultDispatcherProvider
+import com.saiful.base.util.DispatcherProvider
 import com.saiful.base.viewmodel.BaseOpsViewModel
 import com.saiful.movie.data.repository.DashboardRepo
-import com.saiful.shared.model.Movies
 import com.saiful.movie.model.MoviesResponse
+import com.saiful.shared.model.Movies
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,8 +24,9 @@ data class DashboardUiState(
 
 @HiltViewModel
 class DashboardVM @Inject constructor(
-    private val dashboardRepo: DashboardRepo
-) : BaseOpsViewModel() {
+    private val dashboardRepo: DashboardRepo,
+    dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider
+) : BaseOpsViewModel(dispatcherProvider) {
 
     private val _uiState = MutableStateFlow(DashboardUiState())
     val uiState = _uiState.asStateFlow()

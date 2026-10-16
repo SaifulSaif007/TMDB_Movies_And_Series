@@ -56,7 +56,8 @@ internal class PersonDetailsVMTest : BaseViewModelTest() {
 
     private fun initViewModel() {
         viewModel = PersonDetailsVM(
-            repository
+            repository,
+            mainCoroutineRule.testDispatcherProvider
         )
     }
     @Test

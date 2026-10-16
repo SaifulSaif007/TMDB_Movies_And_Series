@@ -2,6 +2,8 @@ package com.saiful.person.view.details
 
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base.network.model.GenericResponse
+import com.saiful.base.util.DefaultDispatcherProvider
+import com.saiful.base.util.DispatcherProvider
 import com.saiful.base.viewmodel.BaseOpsViewModel
 import com.saiful.person.data.repository.PersonDetailsRepo
 import com.saiful.person.model.MovieCredits
@@ -23,8 +25,9 @@ data class PersonDetailsUiState(
 
 @HiltViewModel
 class PersonDetailsVM @Inject constructor(
-    private val repo: PersonDetailsRepo
-) : BaseOpsViewModel() {
+    private val repo: PersonDetailsRepo,
+    dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider
+) : BaseOpsViewModel(dispatcherProvider) {
 
     private val _uiState = MutableStateFlow(PersonDetailsUiState())
     val uiState = _uiState.asStateFlow()

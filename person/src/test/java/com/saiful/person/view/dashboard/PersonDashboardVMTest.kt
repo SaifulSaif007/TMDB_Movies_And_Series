@@ -42,7 +42,10 @@ class PersonDashboardVMTest : BaseViewModelTest() {
     }
 
     private fun initViewModel() {
-        viewModel = PersonDashboardVM(repository)
+        viewModel = PersonDashboardVM(
+            repository,
+            mainCoroutineRule.testDispatcherProvider
+        )
     }
 
     @Test

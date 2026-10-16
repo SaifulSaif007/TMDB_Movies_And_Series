@@ -49,7 +49,10 @@ internal class DashboardVMTest : BaseViewModelTest() {
     }
 
     private fun initViewModel() {
-        viewModel = DashboardVM(repository)
+        viewModel = DashboardVM(
+            repository,
+            coroutineRule.testDispatcherProvider
+        )
     }
 
 

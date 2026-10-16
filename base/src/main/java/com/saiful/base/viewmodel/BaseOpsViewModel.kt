@@ -4,20 +4,23 @@ import androidx.lifecycle.viewModelScope
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base.network.model.GenericError
 import com.saiful.base.network.model.GenericResponse
-import kotlinx.coroutines.Dispatchers
+import com.saiful.base.util.DefaultDispatcherProvider
+import com.saiful.base.util.DispatcherProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-abstract class BaseOpsViewModel : BaseViewModel() {
+abstract class BaseOpsViewModel(
+    private val dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider
+) : BaseViewModel() {
 
     protected fun executeRestCodeBlock(
         operationTag: String = String(),
         showLoader: Boolean = true,
         codeBlock: suspend () -> GenericResponse<Any>
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcherProvider.main()) {
             if (showLoader) updateLoading(true)
-            val result = withContext(Dispatchers.IO) { codeBlock() }
+            val result = withContext(dispatcherProvider.io()) { codeBlock() }
             if (showLoader) updateLoading(false)
 
             when (result) {
