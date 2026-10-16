@@ -22,7 +22,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.saiful.base.ui.theme.TMDBTheme
 import com.saiful.shared.model.SliderItem
 import com.saiful.shared.utils.AppConstants

@@ -3,6 +3,8 @@ package com.saiful.tvshows.view.dashboard
 import androidx.lifecycle.viewModelScope
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base.network.model.GenericResponse
+import com.saiful.base.util.DefaultDispatcherProvider
+import com.saiful.base.util.DispatcherProvider
 import com.saiful.base.viewmodel.BaseOpsViewModel
 import com.saiful.tvshows.data.repository.DashboardRepo
 import com.saiful.shared.model.TvShows
@@ -23,8 +25,9 @@ data class DashboardUiState(
 
 @HiltViewModel
 class ShowsDashboardVM @Inject constructor(
-    private val repo: DashboardRepo
-) : BaseOpsViewModel() {
+    private val repo: DashboardRepo,
+    dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider
+) : BaseOpsViewModel(dispatcherProvider) {
 
     private val _uiState = MutableStateFlow(DashboardUiState())
     val uiState = _uiState.asStateFlow()

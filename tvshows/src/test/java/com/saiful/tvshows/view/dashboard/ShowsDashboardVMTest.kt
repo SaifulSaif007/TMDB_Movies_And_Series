@@ -41,7 +41,10 @@ class ShowsDashboardVMTest : BaseViewModelTest() {
     }
 
     private fun initViewModel() {
-        viewModel = ShowsDashboardVM(dashboardRepo)
+        viewModel = ShowsDashboardVM(
+            dashboardRepo,
+            coroutineRule.testDispatcherProvider
+        )
     }
 
     @Test

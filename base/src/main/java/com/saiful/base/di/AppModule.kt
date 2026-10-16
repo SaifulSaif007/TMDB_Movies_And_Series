@@ -56,4 +56,8 @@ object AppModule {
             .addCallAdapterFactory(ResponseAdapterFactory())
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
+
+    @Provides
+    @Singleton
+    fun provideDispatcherProvider(): com.saiful.base.util.DispatcherProvider = com.saiful.base.util.DefaultDispatcherProvider
 }
