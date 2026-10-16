@@ -1,6 +1,6 @@
 package com.saiful.tvshows.view.season
 
-import com.nhaarman.mockito_kotlin.*
+import org.mockito.kotlin.*
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base_unit_test.BaseViewModelTest
 import com.saiful.base_unit_test.rules.MainCoroutineRule
@@ -53,6 +53,8 @@ internal class ShowSeasonVMTest : BaseViewModelTest() {
             initViewModel()
 
             viewModel.fetchSeason(showId, seasonNo)
+
+            mainCoroutineRule.testDispatcher.scheduler.advanceUntilIdle()
 
             verify(repository, times(1)).seasonDetails(any(), any())
 
