@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.hilt.plugin)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.navigation.safeargs)
     id("jacoco")
 }
 
@@ -41,7 +40,6 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
         compose = true
     }
     lint {
@@ -64,7 +62,6 @@ dependencies {
     implementation(libs.androidx.material3)
 
     implementation(libs.dagger.hilt)
-    implementation(libs.bundles.androidxNavigation)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.coil.compose)
