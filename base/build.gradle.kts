@@ -67,7 +67,6 @@ dependencies {
 
     implementation(libs.bundles.androidxLifecycle)
 
-    api(libs.androidx.viewpager)
 
     implementation(libs.androidx.navigation.runtime)
     

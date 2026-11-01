@@ -61,7 +61,6 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     implementation(libs.kotlinx.serialization.json)
-    api(libs.bumtech.glide)
     api(libs.coil.compose)
     api(libs.coil.network.okhttp)
     api(libs.androidx.paging)
