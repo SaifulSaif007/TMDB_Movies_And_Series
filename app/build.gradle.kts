@@ -54,7 +54,6 @@ android {
         jvmTarget = "17"
     }
     buildFeatures {
-        viewBinding = true
     }
     buildFeatures {
         compose = true
@@ -74,7 +73,6 @@ dependencies {
     implementation(libs.dagger.hilt)
     ksp(libs.hilt.compiler)
 
-    implementation(libs.google.material)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

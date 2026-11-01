@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.hilt.plugin)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.navigation.safeargs)
     id("jacoco")
 }
 
@@ -38,7 +37,6 @@ android {
         jvmTarget = "17"
     }
     buildFeatures {
-        viewBinding = true
         compose = true
     }
 
@@ -64,7 +62,6 @@ dependencies {
     implementation(libs.androidx.paging.compose)
 
     implementation(libs.dagger.hilt)
-    implementation(libs.bundles.androidxNavigation)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.coil.compose)

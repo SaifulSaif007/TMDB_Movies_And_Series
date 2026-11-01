@@ -5,8 +5,6 @@ plugins {
     alias(libs.plugins.hilt.plugin)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
-    id("androidx.navigation.safeargs.kotlin")
-    id("kotlin-parcelize")
 }
 
 android {
@@ -34,7 +32,6 @@ android {
         jvmTarget = "17"
     }
     buildFeatures {
-        viewBinding = true
         compose = true
     }
     lint {
@@ -66,5 +63,4 @@ dependencies {
     api(libs.androidx.paging)
     api(libs.androidx.paging.compose)
 
-    api(libs.bundles.androidxNavigation)
 } 

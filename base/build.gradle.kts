@@ -44,7 +44,6 @@ android {
     
     buildFeatures {
         buildConfig = true // Enable BuildConfig generation
-        viewBinding = true
         compose = true
     }
     testOptions {
@@ -68,7 +67,6 @@ dependencies {
     implementation(libs.bundles.androidxLifecycle)
 
 
-    implementation(libs.androidx.navigation.runtime)
     
 
     implementation(libs.dagger.hilt)
