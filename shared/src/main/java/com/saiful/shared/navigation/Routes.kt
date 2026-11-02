@@ -1,12 +1,12 @@
 package com.saiful.shared.navigation
 
-import com.saiful.shared.model.MovieCategory
-import com.saiful.shared.model.PersonCategory
-import com.saiful.shared.model.TvShowsCategory
 import kotlinx.serialization.Serializable
 
 @Serializable
 sealed interface Route {
+
+    @Serializable
+    data object Welcome : Route
 
     @Serializable
     data object MovieDashboard : Route

@@ -50,7 +50,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.saiful.base.ui.theme.CinemaCrimson
+import com.saiful.base.ui.theme.SurfaceContainerLowestDark
 import com.saiful.base.ui.theme.TMDBTheme
+import com.saiful.base.ui.theme.TextMuted
 import com.saiful.movie.view.collection.MovieCollectionScreen
 import com.saiful.movie.view.dashboard.MovieDashboardScreen
 import com.saiful.movie.view.details.MovieDetailsScreen
@@ -65,6 +68,7 @@ import com.saiful.shared.navigation.Route
 import com.saiful.shared.utils.JsonConverter
 import com.saiful.shared.view.gallery.GalleryScreen
 import com.saiful.tmdbexplorer.search.SearchScreen
+import com.saiful.tmdbexplorer.welcome.WelcomeScreen
 import com.saiful.tvshows.view.dashboard.TvShowsDashboardScreen
 import com.saiful.tvshows.view.details.TvShowsDetailsScreen
 import com.saiful.tvshows.view.list.TvShowListScreen
@@ -114,7 +118,7 @@ fun MainScreen(context: Context) {
         bottomBar = {
             if (showBottomBar) {
                 NavigationBar(
-                    containerColor = Color.Black,
+                    containerColor = SurfaceContainerLowestDark,
                     contentColor = Color.White
                 ) {
                     topLevelDestinations.forEach { destination ->
@@ -139,28 +143,40 @@ fun MainScreen(context: Context) {
                             },
                             label = { Text(destination.name) },
                             colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = Color.White,
-                                selectedTextColor = Color.White,
-                                indicatorColor = Color.Black,
-                                unselectedIconColor = Color.Gray,
-                                unselectedTextColor = Color.Gray
+                                selectedIconColor = CinemaCrimson,
+                                selectedTextColor = CinemaCrimson,
+                                indicatorColor = CinemaCrimson.copy(alpha = 0.15f),
+                                unselectedIconColor = TextMuted,
+                                unselectedTextColor = TextMuted
                             )
                         )
                     }
                 }
             }
-
         },
         contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Bottom)
     ) { paddingValues ->
         NavHost(
             navController = navController,
-            startDestination = Route.MovieDashboard,
+            startDestination = Route.Welcome,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .consumeWindowInsets(paddingValues),
         ) {
+            composable<Route.Welcome> {
+                WelcomeScreen(
+                    onGetStarted = {
+                        navController.navigate(Route.MovieDashboard) {
+                            popUpTo(Route.Welcome) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                        }
+                    }
+                )
+            }
+
             composable<Route.MovieDashboard> {
                 MovieDashboardScreen(
                     viewModel = hiltViewModel(),
@@ -340,13 +356,13 @@ fun EdgeToEdgeBottomBar(
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
-        tonalElevation = 3.dp // optional, matches BottomAppBar-ish look
+        tonalElevation = 3.dp
     ) {
         Box(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.error)
                 .fillMaxWidth()
-                .windowInsetsPadding(windowInsets) // pushes content above the gesture/nav bar // your normal visual padding
+                .windowInsetsPadding(windowInsets)
         ) {
             Row(
                 modifier = Modifier
