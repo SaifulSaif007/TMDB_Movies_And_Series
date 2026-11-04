@@ -18,5 +18,6 @@ data class PersonDetails(
     @SerialName("place_of_birth")
     val birthPlace: String = "",
     @SerialName("profile_path")
-    val profilePath: String = ""
+    val profilePath: String = "",
+    val popularity: Double? = 0.0
 )
