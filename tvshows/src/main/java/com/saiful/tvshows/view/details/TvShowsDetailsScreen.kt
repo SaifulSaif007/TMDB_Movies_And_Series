@@ -2,12 +2,6 @@ package com.saiful.tvshows.view.details
 
 import android.content.Context
 import android.content.Intent
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -689,16 +683,6 @@ private fun TvShowsDetailsTopBar(
     onBackClick: () -> Unit,
     onShareClick: () -> Unit
 ) {
-    val infiniteTransition = rememberInfiniteTransition(label = "pulse")
-    val pulseAlpha by infiniteTransition.animateFloat(
-        initialValue = 0.35f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(900, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "pulseAlpha"
-    )
 
     Column(
         modifier = Modifier
@@ -757,7 +741,7 @@ private fun TvShowsDetailsTopBar(
                         modifier = Modifier
                             .size(8.dp)
                             .clip(CircleShape)
-                            .background(CinemaCrimson.copy(alpha = pulseAlpha))
+                            .background(CinemaCrimson)
                     )
                 }
             }
