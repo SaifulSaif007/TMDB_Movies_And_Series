@@ -44,7 +44,8 @@ class CollectionVMTest : BaseViewModelTest() {
 
     private fun initViewModel(){
         collectionVM = CollectionVM(
-            collectionRepo
+            collectionRepo,
+            mainCoroutineRule.testDispatcherProvider
         )
     }
 

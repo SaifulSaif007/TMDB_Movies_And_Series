@@ -55,7 +55,8 @@ internal class MovieDetailsVMTest : BaseViewModelTest() {
 
     private fun initViewModel() {
         viewModel = MovieDetailsVM(
-            repo = repository
+            repo = repository,
+            dispatcherProvider = coroutineRule.testDispatcherProvider
         )
     }
 

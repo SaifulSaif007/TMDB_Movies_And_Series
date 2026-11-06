@@ -1,6 +1,8 @@
 package com.saiful.movie.view.details
 
 import com.saiful.base.network.model.BaseResponse
+import com.saiful.base.util.DefaultDispatcherProvider
+import com.saiful.base.util.DispatcherProvider
 import com.saiful.base.viewmodel.BaseOpsViewModel
 import com.saiful.movie.data.repository.MovieDetailsRepo
 import com.saiful.movie.model.Cast
@@ -24,8 +26,9 @@ data class MovieDetailsUiState(
 
 @HiltViewModel
 class MovieDetailsVM @Inject constructor(
-    private val repo: MovieDetailsRepo
-) : BaseOpsViewModel() {
+    private val repo: MovieDetailsRepo,
+    dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider
+) : BaseOpsViewModel(dispatcherProvider) {
 
     private val _uiState = MutableStateFlow(MovieDetailsUiState())
     val uiState = _uiState.asStateFlow()
