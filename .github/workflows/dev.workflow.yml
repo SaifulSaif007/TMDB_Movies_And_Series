@@ -2,9 +2,9 @@ name: Android Dev CI
 
 on:
   push:
-    branches: [ "testing" ]
+    branches: [ "dev" ]
   pull_request:
-    branches: [ "testing" ]
+    branches: [ "dev" ]
 
 permissions:
   contents: read
