@@ -1,22 +1,25 @@
 name: Android Production CI
 
 on:
-  #  push:
-  #    branches: [ "master" ]
+  push:
+    branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
@@ -24,36 +27,26 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      #      - name: Build with Gradle
-      #        run: ./gradlew build
-
-      #      - name: Run Coverage
-      #        run:
-      #          ./gradlew clean testDebugUnitTestCoverage
+      - name: Run Coverage
+        run: ./gradlew jacocoConsolidatedReport --console=plain
 
       - name: Add coverage to PR
         if: github.event_name == 'pull_request'
         id: jacoco
-        uses: madrapps/jacoco-report@v1.3
+        uses: madrapps/jacoco-report@v1.7.1
         with:
-          paths: ${{ github.workspace }}/build/reports/jacoco/jacocoConsolidatedReport.xml
+          paths: |
+            ${{ github.workspace }}/build/reports/jacoco/jacocoConsolidatedReport.xml
+            ${{ github.workspace }}/build/reports/jacoco/**/jacocoConsolidatedReport.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 80
           min-coverage-changed-files: 80
 
-      - name: Build Android Release
-        run: bash ./gradlew assembleDebug
+      - name: Build Android App
+        run: ./gradlew assembleProdDebug --console=plain
 
-      #     - name: Upload APK
-      #       uses: actions/upload-artifact@v2.2.4
-      #        with:
-      #         name: APP
-      #        path: app/build/outputs/apk/debug/app-debug.apk
-
-      - name: upload artifact to Firebase App Distribution
-        uses: wzieba/Firebase-Distribution-Github-Action@v1
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
-          appId: ${{secrets.FIREBASE_APP_ID}}
-          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
-          groups: testers
-          file: app/build/outputs/apk/debug/app-debug.apk
+          name: app-prod-debug
+          path: app/build/outputs/apk/prod/debug/app-prod-debug.apk
