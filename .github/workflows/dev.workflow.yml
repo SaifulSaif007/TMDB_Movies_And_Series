@@ -6,17 +6,20 @@ on:
   pull_request:
     branches: [ "testing" ]
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
@@ -24,26 +27,23 @@ jobs:
       - name: Verify Java version
         run: java -version
 
-      #      - name: "Set up JDK 17 as default"
-      #        run: |
-      #          echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
-
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew buildDebug --console=plain
+        run: ./gradlew assembleDebug --console=plain
 
       - name: Run Coverage
-        run:
-          ./gradlew clean jacocoConsolidatedReport
+        run: ./gradlew jacocoConsolidatedReport --console=plain
 
       - name: Add coverage to PR only
         if: github.event_name == 'pull_request'
         id: jacoco
-        uses: madrapps/jacoco-report@v1.3
+        uses: madrapps/jacoco-report@v1.7.1
         with:
-          paths: ${{ github.workspace }}/build/reports/jacoco/jacocoConsolidatedReport.xml
+          paths: |
+            ${{ github.workspace }}/build/reports/jacoco/jacocoConsolidatedReport.xml
+            ${{ github.workspace }}/build/reports/jacoco/**/jacocoConsolidatedReport.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 80
           min-coverage-changed-files: 80

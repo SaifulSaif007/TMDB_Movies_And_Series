@@ -30,6 +30,7 @@ tasks.register("jacocoConsolidatedReport", JacocoReport::class.java) {
         xml.required.set(true)
         html.required.set(true)
         csv.required.set(false)
+        xml.outputLocation.set(layout.buildDirectory.file("reports/jacoco/jacocoConsolidatedReport.xml"))
     }
     
     // Collect execution data from all modules
