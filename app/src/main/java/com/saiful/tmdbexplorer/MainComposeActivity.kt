@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlayArrow
@@ -67,7 +68,10 @@ import com.saiful.shared.model.TvShowsCategory
 import com.saiful.shared.navigation.Route
 import com.saiful.shared.utils.JsonConverter
 import com.saiful.shared.view.gallery.GalleryScreen
+import com.saiful.tmdbexplorer.auth.AuthDeepLinkManager
+import com.saiful.tmdbexplorer.profile.ProfileScreen
 import com.saiful.tmdbexplorer.search.SearchScreen
+import javax.inject.Inject
 import com.saiful.tmdbexplorer.welcome.WelcomeScreen
 import com.saiful.tvshows.view.dashboard.TvShowsDashboardScreen
 import com.saiful.tvshows.view.details.TvShowsDetailsScreen
@@ -76,17 +80,27 @@ import com.saiful.tvshows.view.season.TvShowSeasonScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @AndroidEntryPoint
 class MainComposeActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var authDeepLinkManager: AuthDeepLinkManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        authDeepLinkManager.handleDeepLink(intent?.data)
         setContent {
             TMDBTheme {
                 MainScreen(context = this)
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        authDeepLinkManager.handleDeepLink(intent.data)
     }
 }
 
@@ -100,7 +114,8 @@ val topLevelDestinations = listOf(
     TopLevelDestination("Movies", Icons.Default.Home, Route.MovieDashboard),
     TopLevelDestination("TV Shows", Icons.Default.PlayArrow, Route.TvShowsDashboard),
     TopLevelDestination("Celebrities", Icons.Default.Person, Route.PersonDashboard),
-    TopLevelDestination("Search", Icons.Default.Search, Route.Search)
+    TopLevelDestination("Search", Icons.Default.Search, Route.Search),
+    TopLevelDestination("Profile", Icons.Default.AccountCircle, Route.Profile)
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -338,6 +353,12 @@ fun MainScreen(context: Context) {
                     images = images,
                     startIndex = args.startIndex,
                     onBackClick = { navController.navigateUp() }
+                )
+            }
+
+            composable<Route.Profile> {
+                ProfileScreen(
+                    viewModel = hiltViewModel()
                 )
             }
         }

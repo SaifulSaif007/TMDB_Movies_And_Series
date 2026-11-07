@@ -31,9 +31,9 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun httpClient(): OkHttpClient = OkHttpClient.Builder()
+    fun httpClient(userInterceptor: UserInterceptor): OkHttpClient = OkHttpClient.Builder()
         .addNetworkInterceptor(loggingInterceptor)
-        .addInterceptor(UserInterceptor())
+        .addInterceptor(userInterceptor)
         .connectTimeout(2, TimeUnit.MINUTES)
         .readTimeout(1, TimeUnit.MINUTES)
         .writeTimeout(1, TimeUnit.MINUTES)

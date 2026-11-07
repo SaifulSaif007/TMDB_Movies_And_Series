@@ -65,6 +65,7 @@ dependencies {
     api(libs.kotlinx.serialization.json)
 
     implementation(libs.bundles.androidxLifecycle)
+    api(libs.androidx.datastore)
 
 
     

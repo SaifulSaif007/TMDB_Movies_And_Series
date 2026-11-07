@@ -46,4 +46,7 @@ sealed interface Route {
 
     @Serializable
     data class Gallery(val imagesJson: String, val startIndex: Int) : Route
+
+    @Serializable
+    data object Profile : Route
 }
