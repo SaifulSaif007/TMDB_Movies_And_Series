@@ -44,6 +44,7 @@ android {
 
 dependencies {
     implementation(project(":base"))
+    testImplementation(project(":base-unit-test"))
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)

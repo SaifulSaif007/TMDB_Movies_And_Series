@@ -36,12 +36,14 @@ class AuthRepository @Inject constructor(
 
     suspend fun saveSession(sessionId: String, account: AccountDetailsResponse) {
         val avatarPath = account.avatar?.tmdb?.avatarPath
+        val gravatarHash = account.avatar?.gravatar?.hash
         sessionManager.saveSession(
             sessionId = sessionId,
             accountId = account.id,
             username = account.username,
             name = account.name,
             avatarPath = avatarPath,
+            gravatarHash = gravatarHash,
             includeAdult = account.includeAdult
         )
     }

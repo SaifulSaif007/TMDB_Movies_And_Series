@@ -9,5 +9,6 @@ data class UserSession(
     val username: String,
     val name: String,
     val avatarPath: String? = null,
+    val gravatarHash: String? = null,
     val includeAdult: Boolean = false
 )
