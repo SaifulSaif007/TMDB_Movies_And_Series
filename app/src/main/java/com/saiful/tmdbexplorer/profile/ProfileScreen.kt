@@ -328,9 +328,15 @@ private fun LoggedInContent(
                 .background(SurfaceContainerLowestDark),
             contentAlignment = Alignment.Center
         ) {
-            val avatarUrl = userSession.avatarPath?.let { path ->
-                if (path.startsWith("http")) path
-                else "${AppConstants.IMAGE_BASE_URL}${AppConstants.PROFILE_SIZE}$path"
+            val avatarUrl = when {
+                !userSession.avatarPath.isNullOrBlank() -> {
+                    val path = userSession.avatarPath!!
+                    if (path.startsWith("http")) path
+                    else "${AppConstants.IMAGE_BASE_URL}${AppConstants.PROFILE_SIZE}$path"
+                }
+                !userSession.gravatarHash.isNullOrBlank() ->
+                    "https://www.gravatar.com/avatar/${userSession.gravatarHash}?s=200"
+                else -> null
             }
 
             if (!avatarUrl.isNullOrBlank()) {

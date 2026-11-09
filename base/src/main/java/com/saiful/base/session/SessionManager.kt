@@ -44,6 +44,7 @@ class SessionManager @Inject constructor(
         private val KEY_USERNAME = stringPreferencesKey("key_username")
         private val KEY_NAME = stringPreferencesKey("key_name")
         private val KEY_AVATAR_PATH = stringPreferencesKey("key_avatar_path")
+        private val KEY_GRAVATAR_HASH = stringPreferencesKey("key_gravatar_hash")
         private val KEY_INCLUDE_ADULT = booleanPreferencesKey("key_include_adult")
     }
 
@@ -77,6 +78,7 @@ class SessionManager @Inject constructor(
             val username = preferences[KEY_USERNAME]
             val name = preferences[KEY_NAME]
             val avatarPath = preferences[KEY_AVATAR_PATH]
+            val gravatarHash = preferences[KEY_GRAVATAR_HASH]
             val includeAdult = preferences[KEY_INCLUDE_ADULT] ?: false
 
             if (sessionId != null && accountId != null && username != null) {
@@ -86,6 +88,7 @@ class SessionManager @Inject constructor(
                     username = username,
                     name = name ?: "",
                     avatarPath = avatarPath,
+                    gravatarHash = gravatarHash,
                     includeAdult = includeAdult
                 )
             } else {
@@ -101,6 +104,7 @@ class SessionManager @Inject constructor(
         username: String,
         name: String,
         avatarPath: String?,
+        gravatarHash: String?,
         includeAdult: Boolean
     ) {
         _cachedSessionId.value = sessionId
@@ -113,6 +117,11 @@ class SessionManager @Inject constructor(
                 prefs[KEY_AVATAR_PATH] = avatarPath
             } else {
                 prefs.remove(KEY_AVATAR_PATH)
+            }
+            if (gravatarHash != null) {
+                prefs[KEY_GRAVATAR_HASH] = gravatarHash
+            } else {
+                prefs.remove(KEY_GRAVATAR_HASH)
             }
             prefs[KEY_INCLUDE_ADULT] = includeAdult
         }
