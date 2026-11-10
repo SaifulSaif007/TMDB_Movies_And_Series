@@ -24,7 +24,11 @@ abstract class BaseViewModel : ViewModel() {
     fun emitMessage(message : String?){
         viewModelScope.launch {
             message?.let {
-                Log.d("BaseViewModel", "emitMessage: $message")
+                try {
+                    Log.d("BaseViewModel", "emitMessage: $message")
+                } catch (_: Throwable) {
+                    // android.util.Log is not mocked in local JVM unit tests
+                }
                 _showMessage.emit(it)
             }
         }

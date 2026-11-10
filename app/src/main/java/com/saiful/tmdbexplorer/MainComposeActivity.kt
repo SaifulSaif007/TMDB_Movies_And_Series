@@ -118,7 +118,6 @@ val topLevelDestinations = listOf(
     TopLevelDestination("Profile", Icons.Default.AccountCircle, Route.Profile)
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(context: Context) {
     val navController = rememberNavController()
@@ -215,7 +214,8 @@ fun MainScreen(context: Context) {
                                 collectionId
                             )
                         )
-                    }
+                    },
+                    onNavigateToProfile = { navController.navigate(Route.Profile) }
                 )
             }
 
@@ -287,7 +287,8 @@ fun MainScreen(context: Context) {
                                 seasonNo
                             )
                         )
-                    }
+                    },
+                    onNavigateToProfile = { navController.navigate(Route.Profile) }
                 )
             }
 
