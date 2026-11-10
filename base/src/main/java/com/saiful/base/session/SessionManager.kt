@@ -32,12 +32,6 @@ class SessionManager @Inject constructor(
 ) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
-    private val _cachedSessionId = MutableStateFlow<String?>(null)
-    val cachedSessionId = _cachedSessionId.asStateFlow()
-
-    val currentSessionId: String?
-        get() = _cachedSessionId.value
-
     companion object {
         private val KEY_SESSION_ID = stringPreferencesKey("key_session_id")
         private val KEY_ACCOUNT_ID = intPreferencesKey("key_account_id")
@@ -46,22 +40,6 @@ class SessionManager @Inject constructor(
         private val KEY_AVATAR_PATH = stringPreferencesKey("key_avatar_path")
         private val KEY_GRAVATAR_HASH = stringPreferencesKey("key_gravatar_hash")
         private val KEY_INCLUDE_ADULT = booleanPreferencesKey("key_include_adult")
-    }
-
-    init {
-        scope.launch {
-            context.dataStore.data
-                .catch { exception ->
-                    if (exception is IOException) {
-                        emit(emptyPreferences())
-                    } else {
-                        throw exception
-                    }
-                }
-                .collect { prefs ->
-                    _cachedSessionId.value = prefs[KEY_SESSION_ID]
-                }
-        }
     }
 
     val userSession: Flow<UserSession?> = context.dataStore.data
@@ -98,6 +76,27 @@ class SessionManager @Inject constructor(
 
     val isLoggedIn: Flow<Boolean> = userSession.map { it != null }
 
+    private val _cachedSessionId = MutableStateFlow<String?>(null)
+    val cachedSessionId = _cachedSessionId.asStateFlow()
+
+    private val _cachedUserSession = MutableStateFlow<UserSession?>(null)
+    val sessionFlow = _cachedUserSession.asStateFlow()
+
+    val currentSessionId: String?
+        get() = _cachedSessionId.value
+
+    val currentUserSession: UserSession?
+        get() = _cachedUserSession.value
+
+    init {
+        scope.launch {
+            userSession.collect { session ->
+                _cachedUserSession.value = session
+                _cachedSessionId.value = session?.sessionId
+            }
+        }
+    }
+
     suspend fun saveSession(
         sessionId: String,
         accountId: Int,
@@ -108,6 +107,15 @@ class SessionManager @Inject constructor(
         includeAdult: Boolean
     ) {
         _cachedSessionId.value = sessionId
+        _cachedUserSession.value = UserSession(
+            sessionId = sessionId,
+            accountId = accountId,
+            username = username,
+            name = name,
+            avatarPath = avatarPath,
+            gravatarHash = gravatarHash,
+            includeAdult = includeAdult
+        )
         context.dataStore.edit { prefs ->
             prefs[KEY_SESSION_ID] = sessionId
             prefs[KEY_ACCOUNT_ID] = accountId
@@ -129,6 +137,7 @@ class SessionManager @Inject constructor(
 
     suspend fun clearSession() {
         _cachedSessionId.value = null
+        _cachedUserSession.value = null
         context.dataStore.edit { prefs ->
             prefs.clear()
         }

@@ -69,8 +69,10 @@ import com.saiful.shared.navigation.Route
 import com.saiful.shared.utils.JsonConverter
 import com.saiful.shared.view.gallery.GalleryScreen
 import com.saiful.tmdbexplorer.auth.AuthDeepLinkManager
+import com.saiful.tmdbexplorer.favorites.FavoritesScreen
 import com.saiful.tmdbexplorer.profile.ProfileScreen
 import com.saiful.tmdbexplorer.search.SearchScreen
+import com.saiful.tmdbexplorer.watchlist.WatchlistScreen
 import javax.inject.Inject
 import com.saiful.tmdbexplorer.welcome.WelcomeScreen
 import com.saiful.tvshows.view.dashboard.TvShowsDashboardScreen
@@ -359,7 +361,29 @@ fun MainScreen(context: Context) {
 
             composable<Route.Profile> {
                 ProfileScreen(
-                    viewModel = hiltViewModel()
+                    viewModel = hiltViewModel(),
+                    onNavigateToFavorites = { navController.navigate(Route.Favorites) },
+                    onNavigateToWatchlist = { navController.navigate(Route.Watchlist) }
+                )
+            }
+
+            composable<Route.Favorites> {
+                FavoritesScreen(
+                    viewModel = hiltViewModel(),
+                    onBackClick = { navController.navigateUp() },
+                    onMovieClick = { movieId -> navController.navigate(Route.MovieDetails(movieId)) },
+                    onShowClick = { showId -> navController.navigate(Route.TvShowsDetails(showId)) },
+                    onNavigateToProfile = { navController.navigate(Route.Profile) }
+                )
+            }
+
+            composable<Route.Watchlist> {
+                WatchlistScreen(
+                    viewModel = hiltViewModel(),
+                    onBackClick = { navController.navigateUp() },
+                    onMovieClick = { movieId -> navController.navigate(Route.MovieDetails(movieId)) },
+                    onShowClick = { showId -> navController.navigate(Route.TvShowsDetails(showId)) },
+                    onNavigateToProfile = { navController.navigate(Route.Profile) }
                 )
             }
         }

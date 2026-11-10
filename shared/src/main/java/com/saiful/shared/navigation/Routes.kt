@@ -49,4 +49,10 @@ sealed interface Route {
 
     @Serializable
     data object Profile : Route
+
+    @Serializable
+    data object Favorites : Route
+
+    @Serializable
+    data object Watchlist : Route
 }

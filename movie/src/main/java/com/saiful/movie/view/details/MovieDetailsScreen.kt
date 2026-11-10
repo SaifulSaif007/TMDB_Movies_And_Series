@@ -29,9 +29,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.BookmarkBorder
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -133,6 +137,22 @@ fun MovieDetailsScreen(
                     authGateFeature = "rate this movie"
                     showAuthGate = true
                 }
+            },
+            onFavoriteClick = {
+                if (isLoggedIn) {
+                    viewModel.toggleFavorite(movieId)
+                } else {
+                    authGateFeature = "add to Favorites"
+                    showAuthGate = true
+                }
+            },
+            onWatchlistClick = {
+                if (isLoggedIn) {
+                    viewModel.toggleWatchlist(movieId)
+                } else {
+                    authGateFeature = "add to your Watchlist"
+                    showAuthGate = true
+                }
             }
         )
 
@@ -181,7 +201,9 @@ fun MovieDetailsContent(
     onTrailerClick: (String) -> Unit,
     onCollectionClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    onRateClick: () -> Unit = {}
+    onRateClick: () -> Unit = {},
+    onFavoriteClick: () -> Unit = {},
+    onWatchlistClick: () -> Unit = {}
 ) {
     val movie = uiState.movieDetails
     val context = LocalContext.current
@@ -195,7 +217,11 @@ fun MovieDetailsContent(
         // --- 1. Top Cinematic App Bar ---
         MovieDetailsTopBar(
             title = movie?.title ?: "",
+            isFavorite = uiState.isFavorite,
+            isWatchlisted = uiState.isWatchlisted,
             onBackClick = onBackClick,
+            onFavoriteClick = onFavoriteClick,
+            onWatchlistClick = onWatchlistClick,
             onShareClick = {
                 shareMovie(context, movie?.title ?: "Movie", movie?.id ?: 0)
             }
@@ -642,7 +668,11 @@ fun MovieDetailsContent(
 @Composable
 private fun MovieDetailsTopBar(
     title: String,
+    isFavorite: Boolean = false,
+    isWatchlisted: Boolean = false,
     onBackClick: () -> Unit,
+    onFavoriteClick: () -> Unit = {},
+    onWatchlistClick: () -> Unit = {},
     onShareClick: () -> Unit
 ) {
     Column(
@@ -693,22 +723,72 @@ private fun MovieDetailsTopBar(
                 )
             }
 
-            // Share Action
-            Box(
-                modifier = Modifier
-                    .size(36.dp)
-                    .clip(CircleShape)
-                    .background(SurfaceContainerHighDark)
-                    .border(1.dp, GlassBorder, CircleShape)
-                    .clickable { onShareClick() },
-                contentAlignment = Alignment.Center
+            // Top Bar Actions: Favorite, Watchlist, Share
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Default.Share,
-                    contentDescription = "Share",
-                    tint = OnSurfaceDark,
-                    modifier = Modifier.size(17.dp)
-                )
+                // Favorite Action
+                Box(
+                    modifier = Modifier
+                        .size(36.dp)
+                        .clip(CircleShape)
+                        .background(if (isFavorite) CinemaCrimson.copy(alpha = 0.2f) else SurfaceContainerHighDark)
+                        .border(
+                            1.dp,
+                            if (isFavorite) CinemaCrimson.copy(alpha = 0.7f) else GlassBorder,
+                            CircleShape
+                        )
+                        .clickable { onFavoriteClick() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                        contentDescription = "Favorite",
+                        tint = if (isFavorite) CinemaCrimson else OnSurfaceDark,
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
+
+                // Watchlist Action
+                Box(
+                    modifier = Modifier
+                        .size(36.dp)
+                        .clip(CircleShape)
+                        .background(if (isWatchlisted) NeonAmber.copy(alpha = 0.2f) else SurfaceContainerHighDark)
+                        .border(
+                            1.dp,
+                            if (isWatchlisted) NeonAmber.copy(alpha = 0.7f) else GlassBorder,
+                            CircleShape
+                        )
+                        .clickable { onWatchlistClick() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = if (isWatchlisted) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
+                        contentDescription = "Watchlist",
+                        tint = if (isWatchlisted) NeonAmber else OnSurfaceDark,
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
+
+                // Share Action
+                Box(
+                    modifier = Modifier
+                        .size(36.dp)
+                        .clip(CircleShape)
+                        .background(SurfaceContainerHighDark)
+                        .border(1.dp, GlassBorder, CircleShape)
+                        .clickable { onShareClick() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Share,
+                        contentDescription = "Share",
+                        tint = OnSurfaceDark,
+                        modifier = Modifier.size(17.dp)
+                    )
+                }
             }
         }
 

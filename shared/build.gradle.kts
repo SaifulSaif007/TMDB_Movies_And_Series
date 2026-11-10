@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     debugImplementation(libs.androidx.ui.tooling)
     implementation(libs.androidx.material3)
+    api(libs.androidx.material.icons.extended)
 
     implementation(libs.dagger.hilt)
     ksp(libs.hilt.compiler)

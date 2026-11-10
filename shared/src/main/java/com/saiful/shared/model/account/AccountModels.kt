@@ -70,12 +70,14 @@ object RatedValueSerializer : KSerializer<RatedValue?> {
                 val floatVal = element.floatOrNull
                 if (floatVal != null) RatedValue(floatVal) else null
             }
+
             is JsonObject -> {
                 val floatVal = element["value"]?.let {
                     if (it is JsonPrimitive) it.floatOrNull else null
                 }
                 if (floatVal != null) RatedValue(floatVal) else null
             }
+
             else -> null
         }
     }
@@ -102,3 +104,30 @@ data class AccountMediaItem(
     @SerialName("first_air_date") val firstAirDate: String? = null,
     @SerialName("media_type") val mediaType: String? = null
 )
+
+fun AccountMediaItem.toMovie() = com.saiful.shared.model.Movies(
+    id = id,
+    title = title ?: name,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    overview = overview,
+    voteAverage = voteAverage,
+    releaseDate = releaseDate ?: firstAirDate
+)
+
+fun AccountMediaItem.toTvShow() = com.saiful.shared.model.TvShows(
+    id = id,
+    name = name ?: title ?: "",
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    overview = overview,
+    voteAverage = voteAverage,
+    firstAirDate = firstAirDate ?: releaseDate
+)
+
+enum class AccountMediaTab(val title: String) {
+    MOVIES("Movies"),
+    TV_SHOWS("TV Shows")
+}
+
+

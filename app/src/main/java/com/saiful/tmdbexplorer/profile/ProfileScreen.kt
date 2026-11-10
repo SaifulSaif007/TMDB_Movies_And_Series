@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Lock
@@ -64,6 +66,7 @@ import coil3.compose.AsyncImage
 import com.saiful.base.model.UserSession
 import com.saiful.base.ui.theme.CinemaCrimson
 import com.saiful.base.ui.theme.CrimsonBright
+import com.saiful.base.ui.theme.GlassBorder
 import com.saiful.base.ui.theme.NeonAmber
 import com.saiful.base.ui.theme.ObsidianCanvas
 import com.saiful.base.ui.theme.SurfaceContainerLowestDark
@@ -74,7 +77,9 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateToFavorites: () -> Unit = {},
+    onNavigateToWatchlist: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -109,6 +114,8 @@ fun ProfileScreen(
             if (user != null) {
                 LoggedInContent(
                     userSession = user,
+                    onNavigateToFavorites = onNavigateToFavorites,
+                    onNavigateToWatchlist = onNavigateToWatchlist,
                     onLogoutClick = { showLogoutDialog = true }
                 )
             } else {
@@ -308,6 +315,8 @@ private fun AuthFeatureRow(
 @Composable
 private fun LoggedInContent(
     userSession: UserSession,
+    onNavigateToFavorites: () -> Unit = {},
+    onNavigateToWatchlist: () -> Unit = {},
     onLogoutClick: () -> Unit
 ) {
     Column(
@@ -386,7 +395,97 @@ private fun LoggedInContent(
             )
         }
 
-        Spacer(modifier = Modifier.height(28.dp))
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Quick Shortcuts: Favorites & Watchlist
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            // My Favorites Shortcut
+            Card(
+                modifier = Modifier
+                    .weight(1f)
+                    .clip(RoundedCornerShape(16.dp))
+                    .clickable { onNavigateToFavorites() },
+                colors = CardDefaults.cardColors(containerColor = SurfaceContainerLowestDark),
+                shape = RoundedCornerShape(16.dp),
+                border = androidx.compose.foundation.BorderStroke(1.dp, GlassBorder)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Box(
+                        modifier = Modifier
+                            .size(38.dp)
+                            .clip(CircleShape)
+                            .background(CinemaCrimson.copy(alpha = 0.15f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Favorite,
+                            contentDescription = null,
+                            tint = CinemaCrimson,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = "My Favorites",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 15.sp,
+                        color = Color.White
+                    )
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text(
+                        text = "Movies & Shows",
+                        fontSize = 12.sp,
+                        color = TextMuted
+                    )
+                }
+            }
+
+            // My Watchlist Shortcut
+            Card(
+                modifier = Modifier
+                    .weight(1f)
+                    .clip(RoundedCornerShape(16.dp))
+                    .clickable { onNavigateToWatchlist() },
+                colors = CardDefaults.cardColors(containerColor = SurfaceContainerLowestDark),
+                shape = RoundedCornerShape(16.dp),
+                border = androidx.compose.foundation.BorderStroke(1.dp, GlassBorder)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Box(
+                        modifier = Modifier
+                            .size(38.dp)
+                            .clip(CircleShape)
+                            .background(NeonAmber.copy(alpha = 0.15f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Bookmark,
+                            contentDescription = null,
+                            tint = NeonAmber,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = "My Watchlist",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 15.sp,
+                        color = Color.White
+                    )
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text(
+                        text = "To Watch Later",
+                        fontSize = 12.sp,
+                        color = TextMuted
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
 
         // Session Information Card
         Card(

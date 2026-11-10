@@ -174,4 +174,108 @@ internal class TvShowsDetailsVMTest : BaseViewModelTest() {
             verify(accountRepository, times(1)).deleteTvShowRating(showId)
         }
     }
+
+    @Test
+    fun `verify toggleFavorite toggles to true optimistically and calls markFavorite with tv type`() {
+        runTest(mainCoroutineRule.testDispatcher) {
+            val userSession = com.saiful.base.model.UserSession(
+                sessionId = "test_session",
+                accountId = 12345,
+                username = "testuser",
+                name = "Test User",
+                avatarPath = null,
+                gravatarHash = null,
+                includeAdult = false
+            )
+            val sessionStateFlow = kotlinx.coroutines.flow.MutableStateFlow<com.saiful.base.model.UserSession?>(userSession)
+            whenever(sessionManager.sessionFlow).thenReturn(sessionStateFlow)
+            whenever(accountRepository.markFavorite(12345, "tv", showId, true)).thenReturn(
+                BaseResponse.Success(AccountActionResponse(statusCode = 1, statusMessage = "Success"))
+            )
+
+            initViewModel()
+            assert(!viewModel.uiState.value.isFavorite)
+
+            viewModel.toggleFavorite(showId)
+
+            assert(viewModel.uiState.value.isFavorite)
+            verify(accountRepository, times(1)).markFavorite(12345, "tv", showId, true)
+        }
+    }
+
+    @Test
+    fun `verify toggleFavorite reverts state when markFavorite returns error`() {
+        runTest(mainCoroutineRule.testDispatcher) {
+            val userSession = com.saiful.base.model.UserSession(
+                sessionId = "test_session",
+                accountId = 12345,
+                username = "testuser",
+                name = "Test User",
+                avatarPath = null,
+                gravatarHash = null,
+                includeAdult = false
+            )
+            val sessionStateFlow = kotlinx.coroutines.flow.MutableStateFlow<com.saiful.base.model.UserSession?>(userSession)
+            whenever(sessionManager.sessionFlow).thenReturn(sessionStateFlow)
+            whenever(accountRepository.markFavorite(12345, "tv", showId, true)).thenReturn(apiError)
+
+            initViewModel()
+            viewModel.toggleFavorite(showId)
+
+            assert(!viewModel.uiState.value.isFavorite)
+            verify(accountRepository, times(1)).markFavorite(12345, "tv", showId, true)
+        }
+    }
+
+    @Test
+    fun `verify toggleWatchlist toggles to true optimistically and calls markWatchlist with tv type`() {
+        runTest(mainCoroutineRule.testDispatcher) {
+            val userSession = com.saiful.base.model.UserSession(
+                sessionId = "test_session",
+                accountId = 12345,
+                username = "testuser",
+                name = "Test User",
+                avatarPath = null,
+                gravatarHash = null,
+                includeAdult = false
+            )
+            val sessionStateFlow = kotlinx.coroutines.flow.MutableStateFlow<com.saiful.base.model.UserSession?>(userSession)
+            whenever(sessionManager.sessionFlow).thenReturn(sessionStateFlow)
+            whenever(accountRepository.markWatchlist(12345, "tv", showId, true)).thenReturn(
+                BaseResponse.Success(AccountActionResponse(statusCode = 1, statusMessage = "Success"))
+            )
+
+            initViewModel()
+            assert(!viewModel.uiState.value.isWatchlisted)
+
+            viewModel.toggleWatchlist(showId)
+
+            assert(viewModel.uiState.value.isWatchlisted)
+            verify(accountRepository, times(1)).markWatchlist(12345, "tv", showId, true)
+        }
+    }
+
+    @Test
+    fun `verify toggleWatchlist reverts state when markWatchlist returns error`() {
+        runTest(mainCoroutineRule.testDispatcher) {
+            val userSession = com.saiful.base.model.UserSession(
+                sessionId = "test_session",
+                accountId = 12345,
+                username = "testuser",
+                name = "Test User",
+                avatarPath = null,
+                gravatarHash = null,
+                includeAdult = false
+            )
+            val sessionStateFlow = kotlinx.coroutines.flow.MutableStateFlow<com.saiful.base.model.UserSession?>(userSession)
+            whenever(sessionManager.sessionFlow).thenReturn(sessionStateFlow)
+            whenever(accountRepository.markWatchlist(12345, "tv", showId, true)).thenReturn(apiError)
+
+            initViewModel()
+            viewModel.toggleWatchlist(showId)
+
+            assert(!viewModel.uiState.value.isWatchlisted)
+            verify(accountRepository, times(1)).markWatchlist(12345, "tv", showId, true)
+        }
+    }
 }
