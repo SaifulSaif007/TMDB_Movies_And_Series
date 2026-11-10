@@ -1,7 +1,17 @@
 package com.saiful.shared.model.account
 
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.JsonDecoder
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.floatOrNull
 
 @Serializable
 data class FavoriteRequest(
@@ -36,10 +46,40 @@ data class AccountStateResponse(
     val rated: RatedValue? = null
 )
 
-@Serializable
+@Serializable(with = RatedValueSerializer::class)
 data class RatedValue(
     val value: Float
 )
+
+object RatedValueSerializer : KSerializer<RatedValue?> {
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("RatedValue", PrimitiveKind.STRING)
+
+    override fun serialize(encoder: Encoder, value: RatedValue?) {
+        if (value == null) {
+            encoder.encodeBoolean(false)
+        } else {
+            encoder.encodeFloat(value.value)
+        }
+    }
+
+    override fun deserialize(decoder: Decoder): RatedValue? {
+        val jsonDecoder = decoder as? JsonDecoder ?: return null
+        return when (val element = jsonDecoder.decodeJsonElement()) {
+            is JsonPrimitive -> {
+                val floatVal = element.floatOrNull
+                if (floatVal != null) RatedValue(floatVal) else null
+            }
+            is JsonObject -> {
+                val floatVal = element["value"]?.let {
+                    if (it is JsonPrimitive) it.floatOrNull else null
+                }
+                if (floatVal != null) RatedValue(floatVal) else null
+            }
+            else -> null
+        }
+    }
+}
 
 @Serializable
 data class AccountMediaListResponse(

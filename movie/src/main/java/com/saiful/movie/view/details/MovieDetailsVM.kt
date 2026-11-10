@@ -1,6 +1,8 @@
 package com.saiful.movie.view.details
 
+import androidx.lifecycle.viewModelScope
 import com.saiful.base.network.model.BaseResponse
+import com.saiful.base.session.SessionManager
 import com.saiful.base.util.DefaultDispatcherProvider
 import com.saiful.base.util.DispatcherProvider
 import com.saiful.base.viewmodel.BaseOpsViewModel
@@ -9,29 +11,48 @@ import com.saiful.movie.model.Cast
 import com.saiful.movie.model.MovieCastResponse
 import com.saiful.movie.model.MovieDetailsResponse
 import com.saiful.movie.model.MoviesResponse
+import com.saiful.shared.data.repository.AccountRepository
 import com.saiful.shared.model.Movies
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 data class MovieDetailsUiState(
     val movieDetails: MovieDetailsResponse? = null,
     val cast: List<Cast> = emptyList(),
-    val recommendations: List<MoviesResponse> = emptyList(), // Wait, recommendation is MoviesResponse which has list of Movies
+    val recommendations: List<MoviesResponse> = emptyList(),
     val recommendationsList: List<Movies> = emptyList(),
-    val similarMoviesList: List<Movies> = emptyList()
+    val similarMoviesList: List<Movies> = emptyList(),
+    val isFavorite: Boolean = false,
+    val isWatchlisted: Boolean = false,
+    val userRating: Float? = null,
+    val isAccountStateLoading: Boolean = false
 )
 
 @HiltViewModel
 class MovieDetailsVM @Inject constructor(
     private val repo: MovieDetailsRepo,
-    dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider
+    private val accountRepository: AccountRepository,
+    private val sessionManager: SessionManager,
+    private val dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider
 ) : BaseOpsViewModel(dispatcherProvider) {
 
     private val _uiState = MutableStateFlow(MovieDetailsUiState())
     val uiState = _uiState.asStateFlow()
+
+    val isLoggedIn: StateFlow<Boolean> = sessionManager.isLoggedIn
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = false
+        )
 
     fun fetchMovieDetails(id: Int) {
         executeRestCodeBlock(movie_details) {
@@ -45,6 +66,82 @@ class MovieDetailsVM @Inject constructor(
         }
         executeRestCodeBlock(movie_similar) {
             repo.similarMovie(id)
+        }
+        fetchAccountStates(id)
+    }
+
+    fun fetchAccountStates(movieId: Int) {
+        viewModelScope.launch(dispatcherProvider.main()) {
+            val sessionId = sessionManager.currentSessionId
+            if (!sessionId.isNullOrBlank()) {
+                _uiState.update { it.copy(isAccountStateLoading = true) }
+                val result = withContext(dispatcherProvider.io()) {
+                    accountRepository.getMovieAccountStates(movieId)
+                }
+                when (result) {
+                    is BaseResponse.Success -> {
+                        _uiState.update {
+                            it.copy(
+                                isFavorite = result.body.favorite,
+                                isWatchlisted = result.body.watchlist,
+                                userRating = result.body.rated?.value,
+                                isAccountStateLoading = false
+                            )
+                        }
+                    }
+                    else -> {
+                        _uiState.update { it.copy(isAccountStateLoading = false) }
+                    }
+                }
+            }
+        }
+    }
+
+    fun submitMovieRating(movieId: Int, rating: Float) {
+        val previousRating = _uiState.value.userRating
+        _uiState.update { it.copy(userRating = rating) }
+
+        viewModelScope.launch(dispatcherProvider.main()) {
+            val result = withContext(dispatcherProvider.io()) {
+                accountRepository.rateMovie(movieId, rating)
+            }
+            when (result) {
+                is BaseResponse.Success -> {
+                    emitMessage("Rating submitted successfully")
+                }
+                is BaseResponse.ApiError -> {
+                    _uiState.update { it.copy(userRating = previousRating) }
+                    emitMessage(result.errorBody.status_message)
+                }
+                else -> {
+                    _uiState.update { it.copy(userRating = previousRating) }
+                    emitMessage("Failed to submit rating")
+                }
+            }
+        }
+    }
+
+    fun deleteMovieRating(movieId: Int) {
+        val previousRating = _uiState.value.userRating
+        _uiState.update { it.copy(userRating = null) }
+
+        viewModelScope.launch(dispatcherProvider.main()) {
+            val result = withContext(dispatcherProvider.io()) {
+                accountRepository.deleteMovieRating(movieId)
+            }
+            when (result) {
+                is BaseResponse.Success -> {
+                    emitMessage("Rating removed")
+                }
+                is BaseResponse.ApiError -> {
+                    _uiState.update { it.copy(userRating = previousRating) }
+                    emitMessage(result.errorBody.status_message)
+                }
+                else -> {
+                    _uiState.update { it.copy(userRating = previousRating) }
+                    emitMessage("Failed to remove rating")
+                }
+            }
         }
     }
 

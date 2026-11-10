@@ -34,13 +34,22 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.saiful.shared.components.AuthGateBottomSheet
+import com.saiful.shared.components.RatingDialog
+import kotlinx.coroutines.flow.collectLatest
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -88,23 +97,78 @@ fun MovieDetailsScreen(
     onMovieClick: (Int) -> Unit,
     onCastClick: (Int) -> Unit,
     onTrailerClick: (String) -> Unit,
-    onCollectionClick: (Int) -> Unit
+    onCollectionClick: (Int) -> Unit,
+    onNavigateToProfile: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val isLoggedIn by viewModel.isLoggedIn.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    var showRatingDialog by remember { mutableStateOf(false) }
+    var showAuthGate by remember { mutableStateOf(false) }
+    var authGateFeature by remember { mutableStateOf("") }
 
     LaunchedEffect(movieId) {
         viewModel.fetchMovieDetails(movieId)
     }
 
-    MovieDetailsContent(
-        modifier = Modifier.fillMaxSize(),
-        uiState = uiState,
-        onBackClick = onBackClick,
-        onMovieClick = onMovieClick,
-        onCastClick = onCastClick,
-        onTrailerClick = onTrailerClick,
-        onCollectionClick = onCollectionClick
-    )
+    LaunchedEffect(Unit) {
+        viewModel.showMessage.collectLatest { msg ->
+            snackbarHostState.showSnackbar(msg)
+        }
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        MovieDetailsContent(
+            modifier = Modifier.fillMaxSize(),
+            uiState = uiState,
+            onBackClick = onBackClick,
+            onMovieClick = onMovieClick,
+            onCastClick = onCastClick,
+            onTrailerClick = onTrailerClick,
+            onCollectionClick = onCollectionClick,
+            onRateClick = {
+                if (isLoggedIn) {
+                    showRatingDialog = true
+                } else {
+                    authGateFeature = "rate this movie"
+                    showAuthGate = true
+                }
+            }
+        )
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 16.dp)
+        )
+    }
+
+    if (showRatingDialog) {
+        RatingDialog(
+            currentRating = uiState.userRating,
+            onConfirm = { rating ->
+                showRatingDialog = false
+                viewModel.submitMovieRating(movieId, rating)
+            },
+            onDelete = {
+                showRatingDialog = false
+                viewModel.deleteMovieRating(movieId)
+            },
+            onDismiss = { showRatingDialog = false }
+        )
+    }
+
+    if (showAuthGate) {
+        AuthGateBottomSheet(
+            feature = authGateFeature,
+            onLoginClick = {
+                showAuthGate = false
+                onNavigateToProfile()
+            },
+            onDismiss = { showAuthGate = false }
+        )
+    }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -116,7 +180,8 @@ fun MovieDetailsContent(
     onCastClick: (Int) -> Unit,
     onTrailerClick: (String) -> Unit,
     onCollectionClick: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onRateClick: () -> Unit = {}
 ) {
     val movie = uiState.movieDetails
     val context = LocalContext.current
@@ -279,11 +344,46 @@ fun MovieDetailsContent(
                         }
                     }
 
-                    // Secondary Franchise / Share Action Row
+                    // Secondary Franchise / Rate / Share Action Row
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
+                        // Rate Action Button
+                        val isRated = uiState.userRating != null
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(38.dp)
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(if (isRated) NeonAmber.copy(alpha = 0.15f) else SurfaceContainerHighDark)
+                                .border(
+                                    1.dp,
+                                    if (isRated) NeonAmber.copy(alpha = 0.6f) else GlassBorder,
+                                    RoundedCornerShape(12.dp)
+                                )
+                                .clickable { onRateClick() },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(5.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Star,
+                                    contentDescription = "Rate",
+                                    tint = if (isRated) NeonAmber else CrimsonLight,
+                                    modifier = Modifier.size(15.dp)
+                                )
+                                Text(
+                                    text = if (isRated) "★ ${String.format(Locale.US, "%.1f", uiState.userRating)}" else "Rate",
+                                    color = if (isRated) NeonAmber else OnSurfaceDark,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
+                        }
+
                         // Share Action
                         Box(
                             modifier = Modifier
