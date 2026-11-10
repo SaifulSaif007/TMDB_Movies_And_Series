@@ -181,4 +181,108 @@ internal class MovieDetailsVMTest : BaseViewModelTest() {
             verify(accountRepository, times(1)).deleteMovieRating(1)
         }
     }
+
+    @Test
+    fun `verify toggleFavorite toggles to true optimistically and calls markFavorite`() {
+        runTest(coroutineRule.testDispatcher) {
+            val userSession = com.saiful.base.model.UserSession(
+                sessionId = "test_session",
+                accountId = 12345,
+                username = "testuser",
+                name = "Test User",
+                avatarPath = null,
+                gravatarHash = null,
+                includeAdult = false
+            )
+            val sessionStateFlow = kotlinx.coroutines.flow.MutableStateFlow<com.saiful.base.model.UserSession?>(userSession)
+            whenever(sessionManager.sessionFlow).thenReturn(sessionStateFlow)
+            whenever(accountRepository.markFavorite(12345, "movie", 1, true)).thenReturn(
+                BaseResponse.Success(AccountActionResponse(statusCode = 1, statusMessage = "Success"))
+            )
+
+            initViewModel()
+            assert(!viewModel.uiState.value.isFavorite)
+
+            viewModel.toggleFavorite(1)
+
+            assert(viewModel.uiState.value.isFavorite)
+            verify(accountRepository, times(1)).markFavorite(12345, "movie", 1, true)
+        }
+    }
+
+    @Test
+    fun `verify toggleFavorite reverts state when markFavorite returns error`() {
+        runTest(coroutineRule.testDispatcher) {
+            val userSession = com.saiful.base.model.UserSession(
+                sessionId = "test_session",
+                accountId = 12345,
+                username = "testuser",
+                name = "Test User",
+                avatarPath = null,
+                gravatarHash = null,
+                includeAdult = false
+            )
+            val sessionStateFlow = kotlinx.coroutines.flow.MutableStateFlow<com.saiful.base.model.UserSession?>(userSession)
+            whenever(sessionManager.sessionFlow).thenReturn(sessionStateFlow)
+            whenever(accountRepository.markFavorite(12345, "movie", 1, true)).thenReturn(apiError)
+
+            initViewModel()
+            viewModel.toggleFavorite(1)
+
+            assert(!viewModel.uiState.value.isFavorite)
+            verify(accountRepository, times(1)).markFavorite(12345, "movie", 1, true)
+        }
+    }
+
+    @Test
+    fun `verify toggleWatchlist toggles to true optimistically and calls markWatchlist`() {
+        runTest(coroutineRule.testDispatcher) {
+            val userSession = com.saiful.base.model.UserSession(
+                sessionId = "test_session",
+                accountId = 12345,
+                username = "testuser",
+                name = "Test User",
+                avatarPath = null,
+                gravatarHash = null,
+                includeAdult = false
+            )
+            val sessionStateFlow = kotlinx.coroutines.flow.MutableStateFlow<com.saiful.base.model.UserSession?>(userSession)
+            whenever(sessionManager.sessionFlow).thenReturn(sessionStateFlow)
+            whenever(accountRepository.markWatchlist(12345, "movie", 1, true)).thenReturn(
+                BaseResponse.Success(AccountActionResponse(statusCode = 1, statusMessage = "Success"))
+            )
+
+            initViewModel()
+            assert(!viewModel.uiState.value.isWatchlisted)
+
+            viewModel.toggleWatchlist(1)
+
+            assert(viewModel.uiState.value.isWatchlisted)
+            verify(accountRepository, times(1)).markWatchlist(12345, "movie", 1, true)
+        }
+    }
+
+    @Test
+    fun `verify toggleWatchlist reverts state when markWatchlist returns error`() {
+        runTest(coroutineRule.testDispatcher) {
+            val userSession = com.saiful.base.model.UserSession(
+                sessionId = "test_session",
+                accountId = 12345,
+                username = "testuser",
+                name = "Test User",
+                avatarPath = null,
+                gravatarHash = null,
+                includeAdult = false
+            )
+            val sessionStateFlow = kotlinx.coroutines.flow.MutableStateFlow<com.saiful.base.model.UserSession?>(userSession)
+            whenever(sessionManager.sessionFlow).thenReturn(sessionStateFlow)
+            whenever(accountRepository.markWatchlist(12345, "movie", 1, true)).thenReturn(apiError)
+
+            initViewModel()
+            viewModel.toggleWatchlist(1)
+
+            assert(!viewModel.uiState.value.isWatchlisted)
+            verify(accountRepository, times(1)).markWatchlist(12345, "movie", 1, true)
+        }
+    }
 }

@@ -140,6 +140,70 @@ class TvShowsDetailsVM @Inject constructor(
         }
     }
 
+    fun toggleFavorite(showId: Int) {
+        val userSession = sessionManager.sessionFlow.value
+        val accountId = userSession?.accountId
+        if (accountId == null) {
+            emitMessage("Please log in to add to favorites")
+            return
+        }
+
+        val previousState = _uiState.value.isFavorite
+        val targetState = !previousState
+        _uiState.update { it.copy(isFavorite = targetState) }
+
+        viewModelScope.launch(dispatcherProvider.main()) {
+            val result = withContext(dispatcherProvider.io()) {
+                accountRepository.markFavorite(accountId, "tv", showId, targetState)
+            }
+            when (result) {
+                is BaseResponse.Success -> {
+                    emitMessage(if (targetState) "Added to Favorites" else "Removed from Favorites")
+                }
+                is BaseResponse.ApiError -> {
+                    _uiState.update { it.copy(isFavorite = previousState) }
+                    emitMessage(result.errorBody.status_message)
+                }
+                else -> {
+                    _uiState.update { it.copy(isFavorite = previousState) }
+                    emitMessage("Failed to update favorites")
+                }
+            }
+        }
+    }
+
+    fun toggleWatchlist(showId: Int) {
+        val userSession = sessionManager.sessionFlow.value
+        val accountId = userSession?.accountId
+        if (accountId == null) {
+            emitMessage("Please log in to add to watchlist")
+            return
+        }
+
+        val previousState = _uiState.value.isWatchlisted
+        val targetState = !previousState
+        _uiState.update { it.copy(isWatchlisted = targetState) }
+
+        viewModelScope.launch(dispatcherProvider.main()) {
+            val result = withContext(dispatcherProvider.io()) {
+                accountRepository.markWatchlist(accountId, "tv", showId, targetState)
+            }
+            when (result) {
+                is BaseResponse.Success -> {
+                    emitMessage(if (targetState) "Added to Watchlist" else "Removed from Watchlist")
+                }
+                is BaseResponse.ApiError -> {
+                    _uiState.update { it.copy(isWatchlisted = previousState) }
+                    emitMessage(result.errorBody.status_message)
+                }
+                else -> {
+                    _uiState.update { it.copy(isWatchlisted = previousState) }
+                    emitMessage("Failed to update watchlist")
+                }
+            }
+        }
+    }
+
     override fun onSuccessResponse(operationTag: String, data: BaseResponse.Success<Any>) {
         when (operationTag) {
             show_details -> {

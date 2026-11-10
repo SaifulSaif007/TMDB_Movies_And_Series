@@ -28,14 +28,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.BookmarkBorder
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
@@ -48,9 +51,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.saiful.shared.components.AuthGateBottomSheet
-import com.saiful.shared.components.RatingDialog
-import kotlinx.coroutines.flow.collectLatest
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -77,6 +77,8 @@ import com.saiful.base.ui.theme.SurfaceContainerHighDark
 import com.saiful.base.ui.theme.SurfaceContainerLowestDark
 import com.saiful.base.ui.theme.TMDBTheme
 import com.saiful.base.ui.theme.TextMuted
+import com.saiful.shared.components.AuthGateBottomSheet
+import com.saiful.shared.components.RatingDialog
 import com.saiful.shared.components.TMDBCastItem
 import com.saiful.shared.components.TMDBHorizontalList
 import com.saiful.shared.components.TMDBLoadingView
@@ -88,6 +90,7 @@ import com.saiful.shared.utils.formatDate
 import com.saiful.tvshows.model.Genre
 import com.saiful.tvshows.model.Season
 import com.saiful.tvshows.model.TvShowDetails
+import kotlinx.coroutines.flow.collectLatest
 import java.util.Locale
 
 @Composable
@@ -132,6 +135,22 @@ fun TvShowsDetailsScreen(
                     showRatingDialog = true
                 } else {
                     authGateFeature = "rate this TV show"
+                    showAuthGate = true
+                }
+            },
+            onFavoriteClick = {
+                if (isLoggedIn) {
+                    viewModel.toggleFavorite(showId)
+                } else {
+                    authGateFeature = "add to Favorites"
+                    showAuthGate = true
+                }
+            },
+            onWatchlistClick = {
+                if (isLoggedIn) {
+                    viewModel.toggleWatchlist(showId)
+                } else {
+                    authGateFeature = "add to your Watchlist"
                     showAuthGate = true
                 }
             }
@@ -182,7 +201,9 @@ fun TvShowsDetailsContent(
     onTrailerClick: (String) -> Unit,
     onSeasonClick: (Int, Int) -> Unit,
     modifier: Modifier = Modifier,
-    onRateClick: () -> Unit = {}
+    onRateClick: () -> Unit = {},
+    onFavoriteClick: () -> Unit = {},
+    onWatchlistClick: () -> Unit = {}
 ) {
     val show = uiState.showDetails
     val context = LocalContext.current
@@ -197,7 +218,11 @@ fun TvShowsDetailsContent(
         // --- 1. Sticky Top Cinematic App Bar ---
         TvShowsDetailsTopBar(
             title = show?.name ?: "",
+            isFavorite = uiState.isFavorite,
+            isWatchlisted = uiState.isWatchlisted,
             onBackClick = onBackClick,
+            onFavoriteClick = onFavoriteClick,
+            onWatchlistClick = onWatchlistClick,
             onShareClick = {
                 shareTvShow(context, show?.name ?: "TV Series", show?.id ?: 0)
             }
@@ -782,7 +807,11 @@ fun TvShowsDetailsContent(
 @Composable
 private fun TvShowsDetailsTopBar(
     title: String,
+    isFavorite: Boolean = false,
+    isWatchlisted: Boolean = false,
     onBackClick: () -> Unit,
+    onFavoriteClick: () -> Unit = {},
+    onWatchlistClick: () -> Unit = {},
     onShareClick: () -> Unit
 ) {
 
@@ -848,22 +877,72 @@ private fun TvShowsDetailsTopBar(
                 }
             }
 
-            // Circular Share Button
-            Box(
-                modifier = Modifier
-                    .size(38.dp)
-                    .clip(CircleShape)
-                    .background(SurfaceContainerHighDark)
-                    .border(1.dp, GlassBorder, CircleShape)
-                    .clickable { onShareClick() },
-                contentAlignment = Alignment.Center
+            // Top Bar Actions: Favorite, Watchlist, Share
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Default.Share,
-                    contentDescription = "Share",
-                    tint = OnSurfaceDark,
-                    modifier = Modifier.size(18.dp)
-                )
+                // Favorite Button
+                Box(
+                    modifier = Modifier
+                        .size(38.dp)
+                        .clip(CircleShape)
+                        .background(if (isFavorite) CinemaCrimson.copy(alpha = 0.2f) else SurfaceContainerHighDark)
+                        .border(
+                            1.dp,
+                            if (isFavorite) CinemaCrimson.copy(alpha = 0.7f) else GlassBorder,
+                            CircleShape
+                        )
+                        .clickable { onFavoriteClick() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                        contentDescription = "Favorite",
+                        tint = if (isFavorite) CinemaCrimson else OnSurfaceDark,
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
+
+                // Watchlist Button
+                Box(
+                    modifier = Modifier
+                        .size(38.dp)
+                        .clip(CircleShape)
+                        .background(if (isWatchlisted) NeonAmber.copy(alpha = 0.2f) else SurfaceContainerHighDark)
+                        .border(
+                            1.dp,
+                            if (isWatchlisted) NeonAmber.copy(alpha = 0.7f) else GlassBorder,
+                            CircleShape
+                        )
+                        .clickable { onWatchlistClick() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = if (isWatchlisted) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
+                        contentDescription = "Watchlist",
+                        tint = if (isWatchlisted) NeonAmber else OnSurfaceDark,
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
+
+                // Share Button
+                Box(
+                    modifier = Modifier
+                        .size(38.dp)
+                        .clip(CircleShape)
+                        .background(SurfaceContainerHighDark)
+                        .border(1.dp, GlassBorder, CircleShape)
+                        .clickable { onShareClick() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Share,
+                        contentDescription = "Share",
+                        tint = OnSurfaceDark,
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
             }
         }
 
