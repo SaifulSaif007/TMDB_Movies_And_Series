@@ -878,11 +878,7 @@ private fun CollectionBannerCard(
 
 @Composable
 private fun MovieInfoCardSection(movie: MovieDetailsResponse?) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-    ) {
+    Column {
         TMDBSectionHeader(
             title = "Information",
             onSeeAllClick = {},
@@ -890,33 +886,41 @@ private fun MovieInfoCardSection(movie: MovieDetailsResponse?) {
             modifier = Modifier.padding(horizontal = 0.dp)
         )
 
-        Spacer(modifier = Modifier.height(6.dp))
-
-        val cardShape = RoundedCornerShape(16.dp)
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(cardShape)
-                .background(SurfaceContainerDark)
-                .border(1.dp, GlassBorder, cardShape)
-                .padding(horizontal = 16.dp, vertical = 10.dp)
+                .padding(horizontal = 16.dp)
         ) {
-            InfoDataRow(label = "Budget", value = movie?.budget?.toLong()?.formatToShortNumber() ?: "-")
-            InfoDivider()
-            InfoDataRow(label = "Revenue", value = movie?.revenue?.toLong()?.formatToShortNumber() ?: "-")
-            InfoDivider()
-            InfoDataRow(label = "Status", value = movie?.status ?: "Released")
-            InfoDivider()
-            InfoDataRow(label = "Release Date", value = movie?.releaseDate?.formatDate() ?: "-")
-            InfoDivider()
-            InfoDataRow(label = "Runtime", value = if (movie?.runtime != null && movie.runtime > 0) "${movie.runtime} mins" else "-")
-            InfoDivider()
-            InfoDataRow(
-                label = "Production",
-                value = movie?.productionCompanies?.mapNotNull { it?.name }?.joinToString(", ") ?: "-"
-            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            val cardShape = RoundedCornerShape(16.dp)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(cardShape)
+                    .background(SurfaceContainerDark)
+                    .border(1.dp, GlassBorder, cardShape)
+                    .padding(horizontal = 16.dp, vertical = 10.dp)
+            ) {
+                InfoDataRow(label = "Budget", value = movie?.budget?.toLong()?.formatToShortNumber() ?: "-")
+                InfoDivider()
+                InfoDataRow(label = "Revenue", value = movie?.revenue?.toLong()?.formatToShortNumber() ?: "-")
+                InfoDivider()
+                InfoDataRow(label = "Status", value = movie?.status ?: "Released")
+                InfoDivider()
+                InfoDataRow(label = "Release Date", value = movie?.releaseDate?.formatDate() ?: "-")
+                InfoDivider()
+                InfoDataRow(label = "Runtime", value = if (movie?.runtime != null && movie.runtime > 0) "${movie.runtime} mins" else "-")
+                InfoDivider()
+                InfoDataRow(
+                    label = "Production",
+                    value = movie?.productionCompanies?.mapNotNull { it?.name }?.joinToString(", ") ?: "-"
+                )
+            }
         }
     }
+
 }
 
 @Composable

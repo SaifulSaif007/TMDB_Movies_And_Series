@@ -210,22 +210,6 @@ fun TMDBImageSlider(
                             }
                         }
 
-                        // Quality spec tag
-                        Box(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(4.dp))
-                                .background(Color.Black.copy(alpha = 0.6f))
-                                .border(1.dp, Color.White.copy(alpha = 0.15f), RoundedCornerShape(4.dp))
-                                .padding(horizontal = 6.dp, vertical = 2.dp)
-                        ) {
-                            Text(
-                                text = "4K HDR",
-                                color = OnSurfaceDark.copy(alpha = 0.85f),
-                                fontSize = 9.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                letterSpacing = 0.5.sp
-                            )
-                        }
                     }
 
                     // Spotlight Info & CTA Overlay

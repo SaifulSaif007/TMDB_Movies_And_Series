@@ -357,7 +357,11 @@ fun TvShowsDetailsContent(
                                 .align(Alignment.TopStart)
                                 .clip(RoundedCornerShape(6.dp))
                                 .background(Color.Black.copy(alpha = 0.75f))
-                                .border(1.dp, NeonAmber.copy(alpha = 0.35f), RoundedCornerShape(6.dp))
+                                .border(
+                                    1.dp,
+                                    NeonAmber.copy(alpha = 0.35f),
+                                    RoundedCornerShape(6.dp)
+                                )
                                 .padding(horizontal = 6.dp, vertical = 2.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(3.dp)
@@ -514,7 +518,13 @@ fun TvShowsDetailsContent(
                                     modifier = Modifier.size(16.dp)
                                 )
                                 Text(
-                                    text = if (isRated) "★ ${String.format(Locale.US, "%.1f", uiState.userRating)}" else "Rate",
+                                    text = if (isRated) "★ ${
+                                        String.format(
+                                            Locale.US,
+                                            "%.1f",
+                                            uiState.userRating
+                                        )
+                                    }" else "Rate",
                                     color = if (isRated) NeonAmber else OnSurfaceDark,
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.SemiBold
@@ -706,7 +716,9 @@ fun TvShowsDetailsContent(
             TvShowInfoSection(show = show)
 
             // Horizontal Seasons Carousel
-            val seasons = show.seasons?.filter { (it.episodeCount ?: 0) > 0 || !it.posterPath.isNullOrBlank() }
+            val seasons = show.seasons?.filter {
+                (it.episodeCount ?: 0) > 0 || !it.posterPath.isNullOrBlank()
+            }
             if (!seasons.isNullOrEmpty()) {
                 Spacer(modifier = Modifier.height(10.dp))
                 TMDBSectionHeader(
@@ -1055,123 +1067,126 @@ private fun SeasonCard(
 
 @Composable
 private fun TvShowInfoSection(show: TvShowDetails) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-    ) {
+    Column {
         TMDBSectionHeader(
             title = "Information",
             onSeeAllClick = {},
             showSeeAll = false
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
-
-        val cardShape = RoundedCornerShape(16.dp)
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(cardShape)
-                .background(SurfaceContainerDark)
-                .border(1.dp, GlassBorder, cardShape)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+                .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            // Status row with indicator
-            val status = show.status
-            if (!status.isNullOrBlank()) {
-                val isOngoing = status.contains("Returning", ignoreCase = true) ||
-                    status.contains("In Production", ignoreCase = true)
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Status",
-                        style = MaterialTheme.typography.bodyMedium.copy(color = TextMuted)
-                    )
+            Spacer(modifier = Modifier.height(10.dp))
+
+            val cardShape = RoundedCornerShape(16.dp)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(cardShape)
+                    .background(SurfaceContainerDark)
+                    .border(1.dp, GlassBorder, cardShape)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                // Status row with indicator
+                val status = show.status
+                if (!status.isNullOrBlank()) {
+                    val isOngoing = status.contains("Returning", ignoreCase = true) ||
+                            status.contains("In Production", ignoreCase = true)
                     Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
+                        Text(
+                            text = "Status",
+                            style = MaterialTheme.typography.bodyMedium.copy(color = TextMuted)
+                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(8.dp)
+                                    .clip(CircleShape)
+                                    .background(if (isOngoing) Color(0xFF34D399) else CrimsonLight)
+                            )
+                            Text(
+                                text = status,
+                                style = MaterialTheme.typography.bodyMedium.copy(
+                                    color = Color.White,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            )
+                        }
+                    }
+                }
+
+                val firstAirDate = show.firstAirDate
+                if (!firstAirDate.isNullOrBlank()) {
+                    InfoRow("First Air Date", firstAirDate.formatDate())
+                }
+
+                val seasons = show.numberOfSeasons
+                if (seasons != null && seasons > 0) {
+                    InfoRow("Seasons", "$seasons ${if (seasons == 1) "Season" else "Seasons"}")
+                }
+
+                val episodes = show.numberOfEpisodes
+                if (episodes != null && episodes > 0) {
+                    InfoRow("Episodes", "$episodes Episodes")
+                }
+
+                val type = show.type
+                if (!type.isNullOrBlank()) {
+                    InfoRow("Type", type)
+                }
+
+                val networks = show.networks?.mapNotNull { it?.name }?.joinToString(", ")
+                if (!networks.isNullOrBlank()) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Network",
+                            style = MaterialTheme.typography.bodyMedium.copy(color = TextMuted)
+                        )
                         Box(
                             modifier = Modifier
-                                .size(8.dp)
-                                .clip(CircleShape)
-                                .background(if (isOngoing) Color(0xFF34D399) else CrimsonLight)
-                        )
-                        Text(
-                            text = status,
-                            style = MaterialTheme.typography.bodyMedium.copy(
-                                color = Color.White,
-                                fontWeight = FontWeight.SemiBold
+                                .clip(RoundedCornerShape(6.dp))
+                                .background(SurfaceContainerHighDark)
+                                .border(1.dp, GlassBorder, RoundedCornerShape(6.dp))
+                                .padding(horizontal = 8.dp, vertical = 3.dp)
+                        ) {
+                            Text(
+                                text = networks,
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    color = Color.White,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 11.sp,
+                                    letterSpacing = 0.5.sp
+                                )
                             )
-                        )
+                        }
                     }
                 }
-            }
 
-            val firstAirDate = show.firstAirDate
-            if (!firstAirDate.isNullOrBlank()) {
-                InfoRow("First Air Date", firstAirDate.formatDate())
-            }
-
-            val seasons = show.numberOfSeasons
-            if (seasons != null && seasons > 0) {
-                InfoRow("Seasons", "$seasons ${if (seasons == 1) "Season" else "Seasons"}")
-            }
-
-            val episodes = show.numberOfEpisodes
-            if (episodes != null && episodes > 0) {
-                InfoRow("Episodes", "$episodes Episodes")
-            }
-
-            val type = show.type
-            if (!type.isNullOrBlank()) {
-                InfoRow("Type", type)
-            }
-
-            val networks = show.networks?.mapNotNull { it?.name }?.joinToString(", ")
-            if (!networks.isNullOrBlank()) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Network",
-                        style = MaterialTheme.typography.bodyMedium.copy(color = TextMuted)
-                    )
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(6.dp))
-                            .background(SurfaceContainerHighDark)
-                            .border(1.dp, GlassBorder, RoundedCornerShape(6.dp))
-                            .padding(horizontal = 8.dp, vertical = 3.dp)
-                    ) {
-                        Text(
-                            text = networks,
-                            style = MaterialTheme.typography.labelSmall.copy(
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 11.sp,
-                                letterSpacing = 0.5.sp
-                            )
-                        )
-                    }
+                val productions =
+                    show.productionCompanies?.mapNotNull { it?.name }?.joinToString(", ")
+                if (!productions.isNullOrBlank()) {
+                    InfoRow("Production", productions)
                 }
-            }
 
-            val productions = show.productionCompanies?.mapNotNull { it?.name }?.joinToString(", ")
-            if (!productions.isNullOrBlank()) {
-                InfoRow("Production", productions)
-            }
-
-            val language = show.originalLanguage
-            if (!language.isNullOrBlank()) {
-                InfoRow("Original Language", language.uppercase())
+                val language = show.originalLanguage
+                if (!language.isNullOrBlank()) {
+                    InfoRow("Original Language", language.uppercase())
+                }
             }
         }
     }
