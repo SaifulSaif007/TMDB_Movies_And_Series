@@ -13,6 +13,8 @@ import com.saiful.movie.model.MovieDetailsResponse
 import com.saiful.movie.model.MoviesResponse
 import com.saiful.shared.data.repository.AccountRepository
 import com.saiful.shared.model.Movies
+import com.saiful.shared.model.WatchProvidersResponse
+import java.util.Locale
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -30,6 +32,8 @@ data class MovieDetailsUiState(
     val recommendations: List<MoviesResponse> = emptyList(),
     val recommendationsList: List<Movies> = emptyList(),
     val similarMoviesList: List<Movies> = emptyList(),
+    val watchProviders: WatchProvidersResponse? = null,
+    val selectedWatchCountry: String = Locale.getDefault().country.ifBlank { "US" },
     val isFavorite: Boolean = false,
     val isWatchlisted: Boolean = false,
     val userRating: Float? = null,
@@ -67,7 +71,14 @@ class MovieDetailsVM @Inject constructor(
         executeRestCodeBlock(movie_similar) {
             repo.similarMovie(id)
         }
+        executeRestCodeBlock(movie_watch_providers) {
+            repo.watchProviders(id)
+        }
         fetchAccountStates(id)
+    }
+
+    fun selectWatchCountry(countryCode: String) {
+        _uiState.update { it.copy(selectedWatchCountry = countryCode) }
     }
 
     fun fetchAccountStates(movieId: Int) {
@@ -224,6 +235,9 @@ class MovieDetailsVM @Inject constructor(
                 movie_similar -> currentState.copy(
                     similarMoviesList = (data.body as? MoviesResponse)?.results ?: emptyList()
                 )
+                movie_watch_providers -> currentState.copy(
+                    watchProviders = data.body as? WatchProvidersResponse
+                )
                 else -> currentState
             }
         }
@@ -234,5 +248,6 @@ class MovieDetailsVM @Inject constructor(
         const val movie_cast = "MOVIE_CAST"
         const val movie_recommendation = "MOVIE_RECOMMENDATION"
         const val movie_similar = "MOVIE_SIMILAR"
+        const val movie_watch_providers = "MOVIE_WATCH_PROVIDERS"
     }
 }

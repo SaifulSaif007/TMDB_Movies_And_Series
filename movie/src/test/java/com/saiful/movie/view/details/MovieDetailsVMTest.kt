@@ -16,6 +16,7 @@ import com.saiful.movie.model.MovieCastResponse
 import com.saiful.movie.model.MovieDetailsResponse
 import com.saiful.movie.model.MoviesResponse
 import com.saiful.shared.data.repository.AccountRepository
+import com.saiful.shared.model.WatchProvidersResponse
 import com.saiful.shared.model.account.AccountActionResponse
 import com.saiful.shared.model.account.AccountStateResponse
 import com.saiful.shared.model.account.RatedValue
@@ -95,6 +96,9 @@ internal class MovieDetailsVMTest : BaseViewModelTest() {
             whenever(repository.recommendation(1)).thenReturn(
                 BaseResponse.Success(moviesResponse)
             )
+            whenever(repository.watchProviders(1)).thenReturn(
+                BaseResponse.Success(WatchProvidersResponse(id = 1, results = emptyMap()))
+            )
 
             initViewModel()
 
@@ -104,9 +108,11 @@ internal class MovieDetailsVMTest : BaseViewModelTest() {
             verify(repository, times(1)).movieCasts(1)
             verify(repository, times(1)).similarMovie(1)
             verify(repository, times(1)).recommendation(1)
+            verify(repository, times(1)).watchProviders(1)
 
             assert(viewModel.uiState.value.movieDetails?.adult == false)
             assert(viewModel.uiState.value.cast.isNotEmpty() || viewModel.uiState.value.movieDetails != null)
+            assert(viewModel.uiState.value.watchProviders != null)
         }
     }
 
@@ -283,6 +289,15 @@ internal class MovieDetailsVMTest : BaseViewModelTest() {
 
             assert(!viewModel.uiState.value.isWatchlisted)
             verify(accountRepository, times(1)).markWatchlist(12345, "movie", 1, true)
+        }
+    }
+
+    @Test
+    fun `verify selectWatchCountry updates state`() {
+        runTest(coroutineRule.testDispatcher) {
+            initViewModel()
+            viewModel.selectWatchCountry("GB")
+            assert(viewModel.uiState.value.selectedWatchCountry == "GB")
         }
     }
 }

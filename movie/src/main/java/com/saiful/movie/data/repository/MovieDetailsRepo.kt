@@ -15,4 +15,6 @@ class MovieDetailsRepo @Inject constructor(private val movieApiService: MovieApi
 
     suspend fun similarMovie(id: Int) = movieApiService.similarMovie(id)
 
+    suspend fun watchProviders(id: Int) = movieApiService.watchProviders(id)
+
 }

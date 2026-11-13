@@ -1,6 +1,7 @@
 package com.saiful.tvshows.data.api
 
 import com.saiful.base.network.model.GenericResponse
+import com.saiful.shared.model.WatchProvidersResponse
 import com.saiful.tvshows.model.*
 import retrofit2.http.*
 
@@ -58,5 +59,10 @@ interface TvShowsApiService {
         @Query("query") query: String,
         @Query("page") page: Int = 1
     ): GenericResponse<TvShowsResponse>
+
+    @GET("tv/{show_id}/watch/providers")
+    suspend fun watchProviders(
+        @Path("show_id") showId: Int
+    ): GenericResponse<WatchProvidersResponse>
 
 }

@@ -2,6 +2,7 @@ package com.saiful.movie.data.api
 
 import com.saiful.base.network.model.GenericResponse
 import com.saiful.movie.model.*
+import com.saiful.shared.model.WatchProvidersResponse
 import retrofit2.http.*
 
 interface MovieApiService {
@@ -59,4 +60,9 @@ interface MovieApiService {
         @Query("query") query: String,
         @Query("page") page: Int = 1
     ): GenericResponse<MoviesResponse>
+
+    @GET("movie/{movie_id}/watch/providers")
+    suspend fun watchProviders(
+        @Path("movie_id") movieId: Int
+    ): GenericResponse<WatchProvidersResponse>
 }

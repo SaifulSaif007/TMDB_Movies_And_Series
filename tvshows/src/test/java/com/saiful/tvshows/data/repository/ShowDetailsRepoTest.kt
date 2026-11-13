@@ -8,6 +8,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import com.saiful.base.network.model.BaseResponse
 import com.saiful.base_unit_test.BaseRepositoryTest
+import com.saiful.shared.model.WatchProvidersResponse
 import com.saiful.tvshows.data.api.TvShowsApiService
 import com.saiful.tvshows.model.TvShowCastResponse
 import com.saiful.tvshows.model.TvShowDetails
@@ -102,6 +103,20 @@ internal class ShowDetailsRepoTest : BaseRepositoryTest() {
 
             assert(showDetailsRepo.similarShows(showId) is BaseResponse.Success)
             verify(apiService, only()).similarShows(any())
+        }
+    }
+
+    @Test
+    fun `verify watch providers fetch is successful`() {
+        runBlocking {
+            whenever(
+                apiService.watchProviders(showId)
+            ).thenReturn(
+                BaseResponse.Success(WatchProvidersResponse(id = showId, results = emptyMap()))
+            )
+
+            assert(showDetailsRepo.watchProviders(showId) is BaseResponse.Success)
+            verify(apiService, only()).watchProviders(any())
         }
     }
 }

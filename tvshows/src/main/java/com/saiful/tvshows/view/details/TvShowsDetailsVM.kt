@@ -7,8 +7,10 @@ import com.saiful.base.util.DefaultDispatcherProvider
 import com.saiful.base.util.DispatcherProvider
 import com.saiful.base.viewmodel.BaseOpsViewModel
 import com.saiful.shared.data.repository.AccountRepository
+import com.saiful.shared.model.WatchProvidersResponse
 import com.saiful.tvshows.data.repository.ShowDetailsRepo
 import com.saiful.tvshows.model.*
+import java.util.Locale
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -25,6 +27,8 @@ data class TvShowsDetailsUiState(
     val showCasts: TvShowCastResponse? = null,
     val recommendations: TvShowsResponse? = null,
     val similarShows: TvShowsResponse? = null,
+    val watchProviders: WatchProvidersResponse? = null,
+    val selectedWatchCountry: String = Locale.getDefault().country.ifBlank { "US" },
     val isFavorite: Boolean = false,
     val isWatchlisted: Boolean = false,
     val userRating: Float? = null,
@@ -62,7 +66,14 @@ class TvShowsDetailsVM @Inject constructor(
         executeRestCodeBlock(similar_show) {
             repo.similarShows(showId)
         }
+        executeRestCodeBlock(show_watch_providers) {
+            repo.watchProviders(showId)
+        }
         fetchAccountStates(showId)
+    }
+
+    fun selectWatchCountry(countryCode: String) {
+        _uiState.update { it.copy(selectedWatchCountry = countryCode) }
     }
 
     fun fetchAccountStates(showId: Int) {
@@ -218,6 +229,9 @@ class TvShowsDetailsVM @Inject constructor(
             similar_show -> {
                 _uiState.update { it.copy(similarShows = data.body as TvShowsResponse) }
             }
+            show_watch_providers -> {
+                _uiState.update { it.copy(watchProviders = data.body as? WatchProvidersResponse) }
+            }
         }
     }
 
@@ -226,5 +240,6 @@ class TvShowsDetailsVM @Inject constructor(
         const val show_cast = "SHOW_CAST"
         const val show_recommendation = "SHOW_RECOMMENDATION"
         const val similar_show = "SIMILAR_SHOW"
+        const val show_watch_providers = "SHOW_WATCH_PROVIDERS"
     }
 }

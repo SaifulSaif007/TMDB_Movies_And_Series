@@ -8,6 +8,7 @@ import com.saiful.base_unit_test.BaseViewModelTest
 import com.saiful.base_unit_test.rules.MainCoroutineRule
 import com.saiful.shared.data.repository.AccountRepository
 import com.saiful.shared.model.TvShows
+import com.saiful.shared.model.WatchProvidersResponse
 import com.saiful.shared.model.account.AccountActionResponse
 import com.saiful.shared.model.account.AccountStateResponse
 import com.saiful.shared.model.account.RatedValue
@@ -86,6 +87,9 @@ internal class TvShowsDetailsVMTest : BaseViewModelTest() {
             whenever(repository.similarShows(showId)).thenReturn(
                 BaseResponse.Success(tvShowsResponse)
             )
+            whenever(repository.watchProviders(showId)).thenReturn(
+                BaseResponse.Success(WatchProvidersResponse(id = showId, results = emptyMap()))
+            )
 
             initViewModel()
 
@@ -95,11 +99,13 @@ internal class TvShowsDetailsVMTest : BaseViewModelTest() {
             verify(repository, times(1)).showCasts(any())
             verify(repository, times(1)).showRecommendation(any())
             verify(repository, times(1)).similarShows(any())
+            verify(repository, times(1)).watchProviders(any())
 
             assert(viewModel.uiState.value.showDetails != null)
             assert(viewModel.uiState.value.showCasts != null)
             assert(viewModel.uiState.value.recommendations?.totalPages == 1)
             assert(viewModel.uiState.value.similarShows?.page == 1)
+            assert(viewModel.uiState.value.watchProviders != null)
         }
     }
 
@@ -276,6 +282,15 @@ internal class TvShowsDetailsVMTest : BaseViewModelTest() {
 
             assert(!viewModel.uiState.value.isWatchlisted)
             verify(accountRepository, times(1)).markWatchlist(12345, "tv", showId, true)
+        }
+    }
+
+    @Test
+    fun `verify selectWatchCountry updates state`() {
+        runTest(mainCoroutineRule.testDispatcher) {
+            initViewModel()
+            viewModel.selectWatchCountry("CA")
+            assert(viewModel.uiState.value.selectedWatchCountry == "CA")
         }
     }
 }

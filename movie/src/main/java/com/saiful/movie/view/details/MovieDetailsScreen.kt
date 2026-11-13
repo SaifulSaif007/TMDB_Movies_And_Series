@@ -87,6 +87,7 @@ import com.saiful.shared.components.TMDBHorizontalList
 import com.saiful.shared.components.TMDBMovieItem
 import com.saiful.shared.components.TMDBSectionHeader
 import com.saiful.shared.components.TMDBTrailerItem
+import com.saiful.shared.components.WatchProvidersSection
 import com.saiful.shared.model.Movies
 import com.saiful.shared.utils.AppConstants
 import com.saiful.shared.utils.formatDate
@@ -153,7 +154,8 @@ fun MovieDetailsScreen(
                     authGateFeature = "add to your Watchlist"
                     showAuthGate = true
                 }
-            }
+            },
+            onCountrySelected = { viewModel.selectWatchCountry(it) }
         )
 
         SnackbarHost(
@@ -203,7 +205,8 @@ fun MovieDetailsContent(
     modifier: Modifier = Modifier,
     onRateClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
-    onWatchlistClick: () -> Unit = {}
+    onWatchlistClick: () -> Unit = {},
+    onCountrySelected: (String) -> Unit = {}
 ) {
     val movie = uiState.movieDetails
     val context = LocalContext.current
@@ -538,7 +541,7 @@ fun MovieDetailsContent(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
-                        movie?.genres?.filterNotNull()?.forEach { genre ->
+                        movie.genres.filterNotNull().forEach { genre ->
                             Box(
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(999.dp))
@@ -635,6 +638,16 @@ fun MovieDetailsContent(
                             onClick = onTrailerClick
                         )
                     }
+                )
+            }
+
+            // --- Where to Watch (Watch Providers) Section ---
+            if (!uiState.watchProviders?.results.isNullOrEmpty()) {
+                Spacer(modifier = Modifier.height(12.dp))
+                WatchProvidersSection(
+                    watchProviders = uiState.watchProviders,
+                    selectedCountry = uiState.selectedWatchCountry,
+                    onCountrySelected = onCountrySelected
                 )
             }
 

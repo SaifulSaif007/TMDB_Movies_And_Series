@@ -10,6 +10,7 @@ import com.saiful.movie.model.DateRange
 import com.saiful.movie.model.MovieCastResponse
 import com.saiful.movie.model.MovieDetailsResponse
 import com.saiful.movie.model.MoviesResponse
+import com.saiful.shared.model.WatchProvidersResponse
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -144,6 +145,28 @@ class MovieDetailsRepoTest : BaseRepositoryTest() {
             )
 
             assert(movieDetailsRepo.similarMovie(movieId) is BaseResponse.ApiError)
+        }
+    }
+
+    @Test
+    fun `verify watch providers fetch successful`() {
+        runBlocking {
+            whenever(movieApiService.watchProviders(movieId)).thenReturn(
+                BaseResponse.Success(WatchProvidersResponse(id = movieId, results = emptyMap()))
+            )
+
+            assert(movieDetailsRepo.watchProviders(movieId) is BaseResponse.Success)
+        }
+    }
+
+    @Test
+    fun `verify watch providers returns api error`() {
+        runBlocking {
+            whenever(movieApiService.watchProviders(movieId)).thenReturn(
+                apiError
+            )
+
+            assert(movieDetailsRepo.watchProviders(movieId) is BaseResponse.ApiError)
         }
     }
 }
