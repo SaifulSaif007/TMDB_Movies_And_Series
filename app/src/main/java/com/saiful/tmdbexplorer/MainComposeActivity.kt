@@ -71,6 +71,7 @@ import com.saiful.shared.view.gallery.GalleryScreen
 import com.saiful.tmdbexplorer.auth.AuthDeepLinkManager
 import com.saiful.tmdbexplorer.favorites.FavoritesScreen
 import com.saiful.tmdbexplorer.profile.ProfileScreen
+import com.saiful.tmdbexplorer.ratings.RatingsScreen
 import com.saiful.tmdbexplorer.search.SearchScreen
 import com.saiful.tmdbexplorer.watchlist.WatchlistScreen
 import javax.inject.Inject
@@ -363,7 +364,8 @@ fun MainScreen(context: Context) {
                 ProfileScreen(
                     viewModel = hiltViewModel(),
                     onNavigateToFavorites = { navController.navigate(Route.Favorites) },
-                    onNavigateToWatchlist = { navController.navigate(Route.Watchlist) }
+                    onNavigateToWatchlist = { navController.navigate(Route.Watchlist) },
+                    onNavigateToRatings = { navController.navigate(Route.Ratings) }
                 )
             }
 
@@ -379,6 +381,16 @@ fun MainScreen(context: Context) {
 
             composable<Route.Watchlist> {
                 WatchlistScreen(
+                    viewModel = hiltViewModel(),
+                    onBackClick = { navController.navigateUp() },
+                    onMovieClick = { movieId -> navController.navigate(Route.MovieDetails(movieId)) },
+                    onShowClick = { showId -> navController.navigate(Route.TvShowsDetails(showId)) },
+                    onNavigateToProfile = { navController.navigate(Route.Profile) }
+                )
+            }
+
+            composable<Route.Ratings> {
+                RatingsScreen(
                     viewModel = hiltViewModel(),
                     onBackClick = { navController.navigateUp() },
                     onMovieClick = { movieId -> navController.navigate(Route.MovieDetails(movieId)) },

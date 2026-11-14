@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.CheckCircle
@@ -79,7 +80,8 @@ fun ProfileScreen(
     viewModel: ProfileViewModel,
     modifier: Modifier = Modifier,
     onNavigateToFavorites: () -> Unit = {},
-    onNavigateToWatchlist: () -> Unit = {}
+    onNavigateToWatchlist: () -> Unit = {},
+    onNavigateToRatings: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -116,6 +118,7 @@ fun ProfileScreen(
                     userSession = user,
                     onNavigateToFavorites = onNavigateToFavorites,
                     onNavigateToWatchlist = onNavigateToWatchlist,
+                    onNavigateToRatings = onNavigateToRatings,
                     onLogoutClick = { showLogoutDialog = true }
                 )
             } else {
@@ -317,6 +320,7 @@ private fun LoggedInContent(
     userSession: UserSession,
     onNavigateToFavorites: () -> Unit = {},
     onNavigateToWatchlist: () -> Unit = {},
+    onNavigateToRatings: () -> Unit = {},
     onLogoutClick: () -> Unit
 ) {
     Column(
@@ -482,6 +486,68 @@ private fun LoggedInContent(
                         color = TextMuted
                     )
                 }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // My Ratings Shortcut
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .clickable { onNavigateToRatings() },
+            colors = CardDefaults.cardColors(containerColor = SurfaceContainerLowestDark),
+            shape = RoundedCornerShape(16.dp),
+            border = androidx.compose.foundation.BorderStroke(1.dp, GlassBorder)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(14.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(42.dp)
+                            .clip(CircleShape)
+                            .background(NeonAmber.copy(alpha = 0.15f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = null,
+                            tint = NeonAmber,
+                            modifier = Modifier.size(22.dp)
+                        )
+                    }
+                    Column {
+                        Text(
+                            text = "My Ratings",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 15.sp,
+                            color = Color.White
+                        )
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Text(
+                            text = "Rated movies & TV shows with your scores",
+                            fontSize = 12.sp,
+                            color = TextMuted
+                        )
+                    }
+                }
+
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null,
+                    tint = TextMuted,
+                    modifier = Modifier.size(20.dp)
+                )
             }
         }
 

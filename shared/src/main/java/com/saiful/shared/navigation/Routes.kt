@@ -55,4 +55,7 @@ sealed interface Route {
 
     @Serializable
     data object Watchlist : Route
+
+    @Serializable
+    data object Ratings : Route
 }

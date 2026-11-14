@@ -54,6 +54,19 @@ interface AccountApiService {
         @Body body: WatchlistRequest
     ): GenericResponse<AccountActionResponse>
 
+    // ── Rated Media ─────────────────────────────────────────────────────────
+    @GET("account/{account_id}/rated/movies")
+    suspend fun getRatedMovies(
+        @Path("account_id") accountId: Int,
+        @Query("page") page: Int = 1
+    ): GenericResponse<AccountMediaListResponse>
+
+    @GET("account/{account_id}/rated/tv")
+    suspend fun getRatedTvShows(
+        @Path("account_id") accountId: Int,
+        @Query("page") page: Int = 1
+    ): GenericResponse<AccountMediaListResponse>
+
     // ── Rating ──────────────────────────────────────────────────────────────
     @POST("movie/{movie_id}/rating")
     suspend fun rateMovie(

@@ -58,6 +58,19 @@ class AccountRepository @Inject constructor(
     ): GenericResponse<AccountActionResponse> =
         accountApiService.markWatchlist(accountId, WatchlistRequest(mediaType, mediaId, watchlist))
 
+    // ── Rated Media ─────────────────────────────────────────────────────────
+    suspend fun getRatedMovies(
+        accountId: Int,
+        page: Int = 1
+    ): GenericResponse<AccountMediaListResponse> =
+        accountApiService.getRatedMovies(accountId, page)
+
+    suspend fun getRatedTvShows(
+        accountId: Int,
+        page: Int = 1
+    ): GenericResponse<AccountMediaListResponse> =
+        accountApiService.getRatedTvShows(accountId, page)
+
     // ── Rating ──────────────────────────────────────────────────────────────
     suspend fun rateMovie(
         movieId: Int,

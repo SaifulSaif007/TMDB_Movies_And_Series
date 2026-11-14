@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -35,8 +37,10 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -66,6 +70,7 @@ import com.saiful.shared.model.Movies
 import com.saiful.shared.model.TvShows
 import com.saiful.shared.model.account.AccountMediaTab
 import com.saiful.tvshows.view.component.TvShowListItem
+import kotlinx.coroutines.launch
 
 @Composable
 fun FavoritesScreen(
@@ -80,6 +85,27 @@ fun FavoritesScreen(
     val movies = viewModel.favoriteMovies.collectAsLazyPagingItems()
     val shows = viewModel.favoriteTvShows.collectAsLazyPagingItems()
 
+    val pagerState = rememberPagerState(
+        initialPage = selectedTab.ordinal,
+        pageCount = { AccountMediaTab.entries.size }
+    )
+    val coroutineScope = rememberCoroutineScope()
+
+    // Sync pager swipe to ViewModel
+    LaunchedEffect(pagerState.currentPage) {
+        val tab = AccountMediaTab.entries[pagerState.currentPage]
+        if (viewModel.selectedTab.value != tab) {
+            viewModel.selectTab(tab)
+        }
+    }
+
+    // Sync ViewModel selection to Pager
+    LaunchedEffect(selectedTab) {
+        if (pagerState.currentPage != selectedTab.ordinal) {
+            pagerState.animateScrollToPage(selectedTab.ordinal)
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -93,26 +119,37 @@ fun FavoritesScreen(
 
         // --- Media Tabs (Movies / TV Shows) ---
         FavoritesTabRow(
-            selectedTab = selectedTab,
-            onTabSelected = { viewModel.selectTab(it) }
+            selectedTabIndex = pagerState.currentPage,
+            onTabSelected = { tab ->
+                coroutineScope.launch {
+                    pagerState.animateScrollToPage(tab.ordinal)
+                }
+            }
         )
 
         // --- Screen Body Content ---
         if (!isLoggedIn) {
             FavoritesLoggedOutState(onNavigateToProfile = onNavigateToProfile)
         } else {
-            when (selectedTab) {
-                AccountMediaTab.MOVIES -> {
-                    FavoriteMoviesContent(
-                        movies = movies,
-                        onMovieClick = onMovieClick
-                    )
-                }
-                AccountMediaTab.TV_SHOWS -> {
-                    FavoriteShowsContent(
-                        shows = shows,
-                        onShowClick = onShowClick
-                    )
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) { page ->
+                when (AccountMediaTab.entries[page]) {
+                    AccountMediaTab.MOVIES -> {
+                        FavoriteMoviesContent(
+                            movies = movies,
+                            onMovieClick = onMovieClick
+                        )
+                    }
+                    AccountMediaTab.TV_SHOWS -> {
+                        FavoriteShowsContent(
+                            shows = shows,
+                            onShowClick = onShowClick
+                        )
+                    }
                 }
             }
         }
@@ -190,19 +227,23 @@ private fun FavoritesTopBar(
 
 @Composable
 private fun FavoritesTabRow(
-    selectedTab: AccountMediaTab,
-    onTabSelected: (AccountMediaTab) -> Unit
+    selectedTabIndex: Int,
+    onTabSelected: (AccountMediaTab) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     TabRow(
-        selectedTabIndex = selectedTab.ordinal,
+        selectedTabIndex = selectedTabIndex,
+        modifier = modifier.fillMaxWidth(),
         containerColor = SurfaceContainerLowestDark,
         contentColor = Color.White,
         indicator = { tabPositions ->
-            TabRowDefaults.SecondaryIndicator(
-                Modifier.tabIndicatorOffset(tabPositions[selectedTab.ordinal]),
-                color = CinemaCrimson,
-                height = 3.dp
-            )
+            if (selectedTabIndex in tabPositions.indices) {
+                TabRowDefaults.SecondaryIndicator(
+                    Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
+                    color = CinemaCrimson,
+                    height = 3.dp
+                )
+            }
         },
         divider = {
             Box(
@@ -213,8 +254,8 @@ private fun FavoritesTabRow(
             )
         }
     ) {
-        AccountMediaTab.entries.forEach { tab ->
-            val isSelected = tab == selectedTab
+        AccountMediaTab.entries.forEachIndexed { index, tab ->
+            val isSelected = index == selectedTabIndex
             Tab(
                 selected = isSelected,
                 onClick = { onTabSelected(tab) },

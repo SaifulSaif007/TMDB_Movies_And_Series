@@ -102,7 +102,8 @@ data class AccountMediaItem(
     @SerialName("vote_average") val voteAverage: Double? = null,
     @SerialName("release_date") val releaseDate: String? = null,
     @SerialName("first_air_date") val firstAirDate: String? = null,
-    @SerialName("media_type") val mediaType: String? = null
+    @SerialName("media_type") val mediaType: String? = null,
+    val rating: Double? = null
 )
 
 fun AccountMediaItem.toMovie() = com.saiful.shared.model.Movies(
@@ -112,7 +113,8 @@ fun AccountMediaItem.toMovie() = com.saiful.shared.model.Movies(
     backdropPath = backdropPath,
     overview = overview,
     voteAverage = voteAverage,
-    releaseDate = releaseDate ?: firstAirDate
+    releaseDate = releaseDate ?: firstAirDate,
+    rating = rating
 )
 
 fun AccountMediaItem.toTvShow() = com.saiful.shared.model.TvShows(
@@ -122,7 +124,8 @@ fun AccountMediaItem.toTvShow() = com.saiful.shared.model.TvShows(
     backdropPath = backdropPath,
     overview = overview,
     voteAverage = voteAverage,
-    firstAirDate = firstAirDate ?: releaseDate
+    firstAirDate = firstAirDate ?: releaseDate,
+    rating = rating
 )
 
 enum class AccountMediaTab(val title: String) {

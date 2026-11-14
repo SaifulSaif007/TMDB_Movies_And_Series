@@ -365,4 +365,50 @@ class AccountRepositoryTest : BaseRepositoryTest() {
             assert(result is BaseResponse.NetworkError)
         }
     }
+
+    // ── Rated Media ─────────────────────────────────────────────────────────
+
+    @Test
+    fun `verify get rated movies returns success`() {
+        runBlocking {
+            whenever(accountApiService.getRatedMovies(accountId, page))
+                .thenReturn(BaseResponse.Success(mediaListResponse))
+
+            val result = accountRepository.getRatedMovies(accountId, page)
+            assert(result is BaseResponse.Success)
+        }
+    }
+
+    @Test
+    fun `verify get rated movies returns network error`() {
+        runBlocking {
+            whenever(accountApiService.getRatedMovies(accountId, page))
+                .thenReturn(networkError)
+
+            val result = accountRepository.getRatedMovies(accountId, page)
+            assert(result is BaseResponse.NetworkError)
+        }
+    }
+
+    @Test
+    fun `verify get rated tv shows returns success`() {
+        runBlocking {
+            whenever(accountApiService.getRatedTvShows(accountId, page))
+                .thenReturn(BaseResponse.Success(mediaListResponse))
+
+            val result = accountRepository.getRatedTvShows(accountId, page)
+            assert(result is BaseResponse.Success)
+        }
+    }
+
+    @Test
+    fun `verify get rated tv shows returns api error`() {
+        runBlocking {
+            whenever(accountApiService.getRatedTvShows(accountId, page))
+                .thenReturn(apiError)
+
+            val result = accountRepository.getRatedTvShows(accountId, page)
+            assert(result is BaseResponse.ApiError)
+        }
+    }
 }

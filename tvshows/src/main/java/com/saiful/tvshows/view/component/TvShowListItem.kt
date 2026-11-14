@@ -60,6 +60,7 @@ fun TvShowListItem(
     val firstAirDate = show.firstAirDate
     val overview = show.overview
     val voteAverage = show.voteAverage
+    val userRating = show.rating
 
     Box(
         modifier = modifier
@@ -180,9 +181,37 @@ fun TvShowListItem(
                 // Rating & Metadata Row
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    // User Personal Rating Badge (if rated)
+                    if (userRating != null && userRating > 0.0) {
+                        Row(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(6.dp))
+                                .background(NeonAmber.copy(alpha = 0.18f))
+                                .border(1.dp, NeonAmber.copy(alpha = 0.5f), RoundedCornerShape(6.dp))
+                                .padding(horizontal = 7.dp, vertical = 3.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(3.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Star,
+                                contentDescription = "Your Rating",
+                                tint = NeonAmber,
+                                modifier = Modifier.size(11.dp)
+                            )
+                            Text(
+                                text = "You: ${String.format(Locale.US, "%.1f", userRating)}",
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    color = NeonAmber,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 11.sp
+                                )
+                            )
+                        }
+                    }
+
                     // Rating Pill
                     if (voteAverage != null && voteAverage > 0.0) {
                         Row(

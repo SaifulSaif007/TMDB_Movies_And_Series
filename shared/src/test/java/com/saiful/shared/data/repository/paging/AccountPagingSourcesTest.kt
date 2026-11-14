@@ -139,4 +139,85 @@ class AccountPagingSourcesTest {
         assertEquals("Breaking Bad", page.data[0].name)
         assertEquals(null, page.nextKey)
     }
+
+    // ── Rated Media Paging Sources ──────────────────────────────────────────
+
+    @Test
+    fun `RatedMoviesPagingSource load success returns page with mapped movies and ratings`() = runTest {
+        val ratedMovieItem = AccountMediaItem(id = 10, title = "Interstellar", voteAverage = 8.6, rating = 9.5)
+        whenever(accountRepository.getRatedMovies(accountId, 1)).thenReturn(
+            BaseResponse.Success(
+                AccountMediaListResponse(
+                    page = 1,
+                    results = listOf(ratedMovieItem),
+                    totalPages = 2,
+                    totalResults = 2
+                )
+            )
+        )
+
+        val pagingSource = RatedMoviesPagingSource(accountRepository, accountId)
+        val result = pagingSource.load(
+            PagingSource.LoadParams.Refresh(key = null, loadSize = 20, placeholdersEnabled = false)
+        )
+
+        assertTrue(result is PagingSource.LoadResult.Page)
+        val page = result as PagingSource.LoadResult.Page<Int, Movies>
+        assertEquals(1, page.data.size)
+        assertEquals("Interstellar", page.data[0].title)
+        assertEquals(9.5, page.data[0].rating)
+        assertEquals(2, page.nextKey)
+    }
+
+    @Test
+    fun `RatedMoviesPagingSource load error returns LoadResult Error`() = runTest {
+        whenever(accountRepository.getRatedMovies(accountId, 1)).thenReturn(apiError)
+
+        val pagingSource = RatedMoviesPagingSource(accountRepository, accountId)
+        val result = pagingSource.load(
+            PagingSource.LoadParams.Refresh(key = null, loadSize = 20, placeholdersEnabled = false)
+        )
+
+        assertTrue(result is PagingSource.LoadResult.Error)
+        assertEquals("Not found", (result as PagingSource.LoadResult.Error).throwable.message)
+    }
+
+    @Test
+    fun `RatedTvShowsPagingSource load success returns page with mapped shows and ratings`() = runTest {
+        val ratedTvItem = AccountMediaItem(id = 20, name = "Severance", voteAverage = 8.7, rating = 10.0)
+        whenever(accountRepository.getRatedTvShows(accountId, 1)).thenReturn(
+            BaseResponse.Success(
+                AccountMediaListResponse(
+                    page = 1,
+                    results = listOf(ratedTvItem),
+                    totalPages = 1,
+                    totalResults = 1
+                )
+            )
+        )
+
+        val pagingSource = RatedTvShowsPagingSource(accountRepository, accountId)
+        val result = pagingSource.load(
+            PagingSource.LoadParams.Refresh(key = 1, loadSize = 20, placeholdersEnabled = false)
+        )
+
+        assertTrue(result is PagingSource.LoadResult.Page)
+        val page = result as PagingSource.LoadResult.Page<Int, TvShows>
+        assertEquals(1, page.data.size)
+        assertEquals("Severance", page.data[0].name)
+        assertEquals(10.0, page.data[0].rating)
+        assertEquals(null, page.nextKey)
+    }
+
+    @Test
+    fun `RatedTvShowsPagingSource load error returns LoadResult Error`() = runTest {
+        whenever(accountRepository.getRatedTvShows(accountId, 1)).thenReturn(apiError)
+
+        val pagingSource = RatedTvShowsPagingSource(accountRepository, accountId)
+        val result = pagingSource.load(
+            PagingSource.LoadParams.Refresh(key = null, loadSize = 20, placeholdersEnabled = false)
+        )
+
+        assertTrue(result is PagingSource.LoadResult.Error)
+    }
 }
