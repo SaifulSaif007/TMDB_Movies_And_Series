@@ -27,7 +27,6 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -69,19 +68,19 @@ import com.saiful.shared.navigation.Route
 import com.saiful.shared.utils.JsonConverter
 import com.saiful.shared.view.gallery.GalleryScreen
 import com.saiful.tmdbexplorer.auth.AuthDeepLinkManager
+import com.saiful.tmdbexplorer.discover.DiscoverScreen
 import com.saiful.tmdbexplorer.favorites.FavoritesScreen
 import com.saiful.tmdbexplorer.profile.ProfileScreen
 import com.saiful.tmdbexplorer.ratings.RatingsScreen
 import com.saiful.tmdbexplorer.search.SearchScreen
 import com.saiful.tmdbexplorer.watchlist.WatchlistScreen
-import javax.inject.Inject
 import com.saiful.tmdbexplorer.welcome.WelcomeScreen
 import com.saiful.tvshows.view.dashboard.TvShowsDashboardScreen
 import com.saiful.tvshows.view.details.TvShowsDetailsScreen
 import com.saiful.tvshows.view.list.TvShowListScreen
 import com.saiful.tvshows.view.season.TvShowSeasonScreen
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainComposeActivity : ComponentActivity() {
@@ -270,7 +269,8 @@ fun MainScreen(context: Context) {
                                 personId
                             )
                         )
-                    }
+                    },
+                    onDiscoverClick = { navController.navigate(Route.Discover()) }
                 )
             }
 
@@ -396,6 +396,15 @@ fun MainScreen(context: Context) {
                     onMovieClick = { movieId -> navController.navigate(Route.MovieDetails(movieId)) },
                     onShowClick = { showId -> navController.navigate(Route.TvShowsDetails(showId)) },
                     onNavigateToProfile = { navController.navigate(Route.Profile) }
+                )
+            }
+
+            composable<Route.Discover> {
+                DiscoverScreen(
+                    viewModel = hiltViewModel(),
+                    onBackClick = { navController.navigateUp() },
+                    onMovieClick = { movieId -> navController.navigate(Route.MovieDetails(movieId)) },
+                    onShowClick = { showId -> navController.navigate(Route.TvShowsDetails(showId)) }
                 )
             }
         }

@@ -58,4 +58,14 @@ sealed interface Route {
 
     @Serializable
     data object Ratings : Route
+
+    @Serializable
+    data class Discover(
+        val mediaType: String = "movie",
+        val genreId: Int? = null,
+        val genreName: String? = null,
+        val year: Int? = null,
+        val providerId: Int? = null,
+        val providerName: String? = null
+    ) : Route
 }

@@ -34,8 +34,10 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Tune
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -76,7 +78,6 @@ import com.saiful.base.ui.theme.SurfaceContainerDark
 import com.saiful.base.ui.theme.SurfaceContainerHighDark
 import com.saiful.base.ui.theme.SurfaceContainerHighestDark
 import com.saiful.base.ui.theme.SurfaceContainerLowDark
-import com.saiful.base.ui.theme.SurfaceContainerLowestDark
 import com.saiful.base.ui.theme.TMDBTheme
 import com.saiful.base.ui.theme.TextMuted
 import com.saiful.movie.view.components.MovieListItem
@@ -92,7 +93,8 @@ import kotlinx.coroutines.launch
 fun SearchScreen(
     onMovieClick: (Int) -> Unit,
     onShowClick: (Int) -> Unit,
-    onPersonClick: (Int) -> Unit
+    onPersonClick: (Int) -> Unit,
+    onDiscoverClick: () -> Unit = {}
 ) {
     var query by remember { mutableStateOf("") }
 
@@ -114,24 +116,50 @@ fun SearchScreen(
             .background(ObsidianCanvas)
     ) {
         // --- 1. Top Cinematic Header ---
-        TopCinematicSearchHeader()
+        TopCinematicSearchHeader(onDiscoverClick = onDiscoverClick)
 
-        // --- 2. Cinematic Pill Search Bar ---
-        TMDBSearchBar(
-            query = query,
-            onQueryChange = {
-                query = it
-                movieSearchVM.searchMovie(it)
-                tvSearchVM.searchShow(it)
-                personSearchVM.searchPersons(it)
-            },
-            onSearch = {
-                movieSearchVM.searchMovie(query)
-                tvSearchVM.searchShow(query)
-                personSearchVM.searchPersons(query)
-            },
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
-        )
+        // --- 2. Cinematic Pill Search Bar with Discover Quick Action ---
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            TMDBSearchBar(
+                query = query,
+                onQueryChange = {
+                    query = it
+                    movieSearchVM.searchMovie(it)
+                    tvSearchVM.searchShow(it)
+                    personSearchVM.searchPersons(it)
+                },
+                onSearch = {
+                    movieSearchVM.searchMovie(query)
+                    tvSearchVM.searchShow(query)
+                    personSearchVM.searchPersons(query)
+                },
+                modifier = Modifier.weight(1f)
+            )
+
+            // Discover & Filter Quick Button
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(CircleShape)
+                    .background(SurfaceContainerHighDark)
+                    .border(1.dp, GlassBorder, CircleShape)
+                    .clickable { onDiscoverClick() },
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Tune,
+                    contentDescription = "Discover & Filter",
+                    tint = CinemaCrimson,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+        }
 
         // --- 3. Segmented Category Tabs Switcher ---
         SearchCategoryTabs(
@@ -157,7 +185,8 @@ fun SearchScreen(
                         emptyState = {
                             MoviesEmptyState(
                                 isSearching = query.isNotBlank(),
-                                query = query
+                                query = query,
+                                onDiscoverClick = onDiscoverClick
                             )
                         }
                     ) {
@@ -188,7 +217,8 @@ fun SearchScreen(
                         emptyState = {
                             TvShowsEmptyState(
                                 isSearching = query.isNotBlank(),
-                                query = query
+                                query = query,
+                                onDiscoverClick = onDiscoverClick
                             )
                         }
                     ) {
@@ -248,7 +278,9 @@ fun SearchScreen(
 }
 
 @Composable
-private fun TopCinematicSearchHeader() {
+private fun TopCinematicSearchHeader(
+    onDiscoverClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -331,24 +363,29 @@ private fun TopCinematicSearchHeader() {
             )
         }
 
-        // Profile Avatar Chip
-        Box(
+        // Discover Quick Action Pill
+        Row(
             modifier = Modifier
-                .size(34.dp)
-                .clip(CircleShape)
-                .background(
-                    Brush.linearGradient(
-                        listOf(SurfaceContainerHighDark, SurfaceContainerDark)
-                    )
-                )
-                .border(1.dp, GlassBorder, CircleShape),
-            contentAlignment = Alignment.Center
+                .clip(RoundedCornerShape(20.dp))
+                .background(SurfaceContainerHighDark)
+                .border(1.dp, GlassBorder, RoundedCornerShape(20.dp))
+                .clickable { onDiscoverClick() }
+                .padding(horizontal = 10.dp, vertical = 6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Icon(
-                imageVector = Icons.Default.Person,
-                contentDescription = "Profile",
-                tint = OnSurfaceDark.copy(alpha = 0.85f),
-                modifier = Modifier.size(18.dp)
+                imageVector = Icons.Default.Tune,
+                contentDescription = "Discover",
+                tint = CinemaCrimson,
+                modifier = Modifier.size(16.dp)
+            )
+            Text(
+                text = "Discover",
+                style = MaterialTheme.typography.labelSmall.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = OnSurfaceDark
+                )
             )
         }
     }
@@ -480,7 +517,8 @@ private fun SearchPageContent(
 @Composable
 private fun MoviesEmptyState(
     isSearching: Boolean,
-    query: String
+    query: String,
+    onDiscoverClick: () -> Unit = {}
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "pulse")
     val pulseAlpha by infiniteTransition.animateFloat(
@@ -569,6 +607,30 @@ private fun MoviesEmptyState(
             textAlign = TextAlign.Center,
             modifier = Modifier.widthIn(max = 280.dp)
         )
+
+        if (!isSearching) {
+            Spacer(modifier = Modifier.height(18.dp))
+            Button(
+                onClick = onDiscoverClick,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = CinemaCrimson.copy(alpha = 0.18f),
+                    contentColor = CinemaCrimson
+                ),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Tune,
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Discover by Genre & Streaming",
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
     }
 }
 
@@ -578,7 +640,8 @@ private fun MoviesEmptyState(
 @Composable
 private fun TvShowsEmptyState(
     isSearching: Boolean,
-    query: String
+    query: String,
+    onDiscoverClick: () -> Unit = {}
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "pulse")
     val pulseAlpha by infiniteTransition.animateFloat(
@@ -678,6 +741,30 @@ private fun TvShowsEmptyState(
             textAlign = TextAlign.Center,
             modifier = Modifier.widthIn(max = 280.dp)
         )
+
+        if (!isSearching) {
+            Spacer(modifier = Modifier.height(18.dp))
+            Button(
+                onClick = onDiscoverClick,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = CinemaCrimson.copy(alpha = 0.18f),
+                    contentColor = CinemaCrimson
+                ),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Tune,
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Discover by Genre & Streaming",
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
     }
 }
 
