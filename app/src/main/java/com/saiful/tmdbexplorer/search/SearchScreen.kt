@@ -56,7 +56,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import coil3.compose.AsyncImage
+import com.saiful.shared.model.search.MultiSearchResult
+import com.saiful.shared.utils.AppConstants
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -69,6 +73,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.saiful.base.ui.theme.CinemaCrimson
 import com.saiful.base.ui.theme.CrimsonBright
+import com.saiful.base.ui.theme.CrimsonLight
 import com.saiful.base.ui.theme.GlassBorder
 import com.saiful.base.ui.theme.NeonAmber
 import com.saiful.base.ui.theme.ObsidianCanvas
@@ -78,8 +83,10 @@ import com.saiful.base.ui.theme.SurfaceContainerDark
 import com.saiful.base.ui.theme.SurfaceContainerHighDark
 import com.saiful.base.ui.theme.SurfaceContainerHighestDark
 import com.saiful.base.ui.theme.SurfaceContainerLowDark
+import com.saiful.base.ui.theme.SurfaceContainerLowestDark
 import com.saiful.base.ui.theme.TMDBTheme
 import com.saiful.base.ui.theme.TextMuted
+import java.util.Locale
 import com.saiful.movie.view.components.MovieListItem
 import com.saiful.movie.view.search.SearchVM
 import com.saiful.person.view.component.PersonListItem
@@ -101,14 +108,16 @@ fun SearchScreen(
     val movieSearchVM: SearchVM = hiltViewModel()
     val tvSearchVM: com.saiful.tvshows.view.search.SearchVM = hiltViewModel()
     val personSearchVM: com.saiful.person.view.search.SearchVM = hiltViewModel()
+    val multiSearchVM: MultiSearchViewModel = hiltViewModel()
 
     val movies = movieSearchVM.movieList.collectAsLazyPagingItems()
     val shows = tvSearchVM.showsList.collectAsLazyPagingItems()
     val persons = personSearchVM.personList.collectAsLazyPagingItems()
+    val multiResults = multiSearchVM.results.collectAsLazyPagingItems()
 
-    val pagerState = rememberPagerState(pageCount = { 3 })
+    val pagerState = rememberPagerState(pageCount = { 4 })
     val coroutineScope = rememberCoroutineScope()
-    val tabs = listOf("Movies", "TV Shows", "People")
+    val tabs = listOf("All", "Movies", "TV Shows", "People")
 
     Column(
         modifier = Modifier
@@ -133,11 +142,13 @@ fun SearchScreen(
                     movieSearchVM.searchMovie(it)
                     tvSearchVM.searchShow(it)
                     personSearchVM.searchPersons(it)
+                    multiSearchVM.search(it)
                 },
                 onSearch = {
                     movieSearchVM.searchMovie(query)
                     tvSearchVM.searchShow(query)
                     personSearchVM.searchPersons(query)
+                    multiSearchVM.search(query)
                 },
                 modifier = Modifier.weight(1f)
             )
@@ -180,6 +191,47 @@ fun SearchScreen(
             when (page) {
                 0 -> {
                     SearchPageContent(
+                        pagingItems = multiResults,
+                        query = query,
+                        emptyState = {
+                            AllEmptyState(
+                                isSearching = query.isNotBlank(),
+                                query = query,
+                                onDiscoverClick = onDiscoverClick
+                            )
+                        }
+                    ) {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            contentPadding = PaddingValues(
+                                start = 16.dp,
+                                end = 16.dp,
+                                top = 8.dp,
+                                bottom = 24.dp
+                            ),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            items(multiResults.itemCount) { index ->
+                                val item = multiResults[index]
+                                if (item != null) {
+                                    MultiSearchResultItem(
+                                        item = item,
+                                        onClick = {
+                                            when (item.mediaType) {
+                                                "movie" -> onMovieClick(item.id)
+                                                "tv" -> onShowClick(item.id)
+                                                "person" -> onPersonClick(item.id)
+                                            }
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
+                1 -> {
+                    SearchPageContent(
                         pagingItems = movies,
                         query = query,
                         emptyState = {
@@ -210,7 +262,7 @@ fun SearchScreen(
                     }
                 }
 
-                1 -> {
+                2 -> {
                     SearchPageContent(
                         pagingItems = shows,
                         query = query,
@@ -242,7 +294,7 @@ fun SearchScreen(
                     }
                 }
 
-                2 -> {
+                3 -> {
                     SearchPageContent(
                         pagingItems = persons,
                         query = query,
@@ -901,6 +953,371 @@ private fun PeopleEmptyState(
             textAlign = TextAlign.Center,
             modifier = Modifier.widthIn(max = 280.dp)
         )
+    }
+}
+
+@Composable
+fun MultiSearchResultItem(
+    item: MultiSearchResult,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val cardShape = RoundedCornerShape(16.dp)
+    val imageShape = RoundedCornerShape(12.dp)
+    val title = item.displayTitle
+    val overview = item.overview
+    val voteAverage = item.voteAverage
+    val releaseYear = item.displayDate?.take(4)
+    val mediaType = item.mediaType
+    val knownFor = item.knownForDepartment
+
+    val imageUrl = when (mediaType) {
+        "person" -> {
+            if (!item.profilePath.isNullOrBlank()) {
+                AppConstants.IMAGE_BASE_URL + AppConstants.PROFILE_SIZE + item.profilePath
+            } else null
+        }
+        else -> {
+            if (!item.posterPath.isNullOrBlank()) {
+                AppConstants.IMAGE_BASE_URL + AppConstants.POSTER_SIZE + item.posterPath
+            } else null
+        }
+    }
+
+    val (badgeText, badgeColor) = when (mediaType) {
+        "movie" -> "Movie" to CinemaCrimson
+        "tv" -> "TV Show" to Color(0xFF29B6F6)
+        "person" -> "Person" to NeonAmber
+        else -> mediaType.replaceFirstChar { it.uppercase() } to TextMuted
+    }
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(cardShape)
+            .background(SurfaceContainerDark)
+            .border(1.dp, GlassBorder, cardShape)
+            .clickable { onClick() }
+            .padding(10.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(14.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Thumbnail
+            Box(
+                modifier = Modifier
+                    .width(100.dp)
+                    .height(140.dp)
+                    .clip(imageShape)
+                    .background(SurfaceContainerLowestDark)
+                    .border(1.dp, GlassBorder, imageShape),
+                contentAlignment = Alignment.Center
+            ) {
+                if (imageUrl != null) {
+                    AsyncImage(
+                        model = imageUrl,
+                        contentDescription = title,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                } else {
+                    Icon(
+                        painter = painterResource(
+                            id = when (mediaType) {
+                                "movie" -> R.drawable.ic_movie
+                                "tv" -> R.drawable.ic_show
+                                else -> R.drawable.ic_person
+                            }
+                        ),
+                        contentDescription = null,
+                        tint = TextMuted.copy(alpha = 0.5f),
+                        modifier = Modifier.size(36.dp)
+                    )
+                }
+            }
+
+            // Details Column
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(140.dp)
+                    .padding(vertical = 4.dp, horizontal = 2.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = title,
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                fontWeight = FontWeight.Bold,
+                                color = OnSurfaceDark,
+                                fontSize = 16.sp,
+                                letterSpacing = (-0.3).sp
+                            ),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.weight(1f, fill = false)
+                        )
+
+                        Spacer(modifier = Modifier.width(6.dp))
+
+                        // Media Type Badge
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(6.dp))
+                                .background(badgeColor.copy(alpha = 0.15f))
+                                .border(1.dp, badgeColor.copy(alpha = 0.35f), RoundedCornerShape(6.dp))
+                                .padding(horizontal = 6.dp, vertical = 2.dp)
+                        ) {
+                            Text(
+                                text = badgeText,
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    color = badgeColor,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 10.sp
+                                )
+                            )
+                        }
+                    }
+
+                    if (!overview.isNullOrBlank()) {
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Text(
+                            text = overview,
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                color = TextMuted,
+                                fontSize = 12.sp,
+                                lineHeight = 17.sp
+                            ),
+                            maxLines = 3,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    } else if (!knownFor.isNullOrBlank()) {
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Text(
+                            text = "Known for: $knownFor",
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                color = TextMuted,
+                                fontSize = 12.sp
+                            )
+                        )
+                    }
+                }
+
+                // Rating & Metadata Badges
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (voteAverage != null && voteAverage > 0.0) {
+                        Row(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(6.dp))
+                                .background(SurfaceContainerHighDark)
+                                .border(1.dp, GlassBorder, RoundedCornerShape(6.dp))
+                                .padding(horizontal = 8.dp, vertical = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Star,
+                                contentDescription = null,
+                                tint = NeonAmber,
+                                modifier = Modifier.size(12.dp)
+                            )
+                            Text(
+                                text = String.format(Locale.US, "%.1f", voteAverage),
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    color = OnSurfaceDark,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 12.sp
+                                )
+                            )
+                            Text(
+                                text = "/ 10",
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    color = TextMuted,
+                                    fontSize = 10.sp
+                                )
+                            )
+                        }
+                    }
+
+                    if (!releaseYear.isNullOrBlank()) {
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(6.dp))
+                                .background(CinemaCrimson.copy(alpha = 0.15f))
+                                .border(1.dp, CinemaCrimson.copy(alpha = 0.25f), RoundedCornerShape(6.dp))
+                                .padding(horizontal = 7.dp, vertical = 3.dp)
+                        ) {
+                            Text(
+                                text = releaseYear,
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    color = CrimsonLight,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 10.sp,
+                                    letterSpacing = 0.5.sp
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Unified Multi-Search Empty State
+ */
+@Composable
+private fun AllEmptyState(
+    isSearching: Boolean,
+    query: String,
+    onDiscoverClick: () -> Unit = {}
+) {
+    val infiniteTransition = rememberInfiniteTransition(label = "pulse")
+    val pulseAlpha by infiniteTransition.animateFloat(
+        initialValue = 0.10f,
+        targetValue = 0.22f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(2200, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "pulseAlpha"
+    )
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Box(
+            modifier = Modifier.size(190.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(170.dp)
+                    .clip(CircleShape)
+                    .background(
+                        Brush.radialGradient(
+                            listOf(
+                                CinemaCrimson.copy(alpha = pulseAlpha),
+                                Color.Transparent
+                            )
+                        )
+                    )
+            )
+
+            Box(
+                modifier = Modifier
+                    .size(110.dp)
+                    .clip(RoundedCornerShape(24.dp))
+                    .background(SurfaceContainerHighDark.copy(alpha = 0.75f))
+                    .border(1.dp, GlassBorder, RoundedCornerShape(24.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_movie),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(CinemaCrimson),
+                        modifier = Modifier.size(28.dp)
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_show),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(Color(0xFF29B6F6)),
+                        modifier = Modifier.size(28.dp)
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_person),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(NeonAmber),
+                        modifier = Modifier.size(28.dp)
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = if (isSearching) "No Matches Found" else "Search Everything",
+            style = MaterialTheme.typography.headlineSmall.copy(
+                fontWeight = FontWeight.Bold,
+                color = OnSurfaceDark
+            ),
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = if (isSearching) {
+                "No movies, series, or people matched \"$query\". Check your spelling or try another search term."
+            } else {
+                "Search across movies, TV series, actors, and directors simultaneously."
+            },
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = TextMuted,
+                lineHeight = 20.sp
+            ),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.widthIn(max = 280.dp)
+        )
+
+        if (!isSearching) {
+            Spacer(modifier = Modifier.height(18.dp))
+            Button(
+                onClick = onDiscoverClick,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = CinemaCrimson.copy(alpha = 0.18f),
+                    contentColor = CinemaCrimson
+                ),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Tune,
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Discover by Genre & Streaming",
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AllEmptyStatePreview() {
+    TMDBTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(ObsidianCanvas)
+        ) {
+            AllEmptyState(isSearching = false, query = "")
+        }
     }
 }
 
