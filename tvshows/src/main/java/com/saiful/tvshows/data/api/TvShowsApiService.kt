@@ -65,4 +65,15 @@ interface TvShowsApiService {
         @Path("show_id") showId: Int
     ): GenericResponse<WatchProvidersResponse>
 
+    @GET("tv/{show_id}/reviews")
+    suspend fun tvShowReviews(
+        @Path("show_id") id: Int,
+        @Query("page") page: Int = 1
+    ): GenericResponse<com.saiful.shared.model.ReviewsResponse>
+
+    @GET("tv/{show_id}/images")
+    suspend fun tvShowImages(
+        @Path("show_id") id: Int
+    ): GenericResponse<com.saiful.shared.model.MediaImagesResponse>
+
 }

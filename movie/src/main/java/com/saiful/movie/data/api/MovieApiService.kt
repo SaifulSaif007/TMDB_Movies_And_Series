@@ -65,4 +65,15 @@ interface MovieApiService {
     suspend fun watchProviders(
         @Path("movie_id") movieId: Int
     ): GenericResponse<WatchProvidersResponse>
+
+    @GET("movie/{id}/reviews")
+    suspend fun movieReviews(
+        @Path("id") id: Int,
+        @Query("page") page: Int = 1
+    ): GenericResponse<com.saiful.shared.model.ReviewsResponse>
+
+    @GET("movie/{id}/images")
+    suspend fun movieImages(
+        @Path("id") id: Int
+    ): GenericResponse<com.saiful.shared.model.MediaImagesResponse>
 }

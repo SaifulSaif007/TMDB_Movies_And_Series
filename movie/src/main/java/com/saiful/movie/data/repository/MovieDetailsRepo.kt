@@ -17,4 +17,8 @@ class MovieDetailsRepo @Inject constructor(private val movieApiService: MovieApi
 
     suspend fun watchProviders(id: Int) = movieApiService.watchProviders(id)
 
+    suspend fun movieReviews(id: Int) = movieApiService.movieReviews(id)
+
+    suspend fun movieImages(id: Int) = movieApiService.movieImages(id)
+
 }

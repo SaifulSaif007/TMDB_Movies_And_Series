@@ -17,4 +17,8 @@ class ShowDetailsRepo
     suspend fun similarShows(id: Int) = apiService.similarShows(id)
 
     suspend fun watchProviders(id: Int) = apiService.watchProviders(id)
+
+    suspend fun showReviews(id: Int) = apiService.tvShowReviews(id)
+
+    suspend fun showImages(id: Int) = apiService.tvShowImages(id)
 }

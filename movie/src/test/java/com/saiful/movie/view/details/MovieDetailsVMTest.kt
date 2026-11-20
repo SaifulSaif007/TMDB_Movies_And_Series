@@ -99,6 +99,12 @@ internal class MovieDetailsVMTest : BaseViewModelTest() {
             whenever(repository.watchProviders(1)).thenReturn(
                 BaseResponse.Success(WatchProvidersResponse(id = 1, results = emptyMap()))
             )
+            whenever(repository.movieReviews(1)).thenReturn(
+                BaseResponse.Success(com.saiful.shared.model.ReviewsResponse(id = 1))
+            )
+            whenever(repository.movieImages(1)).thenReturn(
+                BaseResponse.Success(com.saiful.shared.model.MediaImagesResponse(id = 1))
+            )
 
             initViewModel()
 
@@ -109,10 +115,13 @@ internal class MovieDetailsVMTest : BaseViewModelTest() {
             verify(repository, times(1)).similarMovie(1)
             verify(repository, times(1)).recommendation(1)
             verify(repository, times(1)).watchProviders(1)
+            verify(repository, times(1)).movieReviews(1)
+            verify(repository, times(1)).movieImages(1)
 
             assert(viewModel.uiState.value.movieDetails?.adult == false)
             assert(viewModel.uiState.value.cast.isNotEmpty() || viewModel.uiState.value.movieDetails != null)
             assert(viewModel.uiState.value.watchProviders != null)
+            assert(viewModel.uiState.value.images != null)
         }
     }
 

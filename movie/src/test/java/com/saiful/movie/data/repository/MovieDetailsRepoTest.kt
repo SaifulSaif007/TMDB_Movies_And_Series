@@ -169,4 +169,26 @@ class MovieDetailsRepoTest : BaseRepositoryTest() {
             assert(movieDetailsRepo.watchProviders(movieId) is BaseResponse.ApiError)
         }
     }
+
+    @Test
+    fun `verify movie reviews fetch successful`() {
+        runBlocking {
+            whenever(movieApiService.movieReviews(movieId)).thenReturn(
+                BaseResponse.Success(com.saiful.shared.model.ReviewsResponse(id = movieId))
+            )
+
+            assert(movieDetailsRepo.movieReviews(movieId) is BaseResponse.Success)
+        }
+    }
+
+    @Test
+    fun `verify movie images fetch successful`() {
+        runBlocking {
+            whenever(movieApiService.movieImages(movieId)).thenReturn(
+                BaseResponse.Success(com.saiful.shared.model.MediaImagesResponse(id = movieId))
+            )
+
+            assert(movieDetailsRepo.movieImages(movieId) is BaseResponse.Success)
+        }
+    }
 }

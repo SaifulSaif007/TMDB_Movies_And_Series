@@ -78,6 +78,8 @@ import com.saiful.base.ui.theme.SurfaceContainerLowestDark
 import com.saiful.base.ui.theme.TMDBTheme
 import com.saiful.base.ui.theme.TextMuted
 import com.saiful.shared.components.AuthGateBottomSheet
+import com.saiful.shared.components.CommunityReviewsSection
+import com.saiful.shared.components.MediaImageGallerySection
 import com.saiful.shared.components.RatingDialog
 import com.saiful.shared.components.TMDBCastItem
 import com.saiful.shared.components.TMDBHorizontalList
@@ -86,6 +88,7 @@ import com.saiful.shared.components.TMDBSectionHeader
 import com.saiful.shared.components.TMDBTrailerItem
 import com.saiful.shared.components.TMDBTvShowItem
 import com.saiful.shared.components.WatchProvidersSection
+import com.saiful.shared.model.Image
 import com.saiful.shared.utils.AppConstants
 import com.saiful.shared.utils.formatDate
 import com.saiful.tvshows.model.Genre
@@ -103,7 +106,8 @@ fun TvShowsDetailsScreen(
     onCastClick: (Int) -> Unit,
     onTrailerClick: (String) -> Unit,
     onSeasonClick: (Int, Int) -> Unit,
-    onNavigateToProfile: () -> Unit = {}
+    onNavigateToProfile: () -> Unit = {},
+    onImageClick: (Int, List<Image>) -> Unit = { _, _ -> }
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val isLoggedIn by viewModel.isLoggedIn.collectAsState()
@@ -131,6 +135,7 @@ fun TvShowsDetailsScreen(
             onCastClick = onCastClick,
             onTrailerClick = onTrailerClick,
             onSeasonClick = onSeasonClick,
+            onImageClick = onImageClick,
             onRateClick = {
                 if (isLoggedIn) {
                     showRatingDialog = true
@@ -206,7 +211,8 @@ fun TvShowsDetailsContent(
     onRateClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
     onWatchlistClick: () -> Unit = {},
-    onCountrySelected: (String) -> Unit = {}
+    onCountrySelected: (String) -> Unit = {},
+    onImageClick: (Int, List<Image>) -> Unit = { _, _ -> }
 ) {
     val show = uiState.showDetails
     val context = LocalContext.current
@@ -791,6 +797,22 @@ fun TvShowsDetailsContent(
                     onCountrySelected = onCountrySelected
                 )
             }
+
+            // --- Photos & Image Gallery Section ---
+            if (uiState.images != null && (uiState.images.backdrops.isNotEmpty() || uiState.images.posters.isNotEmpty())) {
+                Spacer(modifier = Modifier.height(10.dp))
+                MediaImageGallerySection(
+                    images = uiState.images,
+                    onImageClick = onImageClick
+                )
+            }
+
+            // --- Community Reviews Section ---
+            Spacer(modifier = Modifier.height(10.dp))
+            CommunityReviewsSection(
+                reviews = uiState.reviews,
+                totalReviews = uiState.totalReviews
+            )
 
             // Recommendations Carousel
             val recommendations = uiState.recommendations?.results

@@ -90,6 +90,12 @@ internal class TvShowsDetailsVMTest : BaseViewModelTest() {
             whenever(repository.watchProviders(showId)).thenReturn(
                 BaseResponse.Success(WatchProvidersResponse(id = showId, results = emptyMap()))
             )
+            whenever(repository.showReviews(showId)).thenReturn(
+                BaseResponse.Success(com.saiful.shared.model.ReviewsResponse(id = showId))
+            )
+            whenever(repository.showImages(showId)).thenReturn(
+                BaseResponse.Success(com.saiful.shared.model.MediaImagesResponse(id = showId))
+            )
 
             initViewModel()
 
@@ -100,12 +106,15 @@ internal class TvShowsDetailsVMTest : BaseViewModelTest() {
             verify(repository, times(1)).showRecommendation(any())
             verify(repository, times(1)).similarShows(any())
             verify(repository, times(1)).watchProviders(any())
+            verify(repository, times(1)).showReviews(any())
+            verify(repository, times(1)).showImages(any())
 
             assert(viewModel.uiState.value.showDetails != null)
             assert(viewModel.uiState.value.showCasts != null)
             assert(viewModel.uiState.value.recommendations?.totalPages == 1)
             assert(viewModel.uiState.value.similarShows?.page == 1)
             assert(viewModel.uiState.value.watchProviders != null)
+            assert(viewModel.uiState.value.images != null)
         }
     }
 

@@ -119,4 +119,32 @@ internal class ShowDetailsRepoTest : BaseRepositoryTest() {
             verify(apiService, only()).watchProviders(any())
         }
     }
+
+    @Test
+    fun `verify tv show reviews fetch is successful`() {
+        runBlocking {
+            whenever(
+                apiService.tvShowReviews(showId)
+            ).thenReturn(
+                BaseResponse.Success(com.saiful.shared.model.ReviewsResponse(id = showId))
+            )
+
+            assert(showDetailsRepo.showReviews(showId) is BaseResponse.Success)
+            verify(apiService, only()).tvShowReviews(any(), any())
+        }
+    }
+
+    @Test
+    fun `verify tv show images fetch is successful`() {
+        runBlocking {
+            whenever(
+                apiService.tvShowImages(showId)
+            ).thenReturn(
+                BaseResponse.Success(com.saiful.shared.model.MediaImagesResponse(id = showId))
+            )
+
+            assert(showDetailsRepo.showImages(showId) is BaseResponse.Success)
+            verify(apiService, only()).tvShowImages(any())
+        }
+    }
 }

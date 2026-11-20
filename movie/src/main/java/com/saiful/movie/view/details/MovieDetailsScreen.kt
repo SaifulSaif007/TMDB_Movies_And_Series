@@ -82,12 +82,15 @@ import com.saiful.base.ui.theme.TMDBTheme
 import com.saiful.base.ui.theme.TextMuted
 import com.saiful.movie.model.Cast
 import com.saiful.movie.model.MovieDetailsResponse
+import com.saiful.shared.components.CommunityReviewsSection
+import com.saiful.shared.components.MediaImageGallerySection
 import com.saiful.shared.components.TMDBCastItem
 import com.saiful.shared.components.TMDBHorizontalList
 import com.saiful.shared.components.TMDBMovieItem
 import com.saiful.shared.components.TMDBSectionHeader
 import com.saiful.shared.components.TMDBTrailerItem
 import com.saiful.shared.components.WatchProvidersSection
+import com.saiful.shared.model.Image
 import com.saiful.shared.model.Movies
 import com.saiful.shared.utils.AppConstants
 import com.saiful.shared.utils.formatDate
@@ -103,7 +106,8 @@ fun MovieDetailsScreen(
     onCastClick: (Int) -> Unit,
     onTrailerClick: (String) -> Unit,
     onCollectionClick: (Int) -> Unit,
-    onNavigateToProfile: () -> Unit = {}
+    onNavigateToProfile: () -> Unit = {},
+    onImageClick: (Int, List<Image>) -> Unit = { _, _ -> }
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val isLoggedIn by viewModel.isLoggedIn.collectAsState()
@@ -131,6 +135,7 @@ fun MovieDetailsScreen(
             onCastClick = onCastClick,
             onTrailerClick = onTrailerClick,
             onCollectionClick = onCollectionClick,
+            onImageClick = onImageClick,
             onRateClick = {
                 if (isLoggedIn) {
                     showRatingDialog = true
@@ -206,7 +211,8 @@ fun MovieDetailsContent(
     onRateClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
     onWatchlistClick: () -> Unit = {},
-    onCountrySelected: (String) -> Unit = {}
+    onCountrySelected: (String) -> Unit = {},
+    onImageClick: (Int, List<Image>) -> Unit = { _, _ -> }
 ) {
     val movie = uiState.movieDetails
     val context = LocalContext.current
@@ -578,7 +584,7 @@ fun MovieDetailsContent(
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = "\"${movie?.tagline}\"",
+                            text = "\"${movie.tagline}\"",
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 fontStyle = FontStyle.Italic,
                                 color = CrimsonLight,
@@ -650,6 +656,22 @@ fun MovieDetailsContent(
                     onCountrySelected = onCountrySelected
                 )
             }
+
+            // --- Photos & Image Gallery Section ---
+            if (uiState.images != null && (uiState.images.backdrops.isNotEmpty() || uiState.images.posters.isNotEmpty())) {
+                Spacer(modifier = Modifier.height(12.dp))
+                MediaImageGallerySection(
+                    images = uiState.images,
+                    onImageClick = onImageClick
+                )
+            }
+
+            // --- Community Reviews Section ---
+            Spacer(modifier = Modifier.height(12.dp))
+            CommunityReviewsSection(
+                reviews = uiState.reviews,
+                totalReviews = uiState.totalReviews
+            )
 
             // --- Recommendations Section ---
             if (uiState.recommendationsList.isNotEmpty()) {

@@ -12,7 +12,10 @@ import com.saiful.movie.model.MovieCastResponse
 import com.saiful.movie.model.MovieDetailsResponse
 import com.saiful.movie.model.MoviesResponse
 import com.saiful.shared.data.repository.AccountRepository
+import com.saiful.shared.model.MediaImagesResponse
 import com.saiful.shared.model.Movies
+import com.saiful.shared.model.ReviewItem
+import com.saiful.shared.model.ReviewsResponse
 import com.saiful.shared.model.WatchProvidersResponse
 import java.util.Locale
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,7 +40,10 @@ data class MovieDetailsUiState(
     val isFavorite: Boolean = false,
     val isWatchlisted: Boolean = false,
     val userRating: Float? = null,
-    val isAccountStateLoading: Boolean = false
+    val isAccountStateLoading: Boolean = false,
+    val reviews: List<ReviewItem> = emptyList(),
+    val totalReviews: Int = 0,
+    val images: MediaImagesResponse? = null
 )
 
 @HiltViewModel
@@ -73,6 +79,12 @@ class MovieDetailsVM @Inject constructor(
         }
         executeRestCodeBlock(movie_watch_providers) {
             repo.watchProviders(id)
+        }
+        executeRestCodeBlock(movie_reviews) {
+            repo.movieReviews(id)
+        }
+        executeRestCodeBlock(movie_images) {
+            repo.movieImages(id)
         }
         fetchAccountStates(id)
     }
@@ -238,6 +250,13 @@ class MovieDetailsVM @Inject constructor(
                 movie_watch_providers -> currentState.copy(
                     watchProviders = data.body as? WatchProvidersResponse
                 )
+                movie_reviews -> currentState.copy(
+                    reviews = (data.body as? ReviewsResponse)?.results ?: emptyList(),
+                    totalReviews = (data.body as? ReviewsResponse)?.totalResults ?: 0
+                )
+                movie_images -> currentState.copy(
+                    images = data.body as? MediaImagesResponse
+                )
                 else -> currentState
             }
         }
@@ -249,5 +268,7 @@ class MovieDetailsVM @Inject constructor(
         const val movie_recommendation = "MOVIE_RECOMMENDATION"
         const val movie_similar = "MOVIE_SIMILAR"
         const val movie_watch_providers = "MOVIE_WATCH_PROVIDERS"
+        const val movie_reviews = "MOVIE_REVIEWS"
+        const val movie_images = "MOVIE_IMAGES"
     }
 }

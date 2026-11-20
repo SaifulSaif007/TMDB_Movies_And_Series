@@ -7,6 +7,9 @@ import com.saiful.base.util.DefaultDispatcherProvider
 import com.saiful.base.util.DispatcherProvider
 import com.saiful.base.viewmodel.BaseOpsViewModel
 import com.saiful.shared.data.repository.AccountRepository
+import com.saiful.shared.model.MediaImagesResponse
+import com.saiful.shared.model.ReviewItem
+import com.saiful.shared.model.ReviewsResponse
 import com.saiful.shared.model.WatchProvidersResponse
 import com.saiful.tvshows.data.repository.ShowDetailsRepo
 import com.saiful.tvshows.model.*
@@ -32,7 +35,10 @@ data class TvShowsDetailsUiState(
     val isFavorite: Boolean = false,
     val isWatchlisted: Boolean = false,
     val userRating: Float? = null,
-    val isAccountStateLoading: Boolean = false
+    val isAccountStateLoading: Boolean = false,
+    val reviews: List<ReviewItem> = emptyList(),
+    val totalReviews: Int = 0,
+    val images: MediaImagesResponse? = null
 )
 
 @HiltViewModel
@@ -68,6 +74,12 @@ class TvShowsDetailsVM @Inject constructor(
         }
         executeRestCodeBlock(show_watch_providers) {
             repo.watchProviders(showId)
+        }
+        executeRestCodeBlock(show_reviews) {
+            repo.showReviews(showId)
+        }
+        executeRestCodeBlock(show_images) {
+            repo.showImages(showId)
         }
         fetchAccountStates(showId)
     }
@@ -232,6 +244,17 @@ class TvShowsDetailsVM @Inject constructor(
             show_watch_providers -> {
                 _uiState.update { it.copy(watchProviders = data.body as? WatchProvidersResponse) }
             }
+            show_reviews -> {
+                _uiState.update {
+                    it.copy(
+                        reviews = (data.body as? ReviewsResponse)?.results ?: emptyList(),
+                        totalReviews = (data.body as? ReviewsResponse)?.totalResults ?: 0
+                    )
+                }
+            }
+            show_images -> {
+                _uiState.update { it.copy(images = data.body as? MediaImagesResponse) }
+            }
         }
     }
 
@@ -241,5 +264,7 @@ class TvShowsDetailsVM @Inject constructor(
         const val show_recommendation = "SHOW_RECOMMENDATION"
         const val similar_show = "SIMILAR_SHOW"
         const val show_watch_providers = "SHOW_WATCH_PROVIDERS"
+        const val show_reviews = "SHOW_REVIEWS"
+        const val show_images = "SHOW_IMAGES"
     }
 }
